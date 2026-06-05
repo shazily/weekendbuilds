@@ -4,32 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About · Vibe with Kids</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/VibewithKids/assets/vwk-theme.css">
     <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
     <style>
-        body { margin: 0; min-height: 100vh; font-family: 'Fredoka', system-ui, sans-serif; color: #f8f4ff; background: #12082e; }
-        .sky { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse at top, #2d1b69, #12082e 55%, #1a0a3e); }
-        .page { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
-        h1 { font-size: clamp(2rem, 6vw, 3rem); margin: 1.5rem 0 0.5rem; background: linear-gradient(135deg, #fff, #c4b5fd, #00d2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .lead { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; color: rgba(248,244,255,0.65); line-height: 1.7; margin-bottom: 2rem; }
-        .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; }
-        .card h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #00d2ff; }
-        .card p, .card li { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; line-height: 1.65; color: rgba(248,244,255,0.75); }
+        .card { padding: 1.5rem; margin-bottom: 1.25rem; }
+        .card h2 { font-family: var(--vwk-font-display); font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--vwk-mint); }
+        .card p, .card li { font-size: 0.9rem; line-height: 1.65; color: var(--vwk-paper-muted); }
         .card ul { padding-left: 1.25rem; margin-top: 0.5rem; }
         .card li { margin-bottom: 0.4rem; }
+        .card a { color: var(--vwk-mint); }
         .builders { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
-        .builder { flex: 1; min-width: 140px; padding: 1rem; border-radius: 12px; background: rgba(0,210,255,0.08); border: 1px solid rgba(0,210,255,0.2); text-align: center; }
+        .builder {
+            flex: 1; min-width: 140px; padding: 1rem; border-radius: 8px; text-align: center;
+            background: var(--vwk-ink); border: 2px solid var(--vwk-border-strong);
+            box-shadow: var(--vwk-shadow);
+        }
         .builder .emoji { font-size: 2rem; }
-        .builder .name { font-weight: 600; margin-top: 0.35rem; }
-        .builder .role { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: rgba(248,244,255,0.5); }
+        .builder .name { font-family: var(--vwk-font-display); font-weight: 700; margin-top: 0.35rem; }
+        .builder .role { font-size: 0.75rem; color: var(--vwk-paper-dim); }
     </style>
 </head>
-<body>
-    <div class="sky"></div>
-    <div class="page">
+<body class="vwk-body about-page">
+    <div class="vwk-sky" aria-hidden="true"></div>
+    <div class="vwk-page vwk-page-about page">
         <div id="nav-slot"></div>
         <h1>What is Vibe with Kids?</h1>
-        <p class="lead">An open-source collection of games and experiments that a dad and his 9-year-old built together — vibe coding with AI as a learning tool, not a shortcut. It is also a place for parents, kids, and the wider community to share their own creations and ideas.</p>
+        <p class="vwk-lead lead">An open-source collection of games and experiments that a dad and his 9-year-old built together — vibe coding with AI as a learning tool, not a shortcut. It is also a place for parents, kids, and the wider community to share their own creations and ideas.</p>
 
         <div class="card">
             <h2>Who we are</h2>
@@ -52,7 +52,7 @@
 
         <div class="card">
             <h2>Get the builds</h2>
-            <p>Head to <a href="ideas" style="color:#7dd3fc">Ideas</a> for vibe coding prompts and HTML downloads of every project.</p>
+            <p>Head to <a href="ideas">Ideas</a> for vibe coding prompts and HTML downloads of every project.</p>
         </div>
 
         <div id="footer-slot"></div>

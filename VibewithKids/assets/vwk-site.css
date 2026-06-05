@@ -1,9 +1,9 @@
 :root {
-    --vwk-bg-deep: #07051a;
-    --vwk-text: #f8f4ff;
-    --vwk-muted: rgba(248, 244, 255, 0.55);
-    --vwk-accent: #00d2ff;
-    --vwk-border: rgba(255, 255, 255, 0.1);
+    --vwk-bg-deep: var(--vwk-ink, #141820);
+    --vwk-text: var(--vwk-paper, #faf6ef);
+    --vwk-muted: var(--vwk-paper-muted, rgba(250, 246, 239, 0.68));
+    --vwk-accent: var(--vwk-orange, #ff8c42);
+    --vwk-border: var(--vwk-border, rgba(250, 246, 239, 0.16));
 }
 
 .vwk-nav {
@@ -16,22 +16,20 @@
     gap: 1rem;
     padding: 0.75rem 1.25rem;
     margin: -0.5rem -1.25rem 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 4px 24px rgba(124, 58, 237, 0.12);
+    background: var(--vwk-ink-raised, #1e2433);
+    border-bottom: 3px solid var(--vwk-yellow, #ffd166);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 
 .vwk-nav-brand {
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 0.85rem;
+    font-family: var(--vwk-font-display, 'Baloo 2', system-ui, sans-serif);
+    font-size: 0.9rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--vwk-paper, #faf6ef);
     text-decoration: none;
-    letter-spacing: 0.04em;
 }
 
 .vwk-nav-brand .vwk-logo {
@@ -43,20 +41,21 @@
 .vwk-nav-brand-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
+    line-height: 1.15;
 }
 
 .vwk-nav-brand .vwk-nav-series {
-    color: #f8f4ff;
-    font-size: 0.85rem;
+    color: var(--vwk-paper, #faf6ef);
+    font-size: 0.88rem;
 }
 
 .vwk-nav-brand .vwk-nav-lab {
-    font-size: 0.6rem;
+    font-family: var(--vwk-font-body, 'IBM Plex Sans', system-ui, sans-serif);
+    font-size: 0.58rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(0, 210, 255, 0.95);
+    color: var(--vwk-orange, #ff8c42);
 }
 
 .vwk-nav-links {
@@ -66,48 +65,50 @@
 }
 
 .vwk-nav-links a {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: var(--vwk-font-body, 'IBM Plex Sans', system-ui, sans-serif);
     font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     text-decoration: none;
-    color: rgba(248, 244, 255, 0.82);
+    color: var(--vwk-paper-muted, rgba(250, 246, 239, 0.68));
     padding: 0.4rem 0.75rem;
-    border-radius: 8px;
-    transition: color 0.2s, background 0.2s;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
 }
 
 .vwk-nav-links a:hover,
 .vwk-nav-links a.active {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.14);
+    color: var(--vwk-paper, #faf6ef);
+    background: rgba(255, 140, 66, 0.15);
+    border-color: rgba(255, 140, 66, 0.35);
 }
 
 .vwk-footer {
     margin-top: 3rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--vwk-border);
+    border-top: 2px solid var(--vwk-border-strong, rgba(250, 246, 239, 0.28));
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 0.5rem 1rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: var(--vwk-font-body, 'IBM Plex Sans', system-ui, sans-serif);
     font-size: 0.78rem;
-    color: rgba(248, 244, 255, 0.4);
+    color: var(--vwk-paper-dim, rgba(250, 246, 239, 0.45));
 }
 
 .vwk-footer a {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    color: rgba(0, 210, 255, 0.7);
+    color: var(--vwk-mint, #3dccc7);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.15s;
 }
 
-.vwk-footer a:hover { color: var(--vwk-accent); }
+.vwk-footer a:hover { color: var(--vwk-yellow, #ffd166); }
 
 .vwk-footer .li-icon {
     width: 14px;
@@ -115,7 +116,6 @@
     display: inline-block;
 }
 
-/* Floating home button for games */
 #vwk-home-btn {
     position: fixed;
     top: 14px;
@@ -125,22 +125,19 @@
     align-items: center;
     gap: 0.35rem;
     padding: 0.45rem 0.85rem;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-family: system-ui, sans-serif;
+    border-radius: 8px;
+    background: var(--vwk-ink-raised, #1e2433);
+    border: 2px solid var(--vwk-yellow, #ffd166);
+    color: var(--vwk-paper, #faf6ef);
+    font-family: var(--vwk-font-body, 'IBM Plex Sans', system-ui, sans-serif);
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
-    letter-spacing: 0.04em;
-    backdrop-filter: blur(8px);
-    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+    transition: transform 0.15s;
     pointer-events: auto;
 }
 
 #vwk-home-btn:hover {
-    transform: scale(1.04);
-    border-color: rgba(0, 210, 255, 0.6);
-    box-shadow: 0 0 16px rgba(0, 210, 255, 0.25);
+    transform: translate(-1px, -1px);
 }

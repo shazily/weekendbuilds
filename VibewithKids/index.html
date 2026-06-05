@@ -4,85 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibe with Kids · Weekend Builds</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/VibewithKids/assets/vwk-theme.css">
     <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
     <style>
-        :root {
-            --bg-deep: #07051a;
-            --bg-mid: #12082e;
-            --text: #f8f4ff;
-            --muted: rgba(248, 244, 255, 0.55);
-            --card-bg: rgba(18, 10, 42, 0.72);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            min-height: 100vh;
-            font-family: 'Fredoka', system-ui, sans-serif;
-            color: var(--text);
-            background: var(--bg-deep);
-            overflow-x: hidden;
-        }
-        .sky {
-            position: fixed; inset: 0; z-index: 0;
-            background:
-                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(120, 60, 255, 0.35), transparent),
-                radial-gradient(ellipse 60% 40% at 90% 20%, rgba(0, 210, 255, 0.15), transparent),
-                radial-gradient(ellipse 50% 35% at 10% 80%, rgba(255, 26, 94, 0.12), transparent),
-                linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 55%, #040210 100%);
-        }
-        #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-        .floaties { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35; animation: drift 18s ease-in-out infinite; }
-        .blob-1 { width: 320px; height: 320px; background: #7c3aed; top: 8%; left: -5%; }
-        .blob-2 { width: 260px; height: 260px; background: #00d2ff; top: 55%; right: -8%; animation-delay: -6s; }
-        .blob-3 { width: 200px; height: 200px; background: #ff1a5e; bottom: 10%; left: 30%; animation-delay: -12s; }
-        @keyframes drift {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            33% { transform: translate(30px,-20px) scale(1.05); }
-            66% { transform: translate(-20px,25px) scale(0.95); }
-        }
-        .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
-        .hero { text-align: center; padding: 1.5rem 0 1.25rem; }
-        .hero h1 {
-            font-size: clamp(2.4rem, 8vw, 4.2rem); font-weight: 700; line-height: 1.05;
-            background: linear-gradient(135deg, #fff 0%, #c4b5fd 40%, #00d2ff 75%, #ff6b9d 100%);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .hero .tagline {
-            margin-top: 0.75rem; font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: var(--muted);
-        }
-        .builds-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
-        .build-tab {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 700;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            padding: 0.55rem 1rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18);
-            background: rgba(255,255,255,0.08); color: rgba(248,244,255,0.8);
-            cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s;
-        }
-        .build-tab:hover { background: rgba(255,255,255,0.14); color: #fff; }
-        .build-tab.active { background: rgba(0,210,255,0.18); border-color: rgba(0,210,255,0.45); color: #fff; }
         .build-panel { display: none; }
         .build-panel.active { display: block; }
-        .community-coming {
-            border-radius: 16px; background: var(--card-bg); border: 1px solid var(--border);
-            padding: 2rem 1.5rem; text-align: center;
-        }
-        .community-coming p {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem;
-            color: var(--muted); margin: 0 0 1.25rem;
-        }
-        .btn-add-idea {
-            display: inline-block; padding: 0.65rem 1.35rem; border-radius: 10px;
-            background: linear-gradient(135deg, #7c3aed, #ff6b9d); color: #fff;
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 700;
-            letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
-            transition: filter 0.2s, transform 0.2s;
-        }
-        .btn-add-idea:hover { filter: brightness(1.1); transform: scale(1.02); }
+        .community-coming { padding: 2rem 1.5rem; text-align: center; }
+        .community-coming p { margin: 0 0 1.25rem; font-size: 0.95rem; color: var(--vwk-paper-muted); }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -90,73 +18,62 @@
         }
         .tile {
             display: flex; flex-direction: column;
-            border-radius: 16px; background: var(--card-bg);
-            border: 1px solid var(--border); overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            --accent: #00d2ff; --accent-glow: rgba(0,210,255,0.35);
+            border-radius: 12px; background: var(--vwk-ink-raised);
+            border: 2px solid var(--vwk-border-strong); overflow: hidden;
+            box-shadow: var(--vwk-shadow);
+            transition: transform 0.15s;
+            --accent: var(--vwk-orange);
         }
-        .tile:hover {
-            transform: translateY(-4px);
-            border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 30px var(--accent-glow);
-        }
+        .tile:hover { transform: translate(-2px, -2px); }
         .tile-poster {
-            height: 160px; background: #0a0618;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden; border-bottom: 1px solid var(--border);
+            height: 160px; background: #0f1218;
+            overflow: hidden; border-bottom: 2px solid var(--vwk-border-strong);
         }
         .tile-poster img { width: 100%; height: 100%; object-fit: cover; }
         .tile-body { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
         .tile-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; }
         .category {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.6rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            padding: 0.2rem 0.55rem; border-radius: 6px;
-            background: color-mix(in srgb, var(--accent) 15%, transparent);
-            color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+            font-family: var(--vwk-font-body); font-size: 0.62rem; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 0.2rem 0.55rem; border-radius: 4px;
+            background: rgba(255, 140, 66, 0.15); color: var(--vwk-orange);
+            border: 1px solid rgba(255, 140, 66, 0.35);
         }
         .badge-desktop {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.55rem; font-weight: 600;
-            letter-spacing: 0.06em; text-transform: uppercase;
-            padding: 0.2rem 0.5rem; border-radius: 6px;
-            background: rgba(251, 191, 36, 0.12); color: #fbbf24;
-            border: 1px solid rgba(251, 191, 36, 0.3);
+            font-family: var(--vwk-font-body); font-size: 0.55rem; font-weight: 600;
+            padding: 0.2rem 0.5rem; border-radius: 4px;
+            background: rgba(255, 209, 102, 0.15); color: var(--vwk-yellow);
+            border: 1px solid rgba(255, 209, 102, 0.4);
         }
-        .tile-title { font-size: 1.15rem; font-weight: 600; }
-        .tile-sub { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: var(--muted); }
-        .tile-desc { font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; line-height: 1.5; color: rgba(248,244,255,0.65); margin-top: 0.15rem; }
-        .tile-actions {
-            display: flex; gap: 0.5rem; padding: 0 1.1rem 1.1rem;
-        }
+        .tile-title { font-family: var(--vwk-font-display); font-size: 1.15rem; font-weight: 700; }
+        .tile-sub { font-size: 0.75rem; color: var(--vwk-paper-muted); }
+        .tile-desc { font-size: 0.8rem; line-height: 1.5; color: var(--vwk-paper-muted); }
+        .tile-actions { display: flex; gap: 0.5rem; padding: 0 1.1rem 1.1rem; }
         .tile-actions a {
-            flex: 1; text-align: center; padding: 0.55rem 0.75rem; border-radius: 10px;
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 700;
-            letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
-            transition: transform 0.2s, filter 0.2s;
+            flex: 1; text-align: center; padding: 0.55rem 0.75rem; border-radius: 6px;
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+            text-transform: uppercase; text-decoration: none;
+            border: 2px solid #1a1208; transition: transform 0.15s;
         }
-        .btn-play { background: var(--accent); color: #fff; }
-        .btn-play:hover { filter: brightness(1.15); transform: scale(1.02); }
-        .btn-dl {
-            background: rgba(255,255,255,0.06); color: var(--muted);
-            border: 1px solid var(--border);
+        .btn-play { background: var(--vwk-orange); color: #1a1208; box-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
+        .btn-play:hover { transform: translate(-1px, -1px); }
+        .btn-dl { background: var(--vwk-ink); color: var(--vwk-paper-muted); border-color: var(--vwk-border-strong); }
+        .btn-dl:hover { color: var(--vwk-paper); }
+        .skeleton {
+            border-radius: 12px; min-height: 280px;
+            background: var(--vwk-ink-raised);
+            border: 2px dashed var(--vwk-border-strong);
         }
-        .btn-dl:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
-        .skeleton { border-radius: 16px; min-height: 280px; background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-        .empty, .error { text-align: center; padding: 2rem; font-family: 'Space Grotesk', sans-serif; color: var(--muted); grid-column: 1 / -1; }
+        .empty, .error { text-align: center; padding: 2rem; color: var(--vwk-paper-dim); grid-column: 1 / -1; }
     </style>
 </head>
-<body>
-    <div class="sky"></div>
-    <canvas id="stars"></canvas>
-    <div class="floaties" aria-hidden="true">
-        <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
-    </div>
-    <div class="page">
+<body class="vwk-body">
+    <div class="vwk-sky" aria-hidden="true"></div>
+    <div class="vwk-page page">
         <div id="nav-slot"></div>
-        <header class="hero">
+        <header class="vwk-hero hero">
             <h1 id="hero-title">Vibe with Kids</h1>
-            <p class="tagline" id="hero-tagline">Loading adventures...</p>
+            <p class="vwk-tagline tagline" id="hero-tagline">Loading adventures...</p>
         </header>
         <div class="builds-tabs" role="tablist">
             <button class="build-tab active" role="tab" aria-selected="true" data-tab="ours">Our Builds</button>
@@ -196,33 +113,6 @@
                 document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
             });
         });
-
-        (function initStars() {
-            const canvas = document.getElementById('stars');
-            const ctx = canvas.getContext('2d');
-            let stars = [], w, h;
-            function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-                stars = Array.from({ length: Math.floor(w * h / 9000) }, () => ({
-                    x: Math.random() * w, y: Math.random() * h,
-                    r: Math.random() * 1.4 + 0.3, a: Math.random(), speed: Math.random() * 0.3 + 0.05
-                }));
-            }
-            function draw() {
-                ctx.clearRect(0, 0, w, h);
-                for (const s of stars) {
-                    s.a += s.speed * 0.01;
-                    ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255,255,255,${(0.3 + Math.abs(Math.sin(s.a)) * 0.7) * 0.7})`;
-                    ctx.fill();
-                }
-                requestAnimationFrame(draw);
-            }
-            resize(); draw();
-            window.addEventListener('resize', resize);
-        })();
 
         async function loadProjects() {
             const grid = document.getElementById('grid');

@@ -4,54 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekend Vibe Coding Ideas · Vibe with Kids</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/VibewithKids/assets/vwk-theme.css">
     <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
     <style>
-        body { margin: 0; min-height: 100vh; font-family: 'Fredoka', system-ui, sans-serif; color: #f8f4ff; background: #12082e; }
-        .sky { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse at top, #2d1b69, #12082e 55%, #1a0a3e); }
-        .page { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
-        h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 1.25rem 0 0.5rem; }
-        .lead { font-family: 'Space Grotesk', sans-serif; color: rgba(248,244,255,0.72); line-height: 1.6; margin-bottom: 1.25rem; }
-
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .tab-btn {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 700;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            padding: 0.55rem 1rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18);
-            background: rgba(255,255,255,0.08); color: rgba(248,244,255,0.8);
-            cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s;
-        }
-        .tab-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
-        .tab-btn.active { background: rgba(0,210,255,0.18); border-color: rgba(0,210,255,0.45); color: #fff; }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
-
-        .card {
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 16px; padding: 1.25rem; margin-bottom: 1.25rem;
-        }
-        .card h2 { font-size: 1rem; margin-bottom: 0.65rem; color: #7dd3fc; }
-        .card p { font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; line-height: 1.6; color: rgba(248,244,255,0.78); margin: 0; }
+        .card { padding: 1.25rem; margin-bottom: 1.25rem; }
+        .card h2 { font-family: var(--vwk-font-display); font-size: 1rem; margin-bottom: 0.65rem; color: var(--vwk-mint); }
+        .card p { font-size: 0.88rem; line-height: 1.6; color: var(--vwk-paper-muted); margin: 0; }
 
         .dl-list { list-style: none; padding: 0; margin: 0.75rem 0 0; }
         .dl-list a {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0.65rem 0.85rem; margin-bottom: 0.4rem; border-radius: 10px;
-            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-            color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
-            transition: border-color 0.2s, background 0.2s;
+            padding: 0.65rem 0.85rem; margin-bottom: 0.4rem; border-radius: 6px;
+            background: var(--vwk-ink); border: 2px solid var(--vwk-border-strong);
+            color: var(--vwk-paper); text-decoration: none; font-size: 0.85rem;
+            transition: border-color 0.15s, transform 0.15s;
         }
-        .dl-list a:hover { border-color: rgba(0,210,255,0.45); background: rgba(0,210,255,0.1); }
-        .dl-list span { color: rgba(248,244,255,0.5); font-size: 0.75rem; }
+        .dl-list a:hover { border-color: var(--vwk-orange); transform: translate(-1px, -1px); }
+        .dl-list span { color: var(--vwk-paper-dim); font-size: 0.75rem; }
 
         .prompt-list { display: flex; flex-direction: column; gap: 0.85rem; }
         .prompt-card {
-            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 14px; padding: 1.1rem 1.2rem; display: flex; gap: 1rem; align-items: flex-start;
+            background: var(--vwk-ink-raised); border: 2px solid var(--vwk-border-strong);
+            border-radius: 10px; padding: 1.1rem 1.2rem; display: flex; gap: 1rem; align-items: flex-start;
+            box-shadow: var(--vwk-shadow);
         }
-        .prompt-text { flex: 1; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; line-height: 1.55; color: rgba(248,244,255,0.9); }
+        .prompt-text { flex: 1; font-size: 0.9rem; line-height: 1.55; color: var(--vwk-paper); }
         .prompt-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
-        .tag { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 6px; background: rgba(0,210,255,0.15); color: #7dd3fc; font-family: 'Space Grotesk', sans-serif; }
+        .tag { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 4px; background: rgba(255,140,66,0.15); color: var(--vwk-orange); border: 1px solid rgba(255,140,66,0.3); }
         .like-btn {
             display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
             padding: 0.5rem 0.65rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14);
@@ -59,78 +40,56 @@
             transition: transform 0.2s, border-color 0.2s;
         }
         .like-btn:hover { transform: scale(1.05); border-color: rgba(255,107,157,0.45); }
-        .like-btn.liked { border-color: #ff6b9d; background: rgba(255,107,157,0.15); }
+        .like-btn.liked { border-color: var(--vwk-coral); background: rgba(239,100,97,0.15); }
         .like-btn .heart { font-size: 1.2rem; line-height: 1; }
         .like-btn .count { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.55); }
 
         .warn-box {
-            background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.35);
-            border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem;
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; line-height: 1.55;
-            color: rgba(254, 243, 199, 0.95);
+            background: rgba(255, 209, 102, 0.1); border: 2px solid rgba(255, 209, 102, 0.4);
+            border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1rem;
+            font-size: 0.82rem; line-height: 1.55; color: var(--vwk-paper);
         }
-        .warn-box strong { color: #fde68a; }
+        .warn-box strong { color: var(--vwk-yellow); }
 
-        .submit-box {
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 16px; padding: 1.25rem; margin-top: 1.5rem;
-        }
-        .submit-box h2 { font-size: 1rem; margin-bottom: 0.75rem; color: #fda4af; }
-        .submit-box label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: rgba(248,244,255,0.65); display: block; margin-bottom: 0.35rem; }
-        .submit-box .field-hint { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.45); margin: -0.5rem 0 0.75rem; }
+        .submit-box { padding: 1.25rem; margin-top: 0; }
+        .submit-box h2 { font-family: var(--vwk-font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--vwk-coral); }
+        .submit-box label { font-size: 0.75rem; color: var(--vwk-paper-muted); display: block; margin-bottom: 0.35rem; }
+        .submit-box .field-hint { font-size: 0.7rem; color: var(--vwk-paper-dim); margin: -0.5rem 0 0.75rem; }
         .submit-box input, .submit-box textarea {
-            width: 100%; padding: 0.65rem 0.85rem; margin-bottom: 0.75rem; border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06);
-            color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
+            width: 100%; padding: 0.65rem 0.85rem; margin-bottom: 0.75rem; border-radius: 6px;
+            border: 2px solid var(--vwk-border-strong); background: var(--vwk-ink);
+            color: var(--vwk-paper); font-size: 0.9rem;
         }
         .submit-box textarea { min-height: 160px; resize: vertical; }
-        .submit-box .check-row {
-            display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.85rem;
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; color: rgba(248,244,255,0.8);
-        }
+        .submit-box .check-row { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.85rem; font-size: 0.8rem; color: var(--vwk-paper-muted); }
         .submit-box .check-row input { width: auto; margin: 0.15rem 0 0; }
-        .submit-box button {
-            padding: 0.65rem 1.25rem; border: none; border-radius: 10px;
-            background: linear-gradient(135deg, #7c3aed, #ff6b9d); color: #fff;
-            font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
-            letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
-        }
-        .submit-box button:hover { filter: brightness(1.1); }
-        .toast {
-            margin-top: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem;
-            display: none;
-        }
-        .section-label { font-size: 1rem; color: #fda4af; margin-bottom: 0.75rem; }
-        .community-card .idea-name { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.35rem; }
-        .community-card .author { font-weight: 600; color: #c4b5fd; margin-top: 0.5rem; font-size: 0.8rem; }
-        .empty-note { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: rgba(248,244,255,0.5); }
+        .toast { margin-top: 0.75rem; font-size: 0.8rem; display: none; }
+        .section-label { font-family: var(--vwk-font-display); font-size: 1rem; color: var(--vwk-coral); margin-bottom: 0.75rem; }
+        .community-card .idea-name { font-family: var(--vwk-font-display); font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; }
+        .community-card .author { font-weight: 600; color: var(--vwk-mint); margin-top: 0.5rem; font-size: 0.8rem; }
 
         .category-pills {
             display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.65rem;
         }
         .cat-pill {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 600;
-            padding: 0.4rem 0.75rem; border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06);
-            color: rgba(248,244,255,0.85); cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, color 0.2s;
+            font-size: 0.72rem; font-weight: 600; padding: 0.4rem 0.75rem; border-radius: 999px;
+            border: 2px solid var(--vwk-border-strong); background: var(--vwk-ink);
+            color: var(--vwk-paper-muted); cursor: pointer; transition: all 0.15s;
         }
-        .cat-pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
-        .cat-pill.active {
-            background: rgba(0,210,255,0.2); border-color: rgba(0,210,255,0.5); color: #fff;
-        }
+        .cat-pill:hover { border-color: var(--vwk-orange); color: var(--vwk-paper); }
+        .cat-pill.active { background: var(--vwk-orange); border-color: var(--vwk-orange); color: #1a1208; }
         #category-other-wrap { display: none; }
         #category-other-wrap.visible { display: block; }
     </style>
 </head>
-<body>
-    <div class="sky"></div>
-    <div class="page">
+<body class="vwk-body">
+    <div class="vwk-sky" aria-hidden="true"></div>
+    <div class="vwk-page vwk-page-narrow page">
         <div id="nav-slot"></div>
         <h1>Weekend Vibe Coding Ideas</h1>
-        <p class="lead">Browse our prompt library, download the builds, see what other families have shared, or submit your own idea.</p>
+        <p class="vwk-lead lead">Browse our prompt library, download the builds, see what other families have shared, or submit your own idea.</p>
 
-        <div class="tabs" role="tablist">
+        <div class="vwk-tabs tabs" role="tablist">
             <button class="tab-btn active" role="tab" aria-selected="true" data-tab="prompts">Prompt Library</button>
             <button class="tab-btn" role="tab" aria-selected="false" data-tab="downloads">Downloads</button>
             <button class="tab-btn" role="tab" aria-selected="false" data-tab="community">Ideas from the Community</button>
