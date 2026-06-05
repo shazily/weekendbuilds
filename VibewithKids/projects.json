@@ -12,6 +12,7 @@
       "category": "Education",
       "description": "A fun AI-powered quiz platform built for kids by kids. Fully open for non-commercial use — built for live quizzes and learning in classrooms, community groups, and similar settings.",
       "poster": "assets/posters/junto.png",
+      "posterPosition": "top",
       "accent": "#7c3aed",
       "accentGlow": "rgba(124, 58, 237, 0.45)",
       "badge": "featured",

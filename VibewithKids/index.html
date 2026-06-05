@@ -115,7 +115,7 @@
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; border-bottom: 1px solid var(--border);
         }
-        .tile-poster img { width: 100%; height: 100%; object-fit: cover; }
+        .tile-poster img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
         .tile-badge {
             position: absolute; top: 0.65rem; left: 0.65rem; z-index: 2;
             display: inline-flex; align-items: center; gap: 0.3rem;
@@ -278,9 +278,10 @@
                         : p.badge === 'new'
                             ? '<span class="tile-badge tile-badge-new">New</span>'
                             : '';
+                    const posterPos = p.posterPosition || 'center';
                     const dlBtn = isExternal ? '' : `<a class="btn-dl" href="${dlUrl}" download>⬇ Download</a>`;
                     return `<article class="tile" style="--accent:${p.accent};--accent-glow:${p.accentGlow || p.accent + '55'}">
-                        <div class="tile-poster">${badge}<img src="${poster}" alt="${p.title} poster" loading="lazy"></div>
+                        <div class="tile-poster">${badge}<img src="${poster}" alt="${p.title} poster" loading="lazy" style="object-position:${posterPos}"></div>
                         <div class="tile-body">
                             <div class="tile-meta">
                                 <span class="category">${p.category}</span>
