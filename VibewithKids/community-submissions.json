@@ -1,6 +1,22 @@
 {
   "submissions": [
     {
+      "id": "sub-1780658432118",
+      "type": "prompt",
+      "name": "Star Counter Game",
+      "text": "A simple click game that teaches counting while collecting glowing stars in space.",
+      "categories": [
+        "Game",
+        "Fun"
+      ],
+      "category": "Game, Fun",
+      "author": "E2E Test",
+      "submittedAt": "2026-06-05T11:20:32.119Z",
+      "approved": true,
+      "likes": 0,
+      "prompt": "Build a tiny star-collecting game where kids click glowing stars and learn counting from 1 to 10."
+    },
+    {
       "id": "sub-copy-test",
       "type": "prompt",
       "name": "Rainbow Calculator",

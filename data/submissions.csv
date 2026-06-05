@@ -4,3 +4,4 @@ sub-smoke-1780656055555,"Smoke Test Idea","Fun","Smoke Test","Automated smoke te
 sub-issue-1,"Test From CLI","Fun","Shaz","This is a test submission with enough characters to verify the GitHub Action saves it to community-submissions.json.",2026-06-05T10:52:40Z,true
 sub-e2e-1,"E2E Test Idea","Art","E2E Bot","End to end test of repository dispatch submission flow with enough text.",2026-06-05T13:00:00.000Z,true
 sub-1780657621575,"Live Test 2","Art","Shaz","Verifying submit works after redeploy with enough characters here.",2026-06-05T11:07:01.575Z,true
+sub-1780658432118,"prompt","Star Counter Game","Game, Fun","E2E Test","A simple click game that teaches counting while collecting glowing stars in space.","Build a tiny star-collecting game where kids click glowing stars and learn counting from 1 to 10.",2026-06-05T11:20:32.119Z,true
