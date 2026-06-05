@@ -6,6 +6,8 @@
   "description": "Weekend Labs — vibe-coded builds with kids",
   "scripts": {
     "deploy": "vercel --prod",
-    "deploy:preview": "vercel"
+    "deploy:preview": "vercel",
+    "test:submit": "node scripts/test-submit-flow.mjs",
+    "test:submit:dispatch": "node scripts/test-submit-flow.mjs --dispatch"
   }
 }

@@ -381,18 +381,12 @@
 
         async function loadCommunity() {
             try {
-                const r = await fetch('/api/community-submissions');
-                if (!r.ok) throw new Error('api failed');
+                const r = await fetch(`${VWK.siteRoot()}community-submissions.json?t=${Date.now()}`);
+                if (!r.ok) throw new Error('load failed');
                 const data = await r.json();
-                renderCommunityList(data.submissions || []);
+                renderCommunityList((data.submissions || []).filter(s => s.approved !== false));
             } catch {
-                try {
-                    const r = await fetch(`${VWK.siteRoot()}community-submissions.json`);
-                    const data = await r.json();
-                    renderCommunityList((data.submissions || []).filter(s => s.approved !== false));
-                } catch {
-                    renderCommunityList([]);
-                }
+                renderCommunityList([]);
             }
         }
 
@@ -446,7 +440,7 @@
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';
                 toast.style.color = '#4ade80';
-                toast.textContent = data.message || 'Thanks! Your idea is live — see it under Ideas from the Community.';
+                toast.textContent = data.message || 'Thanks! Your idea is saved — it usually appears within a minute.';
                 await loadCommunity();
                 document.querySelector('.tab-btn[data-tab="community"]').click();
             } catch (e) {
