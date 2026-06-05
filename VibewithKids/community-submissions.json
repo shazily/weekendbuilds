@@ -1,3 +1,16 @@
 {
-  "submissions": []
+  "submissions": [
+    {
+      "id": "test-local",
+      "name": "Local Test",
+      "text": "Testing github store locally",
+      "categories": [
+        "Fun"
+      ],
+      "category": "Fun",
+      "author": "Test",
+      "submittedAt": "2026-06-05T10:38:56.041Z",
+      "approved": true
+    }
+  ]
 }
