@@ -11,11 +11,13 @@
       gtag('config', 'G-21TVKZ7NKB');
     </script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="author" content="Shazily Munawar">
     <title>Galactic Ranger: V2.7 (Feature Update)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
-        body { margin: 0; overflow: hidden; background: #000; font-family: 'Orbitron', sans-serif; }
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Orbitron', sans-serif; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+        canvas { touch-action: none; display: block; }
 
         /* WATERMARK */
         #watermark { position: absolute; bottom: 5px; left: 10px; color: #446688; font-size: 10px; opacity: 0.7; pointer-events: none; z-index: 25; }
@@ -157,6 +159,77 @@
             align-items: center; justify-content: center; flex-direction: column;
         }
         .pause-text { font-size: 50px; color: #fff; letter-spacing: 20px; text-shadow: 0 0 20px #fff; }
+
+        /* MOBILE TOUCH CONTROLS */
+        #touch-controls {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+            box-sizing: border-box;
+            pointer-events: auto;
+            z-index: 15;
+            background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+        }
+        .touch-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .touch-btn {
+            flex: 1;
+            max-width: 110px;
+            min-height: 52px;
+            border: 2px solid rgba(0, 210, 255, 0.55);
+            border-radius: 12px;
+            background: rgba(0, 20, 40, 0.75);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.15);
+        }
+        .touch-btn:active {
+            background: rgba(0, 210, 255, 0.35);
+            transform: scale(0.96);
+        }
+        .touch-btn.wide { max-width: 160px; }
+        .touch-btn.pause-btn { max-width: 90px; flex: 0 0 auto; border-color: rgba(255, 215, 0, 0.5); }
+
+        @media (hover: none) and (pointer: coarse) {
+            #touch-controls { display: block; }
+            #controls-footer { display: none; }
+            .panel { top: 10px; padding: 6px 14px; min-width: 90px; }
+            .val { font-size: 20px; }
+            #score-panel { left: 8px; }
+            #bucks-panel { right: 8px; }
+            #level-bar-container { width: min(400px, 72vw); }
+            #center-hud { top: 6px; }
+            #lives-panel { font-size: 22px; letter-spacing: 4px; }
+            #timer-box { font-size: 11px; padding: 4px 10px; }
+            #level-text { font-size: 11px; }
+            #game-logo { font-size: 42px; }
+            #game-sub { font-size: 16px; margin-bottom: 24px; }
+            .mission-box { padding: 24px 18px; max-width: 92vw; }
+            #trivia-box { width: min(700px, 92vw); padding: 24px 18px; }
+            #q-text { font-size: 18px; margin-bottom: 24px; }
+            .opt-btn { font-size: 16px; padding: 16px; }
+            .pause-text { font-size: 28px; letter-spacing: 8px; }
+            .pause-resume-desktop { display: none !important; }
+            .pause-resume-mobile { display: block !important; }
+        }
+        @media not all and (hover: none) and (pointer: coarse) {
+            .pause-resume-mobile { display: none !important; }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
@@ -211,7 +284,8 @@
 
     <div id="pause-screen">
         <div class="pause-text">MISSION SUSPENDED</div>
-        <div style="font-size: 20px; margin-top:20px; letter-spacing:5px;">PRESS <span style="color:#00d2ff; font-weight:bold;">SPACE</span> TO RESUME</div>
+        <div class="pause-resume-desktop" style="font-size: 20px; margin-top:20px; letter-spacing:5px;">PRESS <span style="color:#00d2ff; font-weight:bold;">SPACE</span> TO RESUME</div>
+        <div class="pause-resume-mobile" style="font-size: 18px; margin-top:20px; letter-spacing:3px;">TAP <span style="color:#00d2ff; font-weight:bold;">⏸</span> TO RESUME</div>
     </div>
 
     <div id="level-alert">
@@ -241,6 +315,18 @@
             <span class="key">↓</span> SLIDE &nbsp;&nbsp; 
             <span class="key">←</span> <span class="key">→</span> STEER &nbsp;&nbsp; 
             <span class="key">SPACE</span> PAUSE
+        </div>
+        <div id="touch-controls" aria-label="Touch controls">
+            <div class="touch-row">
+                <button type="button" class="touch-btn" data-action="ArrowLeft" aria-label="Steer left">◀ Left</button>
+                <button type="button" class="touch-btn" data-action="ArrowUp" aria-label="Jump">▲ Jump</button>
+                <button type="button" class="touch-btn" data-action="ArrowDown" aria-label="Slide">▼ Slide</button>
+                <button type="button" class="touch-btn" data-action="ArrowRight" aria-label="Steer right">Right ▶</button>
+            </div>
+            <div class="touch-row">
+                <button type="button" class="touch-btn wide" data-action="hint">Swipe on screen to move</button>
+                <button type="button" class="touch-btn pause-btn" data-action="pause" aria-label="Pause">⏸</button>
+            </div>
         </div>
     </div>
 
@@ -549,6 +635,7 @@
             state.currentDeck = shuffleDeck([...ALL_LEVELS[0]]);
 
             window.addEventListener('keydown', handleInput);
+            initTouchControls(renderer.domElement);
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth/window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -556,6 +643,70 @@
             });
 
             animate();
+        }
+
+        function sendGameAction(key) {
+            if (document.getElementById('modal-overlay').style.display === 'block') return;
+            if (state.paused || !state.gameStarted) return;
+            ranger.handleInput(key);
+        }
+
+        function initTouchControls(canvasEl) {
+            const SWIPE_MIN = 36;
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchActive = false;
+
+            function handleSwipe(endX, endY) {
+                const dx = endX - touchStartX;
+                const dy = endY - touchStartY;
+                const absX = Math.abs(dx);
+                const absY = Math.abs(dy);
+                if (Math.max(absX, absY) < SWIPE_MIN) return;
+                if (absX > absY) {
+                    sendGameAction(dx < 0 ? 'ArrowLeft' : 'ArrowRight');
+                } else {
+                    sendGameAction(dy < 0 ? 'ArrowUp' : 'ArrowDown');
+                }
+            }
+
+            canvasEl.addEventListener('touchstart', (e) => {
+                if (!state.gameStarted || state.paused) return;
+                if (document.getElementById('modal-overlay').style.display === 'block') return;
+                if (e.touches.length !== 1) return;
+                touchActive = true;
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            canvasEl.addEventListener('touchmove', (e) => {
+                if (touchActive && state.gameStarted && !state.paused) e.preventDefault();
+            }, { passive: false });
+
+            canvasEl.addEventListener('touchend', (e) => {
+                if (!touchActive) return;
+                touchActive = false;
+                if (!e.changedTouches.length) return;
+                handleSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            }, { passive: true });
+
+            canvasEl.addEventListener('touchcancel', () => { touchActive = false; }, { passive: true });
+
+            document.getElementById('touch-controls')?.querySelectorAll('.touch-btn[data-action]').forEach(btn => {
+                const action = btn.dataset.action;
+                if (action === 'hint') return;
+                let lastFire = 0;
+                const fire = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const now = Date.now();
+                    if (now - lastFire < 200) return;
+                    lastFire = now;
+                    if (action === 'pause') togglePause();
+                    else sendGameAction(action);
+                };
+                btn.addEventListener('pointerdown', fire);
+            });
         }
 
         function handleInput(e) {
@@ -572,8 +723,7 @@
             }
 
             if(e.code === 'Space') { togglePause(); return; }
-            if(state.paused || !state.gameStarted) return;
-            ranger.handleInput(e.key);
+            sendGameAction(e.key);
         }
 
         function createEnvironment() {
