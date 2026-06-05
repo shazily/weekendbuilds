@@ -511,7 +511,15 @@
             const grid = document.getElementById('grid');
 
             try {
-                const res = await fetch('projects.json');
+                const path = window.location.pathname;
+                const last = path.split('/').pop() || '';
+                const basePath =
+                    path.endsWith('/') ? path
+                    : last.includes('.') ? path.substring(0, path.lastIndexOf('/') + 1)
+                    : `${path}/`;
+
+                const manifestUrl = `${basePath}projects.json`;
+                const res = await fetch(manifestUrl);
                 if (!res.ok) throw new Error('Manifest not found');
                 const data = await res.json();
 
@@ -529,9 +537,9 @@
                 }
 
                 grid.innerHTML = data.projects.map((p, i) => `
-                    <a class="tile" href="${p.slug}" style="--accent: ${p.accent}; --accent-glow: ${p.accentGlow || p.accent + '66'}">
+                    <a class="tile" href="${basePath}${p.slug}" style="--accent: ${p.accent}; --accent-glow: ${p.accentGlow || p.accent + '66'}">
                         <div class="tile-shot">
-                            <img src="${p.screenshot}" alt="${p.title} screenshot" loading="${i < 2 ? 'eager' : 'lazy'}">
+                            <img src="${p.screenshot.startsWith('/') ? p.screenshot : `${basePath}${p.screenshot}`}" alt="${p.title} screenshot" loading="${i < 2 ? 'eager' : 'lazy'}">
                             <span class="play-pill">▶ Play</span>
                         </div>
                         <div class="tile-body">
