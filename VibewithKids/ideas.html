@@ -440,7 +440,7 @@
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';
                 toast.style.color = '#4ade80';
-                toast.textContent = data.message || 'Thanks! Your idea is saved — it usually appears within a minute.';
+                toast.textContent = data.message || 'Thanks! Your idea is live — see it under Ideas from the Community.';
                 await loadCommunity();
                 document.querySelector('.tab-btn[data-tab="community"]').click();
             } catch (e) {
