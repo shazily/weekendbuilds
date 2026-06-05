@@ -109,27 +109,33 @@
     <div class="page">
         <div id="nav-slot"></div>
         <h1>Weekend Vibe Coding Ideas</h1>
-        <p class="lead">Our prompt library, community ideas from other families, and downloads of every build.</p>
+        <p class="lead">Browse our prompt library, download the builds, see what other families have shared, or submit your own idea.</p>
 
         <div class="tabs" role="tablist">
-            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="prompts">Our Prompts</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="community">Community</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="downloads">Downloads</button>
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="library">Prompt Library &amp; Downloads</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="community">Ideas from the Community</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="submit">Submit an Idea</button>
         </div>
 
-        <div class="tab-panel active" id="panel-prompts" role="tabpanel">
+        <div class="tab-panel active" id="panel-library" role="tabpanel">
             <p class="empty-note" id="prompt-list"></p>
+            <div class="card" style="margin-top:1.5rem">
+                <h2>Download the source</h2>
+                <p>Grab any project as a standalone HTML file. Each includes attribution to Shazily Munawar and a link to LinkedIn in the code.</p>
+                <div id="downloads-list"><p class="empty-note">Loading projects...</p></div>
+            </div>
         </div>
 
         <div class="tab-panel" id="panel-community" role="tabpanel">
+            <p class="section-label">Submitted by other families</p>
+            <div class="prompt-list" id="community-list"></div>
+        </div>
+
+        <div class="tab-panel" id="panel-submit" role="tabpanel">
             <div class="warn-box">
                 <strong>Child-safe only.</strong> Keep ideas fun and family-friendly. No personal contact details, violence, or unsafe themes.
             </div>
-
-            <p class="section-label">Ideas from the community</p>
-            <div class="prompt-list" id="community-list"></div>
-
-            <div class="submit-box">
+            <div class="submit-box" style="margin-top:0">
                 <h2>Share your idea</h2>
                 <label for="author">Your name</label>
                 <input type="text" id="author" placeholder="Parent + kid names" maxlength="60" required>
@@ -141,14 +147,6 @@
                 </label>
                 <button type="button" id="submit-btn">Share idea</button>
                 <p class="toast" id="toast"></p>
-            </div>
-        </div>
-
-        <div class="tab-panel" id="panel-downloads" role="tabpanel">
-            <div class="card">
-                <h2>Download the source</h2>
-                <p>Grab any project as a standalone HTML file. Each includes attribution to Shazily Munawar and a link to LinkedIn in the code.</p>
-                <div id="downloads-list"><p class="empty-note">Loading projects...</p></div>
             </div>
         </div>
 
@@ -347,15 +345,9 @@
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';
                 toast.style.color = '#4ade80';
-                toast.textContent = data.message || 'Thanks! Your idea is live.';
-
-                if (data.submission) {
-                    const list = document.getElementById('community-list');
-                    const empty = list.querySelector('.empty-note');
-                    if (empty) empty.remove();
-                    list.insertAdjacentHTML('afterbegin', renderCommunityItem(data.submission));
-                }
+                toast.textContent = data.message || 'Thanks! Your idea is live — see it under Ideas from the Community.';
                 await loadCommunity();
+                document.querySelector('.tab-btn[data-tab="community"]').click();
             } catch (e) {
                 toast.style.display = 'block';
                 toast.style.color = '#f87171';
