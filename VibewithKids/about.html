@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
     <style>
-        body { margin: 0; min-height: 100vh; font-family: 'Fredoka', system-ui, sans-serif; color: #f8f4ff; background: #07051a; }
-        .sky { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse at top, #1a0a3e, #07051a 60%); }
+        body { margin: 0; min-height: 100vh; font-family: 'Fredoka', system-ui, sans-serif; color: #f8f4ff; background: #12082e; }
+        .sky { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse at top, #2d1b69, #12082e 55%, #1a0a3e); }
         .page { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
         h1 { font-size: clamp(2rem, 6vw, 3rem); margin: 1.5rem 0 0.5rem; background: linear-gradient(135deg, #fff, #c4b5fd, #00d2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .lead { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; color: rgba(248,244,255,0.65); line-height: 1.7; margin-bottom: 2rem; }
-        .card { background: rgba(18,10,42,0.7); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; }
+        .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; }
         .card h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #00d2ff; }
         .card p, .card li { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; line-height: 1.65; color: rgba(248,244,255,0.75); }
         .card ul { padding-left: 1.25rem; margin-top: 0.5rem; }
@@ -22,17 +22,6 @@
         .builder .emoji { font-size: 2rem; }
         .builder .name { font-weight: 600; margin-top: 0.35rem; }
         .builder .role { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: rgba(248,244,255,0.5); }
-        .downloads h3 { font-size: 0.95rem; margin: 1rem 0 0.5rem; }
-        .dl-list { list-style: none; padding: 0; }
-        .dl-list a {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.65rem 0.85rem; margin-bottom: 0.4rem; border-radius: 10px;
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .dl-list a:hover { border-color: rgba(0,210,255,0.4); background: rgba(0,210,255,0.08); }
-        .dl-list span { color: rgba(248,244,255,0.45); font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -62,9 +51,8 @@
         </div>
 
         <div class="card">
-            <h2>Download the source</h2>
-            <p>Grab any project as a standalone HTML file. Each includes attribution to Shazily Munawar and a link to LinkedIn in the code.</p>
-            <div class="downloads" id="downloads-list"><p style="color:rgba(248,244,255,0.4)">Loading...</p></div>
+            <h2>Get the builds</h2>
+            <p>Head to <a href="ideas" style="color:#7dd3fc">Ideas</a> for vibe coding prompts and HTML downloads of every project.</p>
         </div>
 
         <div id="footer-slot"></div>
@@ -73,19 +61,6 @@
     <script>
         document.getElementById('nav-slot').innerHTML = vwkRenderNav('about');
         document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
-
-        fetch(`${VWK.siteRoot()}projects.json`)
-            .then(r => { if (!r.ok) throw new Error('failed'); return r.json(); })
-            .then(data => {
-                const base = VWK.siteRoot();
-                document.getElementById('downloads-list').innerHTML = '<h3>Projects</h3><ul class="dl-list">' +
-                    data.projects.map(p =>
-                        `<li><a href="${base}${p.file || p.slug + '.html'}" download><strong>${p.title}</strong><span>.html ↓</span></a></li>`
-                    ).join('') + '</ul>';
-            })
-            .catch(() => {
-                document.getElementById('downloads-list').innerHTML = '<p>Could not load downloads.</p>';
-            });
     </script>
 </body>
 </html>

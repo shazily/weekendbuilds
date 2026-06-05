@@ -14,20 +14,49 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.85rem 1.25rem;
+    padding: 0.75rem 1.25rem;
     margin: -0.5rem -1.25rem 1.5rem;
-    background: rgba(7, 5, 26, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--vwk-border);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 24px rgba(124, 58, 237, 0.12);
 }
 
 .vwk-nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     font-family: 'Space Grotesk', system-ui, sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--vwk-accent);
+    color: #fff;
     text-decoration: none;
     letter-spacing: 0.04em;
+}
+
+.vwk-nav-brand .vwk-logo {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.vwk-nav-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.vwk-nav-brand .vwk-nav-series {
+    color: #f8f4ff;
+    font-size: 0.85rem;
+}
+
+.vwk-nav-brand .vwk-nav-lab {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0, 210, 255, 0.95);
 }
 
 .vwk-nav-links {
@@ -43,7 +72,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--vwk-muted);
+    color: rgba(248, 244, 255, 0.82);
     padding: 0.4rem 0.75rem;
     border-radius: 8px;
     transition: color 0.2s, background 0.2s;
@@ -52,7 +81,7 @@
 .vwk-nav-links a:hover,
 .vwk-nav-links a.active {
     color: #fff;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.14);
 }
 
 .vwk-footer {

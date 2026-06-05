@@ -38,8 +38,15 @@ function vwkRenderNav(active) {
         { id: 'about', label: 'About', href: `${base}about` },
         { id: 'ideas', label: 'Ideas', href: `${base}ideas` }
     ];
+    const logo = `${base}assets/weekend-labs-logo.svg`;
     return `<nav class="vwk-nav">
-        <a class="vwk-nav-brand" href="${base}">${VWK.seriesName}</a>
+        <a class="vwk-nav-brand" href="${base}">
+            <img class="vwk-logo" src="${logo}" alt="Weekend Labs logo" width="32" height="32">
+            <span class="vwk-nav-brand-text">
+                <span class="vwk-nav-lab">${VWK.labName}</span>
+                <span class="vwk-nav-series">${VWK.seriesName}</span>
+            </span>
+        </a>
         <div class="vwk-nav-links">${pages.map(p =>
             `<a href="${p.href}" class="${active === p.id ? 'active' : ''}">${p.label}</a>`
         ).join('')}</div>
