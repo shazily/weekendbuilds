@@ -22,8 +22,8 @@ export default async function handler(req, res) {
     if (!text || typeof text !== 'string' || text.trim().length < 10) {
         return res.status(400).json({ error: 'Please write at least 10 characters for the prompt and description.' });
     }
-    if (text.length > 500) {
-        return res.status(400).json({ error: 'Please keep your description under 500 characters.' });
+    if (text.length > 8000) {
+        return res.status(400).json({ error: 'Please keep your description under 8,000 characters.' });
     }
     if (!category || typeof category !== 'string' || !category.trim()) {
         return res.status(400).json({ error: 'Please add a category.' });
