@@ -18,8 +18,9 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-    const { name, text, author, childSafe } = req.body || {};
+    const { name, text, prompt, author, childSafe } = req.body || {};
     const categories = normalizeCategories(req.body || {});
+    const type = req.body?.type === 'prompt' ? 'prompt' : 'idea';
 
     if (!name || typeof name !== 'string' || name.trim().length < 2) {
         return res.status(400).json({ error: 'Please add an idea name.' });
@@ -28,10 +29,18 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Idea name is too long (max 80 characters).' });
     }
     if (!text || typeof text !== 'string' || text.trim().length < 10) {
-        return res.status(400).json({ error: 'Please write at least 10 characters for the prompt and description.' });
+        return res.status(400).json({ error: 'Please write at least 10 characters for the description.' });
     }
     if (text.length > 8000) {
         return res.status(400).json({ error: 'Please keep your description under 8,000 characters.' });
+    }
+    if (type === 'prompt') {
+        if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 10) {
+            return res.status(400).json({ error: 'Please write at least 10 characters for the vibe coding prompt.' });
+        }
+        if (prompt.length > 8000) {
+            return res.status(400).json({ error: 'Please keep your prompt under 8,000 characters.' });
+        }
     }
     if (!categories.length) {
         return res.status(400).json({ error: 'Please pick at least one category.' });
@@ -56,6 +65,7 @@ export default async function handler(req, res) {
 
     const submission = {
         id: `sub-${Date.now()}`,
+        type,
         name: name.trim(),
         text: text.trim(),
         categories,
@@ -64,6 +74,9 @@ export default async function handler(req, res) {
         submittedAt: new Date().toISOString(),
         approved: true
     };
+    if (type === 'prompt') {
+        submission.prompt = prompt.trim();
+    }
 
     try {
         const gh = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {

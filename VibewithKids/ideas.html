@@ -63,6 +63,30 @@
         .like-btn .heart { font-size: 1.2rem; line-height: 1; }
         .like-btn .count { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.55); }
 
+        .copy-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            margin-top: 0.65rem; padding: 0.45rem 0.75rem; border-radius: 8px;
+            border: 1px solid rgba(0,210,255,0.35); background: rgba(0,210,255,0.12);
+            color: #7dd3fc; font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem;
+            font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+            cursor: pointer; transition: background 0.2s, border-color 0.2s;
+        }
+        .copy-btn:hover { background: rgba(0,210,255,0.22); border-color: rgba(0,210,255,0.55); }
+        .copy-btn.copied { border-color: rgba(74,222,128,0.5); color: #4ade80; background: rgba(74,222,128,0.12); }
+
+        .type-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.85rem; }
+        .type-pill {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 600;
+            padding: 0.5rem 0.9rem; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06);
+            color: rgba(248,244,255,0.85); cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .type-pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .type-pill.active { background: rgba(124,58,237,0.25); border-color: rgba(124,58,237,0.55); color: #fff; }
+        #prompt-field-wrap { display: none; }
+        #prompt-field-wrap.visible { display: block; }
+
         .warn-box {
             background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.35);
             border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem;
@@ -160,10 +184,20 @@
             </div>
             <div class="submit-box" style="margin-top:0">
                 <h2>Share your idea</h2>
+                <label>What are you sharing?</label>
+                <div class="type-pills" id="type-pills">
+                    <button type="button" class="type-pill active" data-type="idea">Just an idea</button>
+                    <button type="button" class="type-pill" data-type="prompt">Idea with a vibe coding prompt</button>
+                </div>
                 <label for="idea-name">Idea name</label>
                 <input type="text" id="idea-name" placeholder="e.g. Cosmic Pet Garden" maxlength="80" required>
-                <label for="prompt-text">Prompt and description</label>
-                <textarea id="prompt-text" placeholder="Describe the vibe coding prompt and what kids will learn or build..." maxlength="8000" required></textarea>
+                <label for="prompt-text">Description</label>
+                <textarea id="prompt-text" placeholder="Describe the idea and what kids might build or learn..." maxlength="8000" required></textarea>
+                <div id="prompt-field-wrap">
+                    <label for="idea-prompt">Vibe coding prompt</label>
+                    <p class="field-hint">This is the text other families can copy into their AI tool.</p>
+                    <textarea id="idea-prompt" placeholder="Write the full prompt here — e.g. Build a cosmic pet garden where..." maxlength="8000"></textarea>
+                </div>
                 <label>Category</label>
                 <p class="field-hint" style="margin-top:0;margin-bottom:0.5rem">Pick one or more</p>
                 <div class="category-pills" id="category-pills">
@@ -196,6 +230,17 @@
         document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
 
         const LIKED_KEY = 'vwk-liked-prompts';
+        const copyTexts = {};
+        let submissionType = 'idea';
+
+        document.querySelectorAll('.type-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                submissionType = pill.dataset.type;
+                document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                document.getElementById('prompt-field-wrap').classList.toggle('visible', submissionType === 'prompt');
+            });
+        });
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -279,19 +324,49 @@
             return cats.map(c => `<span class="tag">${escapeHtml(c)}</span>`).join('');
         }
 
-        function renderCommunityItem(s) {
+        function renderCommunityItem(s, count, liked) {
             const name = s.name ? `<div class="idea-name">${escapeHtml(s.name)}</div>` : '';
             const category = renderCategories(s);
             const body = escapeHtml(s.text || s.description || '');
             const author = s.author ? `<div class="author">— ${escapeHtml(s.author)}</div>` : '';
-            return `<div class="prompt-card community-card">
+            const hasPrompt = s.type === 'prompt' && s.prompt;
+            if (hasPrompt) copyTexts[s.id] = s.prompt;
+            const copyBtn = hasPrompt
+                ? `<button type="button" class="copy-btn" data-copy-id="${escapeHtml(s.id)}">Copy this prompt</button>`
+                : '';
+            return `<div class="prompt-card community-card" data-id="${escapeHtml(s.id)}">
                 <div class="prompt-text">
                     ${name}
                     ${body}
+                    ${copyBtn}
                     <div class="prompt-meta">${category}</div>
                     ${author}
                 </div>
+                <button class="like-btn${liked ? ' liked' : ''}" data-id="${escapeHtml(s.id)}" aria-label="Like this idea">
+                    <span class="heart">${liked ? '❤️' : '🤍'}</span>
+                    <span class="count">${count}</span>
+                </button>
             </div>`;
+        }
+
+        function bindCopyButtons(container) {
+            container.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const text = copyTexts[btn.dataset.copyId] || '';
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        btn.classList.add('copied');
+                        const prev = btn.textContent;
+                        btn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            btn.classList.remove('copied');
+                            btn.textContent = prev;
+                        }, 2000);
+                    } catch {
+                        btn.textContent = 'Copy failed';
+                    }
+                });
+            });
         }
 
         function escapeHtml(str) {
@@ -374,9 +449,20 @@
 
         function renderCommunityList(items) {
             const list = document.getElementById('community-list');
-            list.innerHTML = items.length
-                ? items.map(renderCommunityItem).join('')
-                : '<p class="empty-note">No community ideas yet — share yours below!</p>';
+            Object.keys(copyTexts).forEach(k => delete copyTexts[k]);
+            const liked = getLiked();
+            if (!items.length) {
+                list.innerHTML = '<p class="empty-note">No community ideas yet — share yours below!</p>';
+                return;
+            }
+            list.innerHTML = items.map(s => renderCommunityItem(s, 0, liked.includes(s.id))).join('');
+            bindLikeButtons(list);
+            bindCopyButtons(list);
+            items.forEach(async (s) => {
+                const count = await fetchLikeCount(s.id);
+                const btn = list.querySelector(`.like-btn[data-id="${s.id}"] .count`);
+                if (btn) btn.textContent = count;
+            });
         }
 
         async function loadCommunity() {
@@ -384,7 +470,7 @@
                 const r = await fetch(`${VWK.siteRoot()}community-submissions.json?t=${Date.now()}`);
                 if (!r.ok) throw new Error('load failed');
                 const data = await r.json();
-                renderCommunityList((data.submissions || []).filter(s => s.approved !== false));
+                renderCommunityList((data.submissions || []).filter(s => s.approved !== false && s.approved !== 'false'));
             } catch {
                 renderCommunityList([]);
             }
@@ -393,6 +479,7 @@
         document.getElementById('submit-btn').addEventListener('click', async () => {
             const name = document.getElementById('idea-name').value.trim();
             const text = document.getElementById('prompt-text').value.trim();
+            const prompt = document.getElementById('idea-prompt').value.trim();
             const categories = getSelectedCategories();
             const author = document.getElementById('author').value.trim();
             const childSafe = document.getElementById('child-safe').checked;
@@ -407,7 +494,11 @@
             }
             if (text.length < 10) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = 'Please write at least 10 characters for the prompt and description.'; return;
+                toast.textContent = 'Please write at least 10 characters for the description.'; return;
+            }
+            if (submissionType === 'prompt' && prompt.length < 10) {
+                toast.style.display = 'block'; toast.style.color = '#f87171';
+                toast.textContent = 'Please write at least 10 characters for the vibe coding prompt.'; return;
             }
             if (!categories.length) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
@@ -426,16 +517,23 @@
 
             btn.disabled = true;
             try {
+                const payload = { type: submissionType, name, text, categories, author, childSafe: true };
+                if (submissionType === 'prompt') payload.prompt = prompt;
                 const r = await fetch('/api/submit-prompt', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, text, categories, author, childSafe: true })
+                    body: JSON.stringify(payload)
                 });
                 const data = await r.json();
                 if (!r.ok) throw new Error(data.error || 'Could not save your idea.');
 
                 document.getElementById('idea-name').value = '';
                 document.getElementById('prompt-text').value = '';
+                document.getElementById('idea-prompt').value = '';
+                submissionType = 'idea';
+                document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+                document.querySelector('.type-pill[data-type="idea"]').classList.add('active');
+                document.getElementById('prompt-field-wrap').classList.remove('visible');
                 resetCategories();
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';

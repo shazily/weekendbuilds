@@ -33,15 +33,17 @@ jobs:
             const esc = (v) => `"${String(v || '').replace(/"/g, '""')}"`;
             const line = [
               submission.id,
+              esc(submission.type || 'idea'),
               esc(submission.name),
               esc(submission.category),
               esc(submission.author),
               esc(submission.text),
+              esc(submission.prompt || ''),
               submission.submittedAt,
               submission.approved ? 'true' : 'false'
             ].join(',');
 
-            const header = 'id,name,category,author,text,submittedAt,approved';
+            const header = 'id,type,name,category,author,text,prompt,submittedAt,approved';
             const csv = fs.existsSync(csvPath)
               ? `${fs.readFileSync(csvPath, 'utf8').trim()}\n${line}\n`
               : `${header}\n${line}\n`;
