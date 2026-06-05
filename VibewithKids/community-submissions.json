@@ -1,6 +1,18 @@
 {
   "submissions": [
     {
+      "approved": "true",
+      "author": "E2E Bot",
+      "categories": [
+        "Art"
+      ],
+      "category": "Art",
+      "id": "sub-e2e-1",
+      "name": "E2E Test Idea",
+      "submittedAt": "2026-06-05T13:00:00.000Z",
+      "text": "End to end test of repository dispatch submission flow with enough text."
+    },
+    {
       "id": "sub-issue-1",
       "name": "Test From CLI",
       "text": "This is a test submission with enough characters to verify the GitHub Action saves it to community-submissions.json.",
