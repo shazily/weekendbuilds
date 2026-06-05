@@ -452,6 +452,16 @@
             }
         });
 
+        function activateTab(tab) {
+            const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+            if (btn) btn.click();
+        }
+
+        const hashTab = location.hash.replace('#', '');
+        if (['prompts', 'downloads', 'community', 'submit'].includes(hashTab)) {
+            activateTab(hashTab);
+        }
+
         loadCuratedPrompts();
         loadDownloads();
         loadCommunity();

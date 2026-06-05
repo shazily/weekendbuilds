@@ -59,8 +59,24 @@
         .stat-num { font-size: 1.75rem; font-weight: 700; }
         .stat-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.25rem; }
         .section-head { margin-bottom: 1.5rem; }
-        .section-head h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 0.35rem; }
-        .section-head p { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: var(--muted); }
+        .section-head-spaced { margin-top: 2.5rem; }
+        .section-head h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 0; }
+        .community-coming {
+            border-radius: 16px; background: var(--card-bg); border: 1px solid var(--border);
+            padding: 2rem 1.5rem; text-align: center;
+        }
+        .community-coming p {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem;
+            color: var(--muted); margin: 0 0 1.25rem;
+        }
+        .btn-add-idea {
+            display: inline-block; padding: 0.65rem 1.35rem; border-radius: 10px;
+            background: linear-gradient(135deg, #7c3aed, #ff6b9d); color: #fff;
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
+            transition: filter 0.2s, transform 0.2s;
+        }
+        .btn-add-idea:hover { filter: brightness(1.1); transform: scale(1.02); }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -143,17 +159,26 @@
         </header>
         <div class="section-head">
             <h2>Our Builds</h2>
-            <p>Play in the browser or download the HTML to explore the code together.</p>
         </div>
         <main class="grid" id="grid">
             <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
         </main>
+
+        <div class="section-head section-head-spaced">
+            <h2>Community Builds</h2>
+        </div>
+        <div class="community-coming">
+            <p>Coming soon — builds from parents and kids in the community.</p>
+            <a class="btn-add-idea" id="add-ideas-link" href="ideas#submit">Add your ideas</a>
+        </div>
+
         <div id="footer-slot"></div>
     </div>
     <script src="/VibewithKids/assets/vwk-site.js"></script>
     <script>
         document.getElementById('nav-slot').innerHTML = vwkRenderNav('home');
         document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
+        document.getElementById('add-ideas-link').href = `${VWK.siteRoot()}ideas#submit`;
 
         (function initStars() {
             const canvas = document.getElementById('stars');
