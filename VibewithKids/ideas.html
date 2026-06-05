@@ -363,6 +363,34 @@
             margin-bottom: 0.25rem;
         }
         .empty-note { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: rgba(248,244,255,0.5); }
+
+        .community-empty {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(6, 4, 18, 0.5);
+        }
+        .community-empty p {
+            margin: 0 0 1.15rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            color: rgba(248,244,255,0.55);
+            line-height: 1.55;
+        }
+        .community-submit-cta {
+            display: inline-block;
+            padding: 0.75rem 1.35rem;
+            border-radius: 8px;
+            background: #00d2ff;
+            color: #041018;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .community-submit-cta:hover { background: #33dbff; }
     </style>
 </head>
 <body>
@@ -774,7 +802,15 @@
             const list = document.getElementById('community-list');
             Object.keys(copyTexts).forEach(k => delete copyTexts[k]);
             if (!items.length) {
-                list.innerHTML = '<p class="empty-note">No community ideas yet — share yours below!</p>';
+                list.innerHTML = `<div class="community-empty">
+                    <p>No ideas from the community yet — be the first to share one.</p>
+                    <a class="community-submit-cta" href="#submit" id="community-submit-link">Submit an idea</a>
+                </div>`;
+                document.getElementById('community-submit-link')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector('.tab-btn[data-tab="submit"]')?.click();
+                    history.replaceState(null, '', '#submit');
+                });
                 return;
             }
             list.innerHTML = items.map(s => renderCommunityItem(s)).join('');

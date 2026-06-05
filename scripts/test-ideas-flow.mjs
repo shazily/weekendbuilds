@@ -22,19 +22,22 @@ async function fetchJson(url, opts) {
 async function main() {
   console.log(`Testing ${SITE}\n`);
 
-  // 1. Community JSON has a prompt entry with copy text
+  // 1. Prompt library has copyable prompts
+  {
+    const { r, data } = await fetchJson(`${SITE}/ideas.json`);
+    if (!r.ok) fail('Load ideas.json', r.status);
+    else ok('Load ideas.json');
+
+    const promptItem = (data.prompts || []).find(p => p.prompt);
+    if (!promptItem) fail('Find prompt in library');
+    else ok(`Library prompt "${promptItem.name}" has copy text (${promptItem.prompt.length} chars)`);
+  }
+
+  // 1b. Community starts empty (or loads)
   {
     const { r, data } = await fetchJson(`${SITE}/community-submissions.json`);
     if (!r.ok) fail('Load community-submissions.json', r.status);
     else ok('Load community-submissions.json');
-
-    const promptItem = (data.submissions || []).find(s => s.type === 'prompt' && s.prompt);
-    if (!promptItem) fail('Find prompt submission in JSON');
-    else {
-      ok(`Prompt entry "${promptItem.name}" has copy text (${promptItem.prompt.length} chars)`);
-      if (typeof promptItem.likes !== 'number') fail('Prompt entry has likes count');
-      else ok(`Prompt entry likes = ${promptItem.likes}`);
-    }
   }
 
   // 2. Submit idea + prompt via API
@@ -65,10 +68,10 @@ async function main() {
     }
   }
 
-  // 3. Like API
+  // 3. Like API (uses submitted id when available)
   if (submittedId) {
     await new Promise(r => setTimeout(r, 15000));
-    const { r, data } = await fetchJson(`${BASE}/api/like-idea?id=${encodeURIComponent('sub-copy-test')}`, {
+    const { r, data } = await fetchJson(`${BASE}/api/like-idea?id=${encodeURIComponent(submittedId)}`, {
       method: 'POST'
     });
     if (!r.ok) fail('POST /api/like-idea', `${r.status} ${JSON.stringify(data)}`);
@@ -88,8 +91,8 @@ async function main() {
     if (!html.includes('Copy this prompt')) fail('Ideas page includes copy button markup');
     else ok('Ideas page includes copy button markup');
 
-    if (!html.includes('/api/like-idea')) fail('Ideas page uses like-idea API');
-    else ok('Ideas page uses session-based like-idea API');
+    if (!html.includes('community-submit-cta')) fail('Ideas page has community empty-state CTA');
+    else ok('Ideas page has community empty-state CTA');
   }
 
   console.log(failures.length ? `\n${failures.length} failed` : '\nAll checks passed');
