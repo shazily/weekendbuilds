@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
+    <link rel="stylesheet" href="/VibewithKids/assets/vwk-nerd-info.css">
     <style>
         :root {
             --bg-deep: #07051a;
@@ -167,6 +168,7 @@
             border: 1px solid var(--border);
         }
         .btn-dl:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+        .tile-actions { flex-wrap: wrap; }
         .skeleton { border-radius: 16px; min-height: 280px; background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         .empty, .error { text-align: center; padding: 2rem; font-family: 'Space Grotesk', sans-serif; color: var(--muted); grid-column: 1 / -1; }
@@ -205,6 +207,7 @@
         <div id="footer-slot"></div>
     </div>
     <script src="/VibewithKids/assets/vwk-site.js"></script>
+    <script src="/VibewithKids/assets/vwk-nerd-info.js"></script>
     <script>
         document.getElementById('nav-slot').innerHTML = vwkRenderNav('home');
         document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
@@ -280,6 +283,9 @@
                             : '';
                     const posterPos = p.posterPosition || 'center';
                     const dlBtn = isExternal ? '' : `<a class="btn-dl" href="${dlUrl}" download>⬇ Download</a>`;
+                    const nerdBtn = (!isExternal && p.nerdInfo)
+                        ? `<button type="button" class="nerd-info-btn btn-nerd" data-slug="${p.slug}" aria-label="Nerd info for ${p.title}">Nerd info</button>`
+                        : '';
                     return `<article class="tile" style="--accent:${p.accent};--accent-glow:${p.accentGlow || p.accent + '55'}">
                         <div class="tile-poster">${badge}<img src="${poster}" alt="${p.title} poster" loading="lazy" style="object-position:${posterPos}"></div>
                         <div class="tile-body">
@@ -294,9 +300,12 @@
                         <div class="tile-actions">
                             <a class="btn-play" href="${playUrl}"${playTarget}>${playLabel}</a>
                             ${dlBtn}
+                            ${nerdBtn}
                         </div>
                     </article>`;
                 }).join('');
+                vwkNerdInfo.register(data.projects);
+                vwkNerdInfo.bind(grid);
             } catch (err) {
                 grid.innerHTML = '<p class="error">Could not load projects.</p>';
                 console.error(err);

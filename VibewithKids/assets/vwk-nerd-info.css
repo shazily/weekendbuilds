@@ -1,0 +1,246 @@
+/* Nerd info trigger buttons */
+.nerd-info-btn {
+    flex-shrink: 0;
+    padding: 0 0.85rem;
+    min-width: 88px;
+    border-radius: 10px;
+    border: 1px solid rgba(167, 139, 250, 0.45);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(0, 210, 255, 0.08));
+    color: #ddd6fe;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.nerd-info-btn:hover {
+    border-color: rgba(167, 139, 250, 0.75);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(0, 210, 255, 0.14));
+    transform: translateY(-1px);
+}
+.tile-actions .btn-nerd {
+    flex: 0 0 auto;
+    min-width: 0;
+    padding: 0.55rem 0.65rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    border-radius: 10px;
+}
+
+/* Nerd info modal */
+.nerd-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.nerd-modal.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+.nerd-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 2, 14, 0.82);
+    backdrop-filter: blur(12px);
+}
+.nerd-modal-panel {
+    position: relative;
+    width: min(720px, 100%);
+    max-height: min(90vh, 820px);
+    display: flex;
+    flex-direction: column;
+    border-radius: 18px;
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    background: linear-gradient(165deg, rgba(16, 10, 40, 0.98), rgba(6, 4, 18, 0.98));
+    box-shadow: 0 32px 100px rgba(0, 0, 0, 0.6), 0 0 80px rgba(124, 58, 237, 0.2);
+    transform: scale(0.94) translateY(16px);
+    transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+    overflow: hidden;
+}
+.nerd-modal.open .nerd-modal-panel { transform: scale(1) translateY(0); }
+.nerd-modal-accent {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg, #7c3aed, #00d2ff);
+    flex-shrink: 0;
+}
+.nerd-modal-header {
+    padding: 1.35rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+.nerd-modal-kicker {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(167, 139, 250, 0.95);
+    margin-bottom: 0.35rem;
+}
+.nerd-modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+}
+.nerd-modal-sub {
+    margin-top: 0.35rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(248, 244, 255, 0.55);
+}
+.nerd-modal-tags {
+    margin-top: 0.65rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+.nerd-modal-tags .tag {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(0, 210, 255, 0.15);
+    color: #7dd3fc;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nerd-modal-tags .tag.meta {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(248, 244, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nerd-modal-body-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.15rem 1.5rem 1.25rem;
+    min-height: 0;
+}
+.nerd-section { margin-bottom: 1.35rem; }
+.nerd-section:last-child { margin-bottom: 0; }
+.nerd-section h3 {
+    margin: 0 0 0.55rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0, 210, 255, 0.85);
+}
+.nerd-section p {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: rgba(248, 244, 255, 0.82);
+}
+.nerd-lib-list { display: flex; flex-direction: column; gap: 0.45rem; }
+.nerd-lib-item {
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.nerd-lib-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+}
+.nerd-lib-detail {
+    margin-top: 0.2rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(248, 244, 255, 0.55);
+    line-height: 1.45;
+}
+.nerd-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+}
+.nerd-stack span {
+    font-size: 0.65rem;
+    padding: 0.22rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(248, 244, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nerd-prompt-box {
+    margin-top: 0.65rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(248, 244, 255, 0.78);
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 180px;
+    overflow-y: auto;
+}
+.nerd-modal-footer {
+    padding: 1rem 1.5rem 1.35rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    flex-shrink: 0;
+}
+.nerd-modal-close {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(248, 244, 255, 0.7);
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    z-index: 1;
+}
+.nerd-modal-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.nerd-modal-copy, .nerd-modal-dl {
+    padding: 0.65rem 1.15rem;
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+}
+.nerd-modal-copy {
+    border: 1px solid rgba(167, 139, 250, 0.5);
+    background: rgba(124, 58, 237, 0.2);
+    color: #ddd6fe;
+}
+.nerd-modal-copy:hover { background: rgba(124, 58, 237, 0.32); border-color: rgba(167, 139, 250, 0.7); }
+.nerd-modal-copy.copied { border-color: rgba(74, 222, 128, 0.5); color: #4ade80; background: rgba(74, 222, 128, 0.12); }
+.nerd-modal-dl {
+    border: 1px solid rgba(0, 210, 255, 0.45);
+    background: rgba(0, 210, 255, 0.14);
+    color: #00d2ff;
+}
+.nerd-modal-dl:hover { background: rgba(0, 210, 255, 0.22); border-color: rgba(0, 210, 255, 0.6); }

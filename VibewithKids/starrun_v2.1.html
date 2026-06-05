@@ -16,8 +16,32 @@
     <title>Galactic Ranger: V2.7 (Feature Update)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
-        body { margin: 0; overflow: hidden; background: #000; font-family: 'Orbitron', sans-serif; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-        canvas { touch-action: none; display: block; }
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Orbitron', sans-serif; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; position: fixed; inset: 0; width: 100%; height: 100%; height: 100dvh; }
+        html { height: 100%; height: 100dvh; overflow: hidden; }
+        canvas {
+            touch-action: none;
+            display: block;
+            position: fixed !important;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 0;
+        }
+
+        #swipe-zone {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body.mobile-game #swipe-zone {
+            display: block;
+            bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+        }
 
         /* WATERMARK */
         #watermark { position: absolute; bottom: 5px; left: 10px; color: #446688; font-size: 10px; opacity: 0.7; pointer-events: none; z-index: 25; }
@@ -25,7 +49,7 @@
         #watermark a:hover { text-decoration: underline; }
 
         /* HUD */
-        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; z-index: 10; display: none; }
+        #ui-layer { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; z-index: 10; display: none; }
 
         .panel {
             position: absolute; top: 20px;
@@ -65,7 +89,7 @@
 
         /* MENUS */
         .fullscreen-menu {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; color: #fff; pointer-events: auto; z-index: 20;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
@@ -125,7 +149,7 @@
         .key { color: #fff; border: 1px solid #555; padding: 4px 10px; border-radius: 4px; margin: 0 5px; background: #111; font-weight: bold; }
 
         #modal-overlay {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 100; backdrop-filter: blur(5px); pointer-events: auto;
         }
         #trivia-box {
@@ -154,7 +178,7 @@
         #flash-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
         
         #pause-screen {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 95; backdrop-filter: blur(8px);
             align-items: center; justify-content: center; flex-direction: column;
         }
@@ -163,7 +187,7 @@
         /* MOBILE TOUCH CONTROLS */
         #touch-controls {
             display: none;
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -205,9 +229,12 @@
         .touch-btn.wide { max-width: 160px; }
         .touch-btn.pause-btn { max-width: 90px; flex: 0 0 auto; border-color: rgba(255, 215, 0, 0.5); }
 
-        @media (hover: none) and (pointer: coarse) {
-            #touch-controls { display: block; }
-            #controls-footer { display: none; }
+        @media (hover: none), (pointer: coarse), (max-width: 900px) {
+            body.mobile-game #touch-controls { display: block; }
+            body.mobile-game #controls-footer { display: none; }
+        }
+
+        @media (max-width: 900px) {
             .panel { top: 10px; padding: 6px 14px; min-width: 90px; }
             .val { font-size: 20px; }
             #score-panel { left: 8px; }
@@ -227,14 +254,17 @@
             .pause-resume-desktop { display: none !important; }
             .pause-resume-mobile { display: block !important; }
         }
-        @media not all and (hover: none) and (pointer: coarse) {
-            .pause-resume-mobile { display: none !important; }
+        @media not all and (max-width: 900px) {
+            body:not(.mobile-game) .pause-resume-mobile { display: none !important; }
         }
+        body:not(.mobile-game) .pause-resume-mobile { display: none !important; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
 </head>
 <body>
+
+    <div id="swipe-zone" aria-hidden="true"></div>
 
     <div id="watermark">v2.7 | Built with AI · Shazily Munawar · <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" rel="noopener">LinkedIn</a></div>
 
@@ -324,7 +354,7 @@
                 <button type="button" class="touch-btn" data-action="ArrowRight" aria-label="Steer right">Right ▶</button>
             </div>
             <div class="touch-row">
-                <button type="button" class="touch-btn wide" data-action="hint">Swipe on screen to move</button>
+                <span class="touch-btn wide" style="pointer-events:none;opacity:0.75;">Tap buttons or swipe above</span>
                 <button type="button" class="touch-btn pause-btn" data-action="pause" aria-label="Pause">⏸</button>
             </div>
         </div>
@@ -514,6 +544,32 @@
         let worldObjects = [], particles = [], dust = [], scenery = [], comets = [];
         let ranger, patternManager, soundManager;
 
+        function getViewportSize() {
+            const vv = window.visualViewport;
+            return {
+                w: Math.round(vv?.width ?? window.innerWidth),
+                h: Math.round(vv?.height ?? window.innerHeight)
+            };
+        }
+
+        function updateMobileGameMode() {
+            const touch = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+            const narrow = window.innerWidth <= 1024;
+            document.body.classList.toggle('mobile-game', touch || narrow);
+        }
+
+        function resizeGame() {
+            if (!camera || !renderer) return;
+            updateMobileGameMode();
+            const { w, h } = getViewportSize();
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(w, h, true);
+            renderer.domElement.style.width = w + 'px';
+            renderer.domElement.style.height = h + 'px';
+        }
+
         // ==========================================
         // LOCAL STORAGE
         // ==========================================
@@ -610,14 +666,18 @@
             scene.fog = new THREE.FogExp2(0x000000, 0.002);
             clock = new THREE.Clock();
 
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 800);
+            const { w, h } = getViewportSize();
+            camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 800);
             camera.position.set(0, 50, -50); 
             camera.lookAt(0, 0, -200);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(w, h, true);
             renderer.shadowMap.enabled = true;
-            document.body.appendChild(renderer.domElement);
+            document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+            updateMobileGameMode();
 
             const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0); 
             scene.add(hemi);
@@ -635,12 +695,12 @@
             state.currentDeck = shuffleDeck([...ALL_LEVELS[0]]);
 
             window.addEventListener('keydown', handleInput);
-            initTouchControls(renderer.domElement);
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth/window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
+            initTouchControls();
+            window.addEventListener('resize', resizeGame);
+            window.addEventListener('orientationchange', () => setTimeout(resizeGame, 150));
+            window.visualViewport?.addEventListener('resize', resizeGame);
+            window.visualViewport?.addEventListener('scroll', resizeGame);
+            resizeGame();
 
             animate();
         }
@@ -651,11 +711,19 @@
             ranger.handleInput(key);
         }
 
-        function initTouchControls(canvasEl) {
-            const SWIPE_MIN = 36;
+        function initTouchControls() {
+            const SWIPE_MIN = 50;
+            const AXIS_RATIO = 1.35;
+            const swipeZone = document.getElementById('swipe-zone');
             let touchStartX = 0;
             let touchStartY = 0;
             let touchActive = false;
+            let touchId = null;
+
+            function gameInputAllowed() {
+                return state.gameStarted && !state.paused &&
+                    document.getElementById('modal-overlay').style.display !== 'block';
+            }
 
             function handleSwipe(endX, endY) {
                 const dx = endX - touchStartX;
@@ -663,49 +731,64 @@
                 const absX = Math.abs(dx);
                 const absY = Math.abs(dy);
                 if (Math.max(absX, absY) < SWIPE_MIN) return;
-                if (absX > absY) {
+                if (absX > absY * AXIS_RATIO) {
                     sendGameAction(dx < 0 ? 'ArrowLeft' : 'ArrowRight');
-                } else {
+                } else if (absY > absX * AXIS_RATIO) {
                     sendGameAction(dy < 0 ? 'ArrowUp' : 'ArrowDown');
                 }
             }
 
-            canvasEl.addEventListener('touchstart', (e) => {
-                if (!state.gameStarted || state.paused) return;
-                if (document.getElementById('modal-overlay').style.display === 'block') return;
+            function onTouchStart(e) {
+                if (!gameInputAllowed()) return;
+                if (e.target.closest('#touch-controls, .fullscreen-menu, #modal-overlay, #pause-screen, button, input, textarea, a')) return;
                 if (e.touches.length !== 1) return;
                 touchActive = true;
+                touchId = e.touches[0].identifier;
                 touchStartX = e.touches[0].clientX;
                 touchStartY = e.touches[0].clientY;
-            }, { passive: true });
+            }
 
-            canvasEl.addEventListener('touchmove', (e) => {
-                if (touchActive && state.gameStarted && !state.paused) e.preventDefault();
-            }, { passive: false });
-
-            canvasEl.addEventListener('touchend', (e) => {
+            function onTouchEnd(e) {
                 if (!touchActive) return;
-                touchActive = false;
-                if (!e.changedTouches.length) return;
-                handleSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-            }, { passive: true });
+                for (const t of e.changedTouches) {
+                    if (t.identifier === touchId) {
+                        touchActive = false;
+                        touchId = null;
+                        handleSwipe(t.clientX, t.clientY);
+                        break;
+                    }
+                }
+            }
 
-            canvasEl.addEventListener('touchcancel', () => { touchActive = false; }, { passive: true });
+            [swipeZone, document.body].forEach(el => {
+                if (!el) return;
+                el.addEventListener('touchstart', onTouchStart, { passive: true });
+                el.addEventListener('touchmove', (e) => {
+                    if (touchActive && gameInputAllowed()) e.preventDefault();
+                }, { passive: false });
+                el.addEventListener('touchend', onTouchEnd, { passive: true });
+                el.addEventListener('touchcancel', () => { touchActive = false; touchId = null; }, { passive: true });
+            });
 
             document.getElementById('touch-controls')?.querySelectorAll('.touch-btn[data-action]').forEach(btn => {
                 const action = btn.dataset.action;
-                if (action === 'hint') return;
+                if (!action || action === 'hint') return;
                 let lastFire = 0;
                 const fire = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     const now = Date.now();
-                    if (now - lastFire < 200) return;
+                    if (now - lastFire < 180) return;
                     lastFire = now;
                     if (action === 'pause') togglePause();
                     else sendGameAction(action);
                 };
-                btn.addEventListener('pointerdown', fire);
+                btn.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+                btn.addEventListener('touchend', fire, { passive: false });
+                btn.addEventListener('click', (e) => {
+                    if (Date.now() - lastFire < 400) return;
+                    fire(e);
+                });
             });
         }
 
@@ -1036,6 +1119,8 @@
 
         // LOAD SAVED DATA ON START
         loadData();
+        updateMobileGameMode();
+        window.addEventListener('resize', updateMobileGameMode);
 
     </script>
     <link rel="stylesheet" href="assets/vwk-site.css">
