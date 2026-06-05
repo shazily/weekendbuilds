@@ -83,7 +83,7 @@
             border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06);
             color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
         }
-        .submit-box textarea { min-height: 90px; resize: vertical; }
+        .submit-box textarea { min-height: 160px; resize: vertical; }
         .submit-box .check-row {
             display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.85rem;
             font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; color: rgba(248,244,255,0.8);
@@ -165,6 +165,7 @@
                 <label for="prompt-text">Prompt and description</label>
                 <textarea id="prompt-text" placeholder="Describe the vibe coding prompt and what kids will learn or build..." maxlength="8000" required></textarea>
                 <label>Category</label>
+                <p class="field-hint" style="margin-top:0;margin-bottom:0.5rem">Pick one or more</p>
                 <div class="category-pills" id="category-pills">
                     <button type="button" class="cat-pill" data-cat="Music">Music</button>
                     <button type="button" class="cat-pill" data-cat="Science">Science</button>
@@ -176,7 +177,6 @@
                     <label for="category">Your category</label>
                     <input type="text" id="category" placeholder="Type your category" maxlength="40">
                 </div>
-                <input type="hidden" id="category-value" value="">
                 <label for="author">Your name</label>
                 <input type="text" id="author" placeholder="Parent + kid names" maxlength="60" required>
                 <label class="check-row">
@@ -210,33 +210,40 @@
             });
         });
 
-        let selectedCategory = '';
+        const selectedPills = new Set();
+        let otherActive = false;
         const categoryOtherWrap = document.getElementById('category-other-wrap');
         const categoryInput = document.getElementById('category');
-        const categoryValue = document.getElementById('category-value');
 
-        function setCategory(cat) {
-            selectedCategory = cat;
-            categoryValue.value = cat === 'Other' ? '' : cat;
-            document.querySelectorAll('.cat-pill').forEach(p => {
-                p.classList.toggle('active', p.dataset.cat === cat);
-            });
-            if (cat === 'Other') {
-                categoryOtherWrap.classList.add('visible');
-                categoryInput.value = '';
-                categoryInput.focus();
-            } else {
-                categoryOtherWrap.classList.remove('visible');
-                categoryInput.value = '';
-            }
+        function getSelectedCategories() {
+            const cats = [...selectedPills];
+            const other = categoryInput.value.trim();
+            if (otherActive && other) cats.push(other);
+            return cats;
+        }
+
+        function resetCategories() {
+            selectedPills.clear();
+            otherActive = false;
+            categoryInput.value = '';
+            categoryOtherWrap.classList.remove('visible');
+            document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
         }
 
         document.querySelectorAll('.cat-pill').forEach(pill => {
-            pill.addEventListener('click', () => setCategory(pill.dataset.cat));
-        });
-
-        categoryInput.addEventListener('input', () => {
-            categoryValue.value = categoryInput.value.trim();
+            pill.addEventListener('click', () => {
+                const cat = pill.dataset.cat;
+                if (cat === 'Other') {
+                    otherActive = !otherActive;
+                    pill.classList.toggle('active', otherActive);
+                    categoryOtherWrap.classList.toggle('visible', otherActive);
+                    if (otherActive) categoryInput.focus();
+                    return;
+                }
+                if (selectedPills.has(cat)) selectedPills.delete(cat);
+                else selectedPills.add(cat);
+                pill.classList.toggle('active', selectedPills.has(cat));
+            });
         });
 
         function getLiked() {
@@ -265,9 +272,16 @@
             </div>`;
         }
 
+        function renderCategories(s) {
+            const cats = s.categories?.length
+                ? s.categories
+                : (s.category ? s.category.split(',').map(c => c.trim()).filter(Boolean) : []);
+            return cats.map(c => `<span class="tag">${escapeHtml(c)}</span>`).join('');
+        }
+
         function renderCommunityItem(s) {
             const name = s.name ? `<div class="idea-name">${escapeHtml(s.name)}</div>` : '';
-            const category = s.category ? `<span class="tag">${escapeHtml(s.category)}</span>` : '';
+            const category = renderCategories(s);
             const body = escapeHtml(s.text || s.description || '');
             const author = s.author ? `<div class="author">— ${escapeHtml(s.author)}</div>` : '';
             return `<div class="prompt-card community-card">
@@ -385,9 +399,7 @@
         document.getElementById('submit-btn').addEventListener('click', async () => {
             const name = document.getElementById('idea-name').value.trim();
             const text = document.getElementById('prompt-text').value.trim();
-            const category = selectedCategory === 'Other'
-                ? categoryInput.value.trim()
-                : (categoryValue.value.trim() || selectedCategory);
+            const categories = getSelectedCategories();
             const author = document.getElementById('author').value.trim();
             const childSafe = document.getElementById('child-safe').checked;
             const toast = document.getElementById('toast');
@@ -403,13 +415,11 @@
                 toast.style.display = 'block'; toast.style.color = '#f87171';
                 toast.textContent = 'Please write at least 10 characters for the prompt and description.'; return;
             }
-            if (!selectedCategory) {
+            if (!categories.length) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = 'Please pick a category.'; return;
-            }
-            if (!category) {
-                toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = selectedCategory === 'Other' ? 'Please type your category.' : 'Please pick a category.'; return;
+                toast.textContent = otherActive && !categoryInput.value.trim()
+                    ? 'Please type your custom category or pick a pill above.'
+                    : 'Please pick at least one category.'; return;
             }
             if (!author) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
@@ -425,18 +435,14 @@
                 const r = await fetch('/api/submit-prompt', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, text, category, author, childSafe: true })
+                    body: JSON.stringify({ name, text, categories, author, childSafe: true })
                 });
                 const data = await r.json();
                 if (!r.ok) throw new Error(data.error || 'Could not save your idea.');
 
                 document.getElementById('idea-name').value = '';
                 document.getElementById('prompt-text').value = '';
-                selectedCategory = '';
-                categoryValue.value = '';
-                categoryInput.value = '';
-                categoryOtherWrap.classList.remove('visible');
-                document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+                resetCategories();
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';
                 toast.style.color = '#4ade80';

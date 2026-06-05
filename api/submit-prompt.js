@@ -3,6 +3,16 @@ import {
     appendSubmissionCsv
 } from './github-store.js';
 
+function normalizeCategories(body) {
+    if (Array.isArray(body.categories) && body.categories.length) {
+        return body.categories.map(c => String(c).trim()).filter(Boolean);
+    }
+    if (body.category && typeof body.category === 'string') {
+        return body.category.split(',').map(c => c.trim()).filter(Boolean);
+    }
+    return [];
+}
+
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -11,7 +21,8 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-    const { name, text, category, author, childSafe } = req.body || {};
+    const { name, text, author, childSafe } = req.body || {};
+    const categories = normalizeCategories(req.body || {});
 
     if (!name || typeof name !== 'string' || name.trim().length < 2) {
         return res.status(400).json({ error: 'Please add an idea name.' });
@@ -25,11 +36,11 @@ export default async function handler(req, res) {
     if (text.length > 8000) {
         return res.status(400).json({ error: 'Please keep your description under 8,000 characters.' });
     }
-    if (!category || typeof category !== 'string' || !category.trim()) {
-        return res.status(400).json({ error: 'Please add a category.' });
+    if (!categories.length) {
+        return res.status(400).json({ error: 'Please pick at least one category.' });
     }
-    if (category.length > 40) {
-        return res.status(400).json({ error: 'Category is too long (max 40 characters).' });
+    if (categories.join(', ').length > 120) {
+        return res.status(400).json({ error: 'Categories are too long combined (max 120 characters).' });
     }
     if (!author || typeof author !== 'string' || !author.trim()) {
         return res.status(400).json({ error: 'Please add your name.' });
@@ -42,7 +53,8 @@ export default async function handler(req, res) {
         id: `sub-${Date.now()}`,
         name: name.trim(),
         text: text.trim(),
-        category: category.trim(),
+        categories,
+        category: categories.join(', '),
         author: author.trim().slice(0, 60),
         submittedAt: new Date().toISOString(),
         approved: true
