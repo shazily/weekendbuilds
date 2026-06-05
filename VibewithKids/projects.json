@@ -12,29 +12,32 @@
       "description": "Space shooter mission. Dodge void crates, slide under lasers, decrypt data cores.",
       "poster": "assets/posters/starrun.svg",
       "accent": "#00d2ff",
-      "accentGlow": "rgba(0, 210, 255, 0.45)"
+      "accentGlow": "rgba(0, 210, 255, 0.45)",
+      "desktopOnly": false
     },
     {
       "slug": "neon_nebula_v2",
       "file": "neon_nebula_v2.html",
       "title": "Perfect Blue",
       "subtitle": "Neon Nebula",
-      "category": "Visual",
-      "description": "Keyboard-driven particle galaxy. Warp, retreat, and paint the cosmos with sound.",
+      "category": "Music & Science",
+      "description": "Keyboard-driven particle galaxy. Uses your camera — best on desktop PC.",
       "poster": "assets/posters/neon_nebula.svg",
       "accent": "#00f2ff",
-      "accentGlow": "rgba(0, 242, 255, 0.4)"
+      "accentGlow": "rgba(0, 242, 255, 0.4)",
+      "desktopOnly": true
     },
     {
       "slug": "wigglysounds_v2",
       "file": "wigglysounds_v2.html",
       "title": "Sound Wizard",
       "subtitle": "Academy",
-      "category": "Music",
-      "description": "Hand-tracking magic synth. Raise your left hand for volume, wiggle right for pitch.",
+      "category": "Music & Science",
+      "description": "Hand-tracking magic synth. Uses your camera — best on desktop PC.",
       "poster": "assets/posters/wigglysounds.svg",
       "accent": "#ff1a5e",
-      "accentGlow": "rgba(255, 26, 94, 0.4)"
+      "accentGlow": "rgba(255, 26, 94, 0.4)",
+      "desktopOnly": true
     }
   ]
 }

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/vwk-site.css">
+    <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
     <style>
         :root {
             --bg-deep: #07051a;
@@ -95,12 +95,20 @@
         }
         .tile-poster img { width: 100%; height: 100%; object-fit: cover; }
         .tile-body { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+        .tile-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; }
         .category {
             font-family: 'Space Grotesk', sans-serif; font-size: 0.6rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase; align-self: flex-start;
+            letter-spacing: 0.1em; text-transform: uppercase;
             padding: 0.2rem 0.55rem; border-radius: 6px;
             background: color-mix(in srgb, var(--accent) 15%, transparent);
             color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+        }
+        .badge-desktop {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.55rem; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 0.2rem 0.5rem; border-radius: 6px;
+            background: rgba(251, 191, 36, 0.12); color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
         }
         .tile-title { font-size: 1.15rem; font-weight: 600; }
         .tile-sub { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: var(--muted); }
@@ -153,7 +161,7 @@
         </main>
         <div id="footer-slot"></div>
     </div>
-    <script src="assets/vwk-site.js"></script>
+    <script src="/VibewithKids/assets/vwk-site.js"></script>
     <script>
         document.getElementById('nav-slot').innerHTML = vwkRenderNav('home');
         document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
@@ -187,7 +195,7 @@
 
         async function loadProjects() {
             const grid = document.getElementById('grid');
-            const basePath = VWK.basePath();
+            const basePath = VWK.siteRoot();
             try {
                 const res = await fetch(`${basePath}projects.json`);
                 if (!res.ok) throw new Error('Manifest not found');
@@ -210,7 +218,10 @@
                     return `<article class="tile" style="--accent:${p.accent};--accent-glow:${p.accentGlow || p.accent + '55'}">
                         <div class="tile-poster"><img src="${poster}" alt="${p.title} poster" loading="lazy"></div>
                         <div class="tile-body">
-                            <span class="category">${p.category}</span>
+                            <div class="tile-meta">
+                                <span class="category">${p.category}</span>
+                                ${p.desktopOnly ? '<span class="badge-desktop">Desktop + Camera</span>' : ''}
+                            </div>
                             <h3 class="tile-title">${p.title}</h3>
                             ${p.subtitle ? `<p class="tile-sub">${p.subtitle}</p>` : ''}
                             <p class="tile-desc">${p.description}</p>

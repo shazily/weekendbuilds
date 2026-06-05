@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy · Vibe with Kids</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/VibewithKids/assets/vwk-site.css">
+    <style>
+        body { margin: 0; min-height: 100vh; font-family: 'Fredoka', system-ui, sans-serif; color: #f8f4ff; background: #07051a; }
+        .page { max-width: 720px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
+        h1 { font-size: 2rem; margin: 1rem 0; color: #00d2ff; }
+        h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; color: #c4b5fd; margin: 1.5rem 0 0.5rem; }
+        p, li { font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; line-height: 1.65; color: rgba(248,244,255,0.75); }
+        ul { padding-left: 1.25rem; }
+        li { margin-bottom: 0.4rem; }
+        .updated { font-size: 0.75rem; color: rgba(248,244,255,0.4); margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div id="nav-slot"></div>
+        <h1>Privacy Policy</h1>
+        <p class="updated">Last updated: June 2026</p>
+
+        <p>Vibe with Kids (Weekend Labs) is an open-source collection of browser-based projects built by Shazily Munawar and his son Zizou. We respect your privacy.</p>
+
+        <h2>What we collect</h2>
+        <ul>
+            <li><strong>Camera/microphone:</strong> Some projects (Perfect Blue, Sound Wizard) request camera access locally in your browser to power hand-tracking and visual effects. Video is processed on your device and is not sent to our servers.</li>
+            <li><strong>Ideas page:</strong> If you submit a prompt or like an idea, we store the text you provide and an anonymous like count. Submissions may be reviewed before appearing publicly.</li>
+            <li><strong>Hosting analytics:</strong> Our site is hosted on Vercel, which may collect standard web server logs (IP address, browser type, pages visited) as part of normal hosting operations.</li>
+        </ul>
+
+        <h2>What we do not do</h2>
+        <ul>
+            <li>We do not sell personal data.</li>
+            <li>We do not require accounts or collect children's personal information through forms.</li>
+            <li>We do not store camera feeds from your device on our servers.</li>
+        </ul>
+
+        <h2>Local storage</h2>
+        <p>Some features (such as remembering which prompts you liked) use your browser's local storage on your device only.</p>
+
+        <h2>Third-party services</h2>
+        <p>Downloaded HTML files may load libraries from CDNs (e.g. MediaPipe, Tone.js, Three.js). Those services have their own privacy policies.</p>
+
+        <h2>Contact</h2>
+        <p>Questions? Reach Shazily Munawar on <a href="https://www.linkedin.com/in/shazilymunawar" style="color:#00d2ff">LinkedIn</a>.</p>
+
+        <div id="footer-slot"></div>
+    </div>
+    <script src="/VibewithKids/assets/vwk-site.js"></script>
+    <script>
+        document.getElementById('nav-slot').innerHTML = vwkRenderNav('');
+        document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
+    </script>
+</body>
+</html>
