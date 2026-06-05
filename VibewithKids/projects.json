@@ -4,6 +4,20 @@
   "lab": "Weekend Builds",
   "projects": [
     {
+      "slug": "junto",
+      "url": "https://junto.gptlab.ae/",
+      "external": true,
+      "title": "Junto",
+      "subtitle": "AI Quiz Platform",
+      "category": "Full App",
+      "description": "A fun AI-powered quiz platform built for kids by kids. Fully open for non-commercial use — built for live quizzes and learning in classrooms, community groups, and similar settings.",
+      "poster": "assets/posters/junto.svg",
+      "accent": "#7c3aed",
+      "accentGlow": "rgba(124, 58, 237, 0.45)",
+      "badge": "featured",
+      "desktopOnly": false
+    },
+    {
       "slug": "starrun_v2.1",
       "file": "starrun_v2.1.html",
       "title": "Jedi Academy Runner",
@@ -13,6 +27,7 @@
       "poster": "assets/posters/starrun.svg",
       "accent": "#00d2ff",
       "accentGlow": "rgba(0, 210, 255, 0.45)",
+      "badge": "new",
       "desktopOnly": false
     },
     {

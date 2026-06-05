@@ -101,11 +101,28 @@
             box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 30px var(--accent-glow);
         }
         .tile-poster {
+            position: relative;
             height: 160px; background: #0a0618;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; border-bottom: 1px solid var(--border);
         }
         .tile-poster img { width: 100%; height: 100%; object-fit: cover; }
+        .tile-badge {
+            position: absolute; top: 0.65rem; left: 0.65rem; z-index: 2;
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.62rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 0.35rem 0.65rem; border-radius: 999px;
+            backdrop-filter: blur(8px); line-height: 1;
+        }
+        .tile-badge-featured {
+            background: linear-gradient(135deg, rgba(124,58,237,0.92), rgba(255,107,157,0.88));
+            color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,0.45);
+        }
+        .tile-badge-new {
+            background: rgba(74, 222, 128, 0.92); color: #052e16;
+            box-shadow: 0 4px 14px rgba(74,222,128,0.35);
+        }
         .tile-body { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
         .tile-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; }
         .category {
@@ -242,10 +259,19 @@
 
                 grid.innerHTML = data.projects.map(p => {
                     const poster = p.poster.startsWith('/') ? p.poster : `${basePath}${p.poster}`;
-                    const playUrl = `${basePath}${p.slug}`;
+                    const isExternal = !!(p.external && p.url);
+                    const playUrl = isExternal ? p.url : `${basePath}${p.slug}`;
+                    const playTarget = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+                    const playLabel = isExternal ? '↗ Open app' : '▶ Play';
                     const dlUrl = `${basePath}${p.file || p.slug + '.html'}`;
+                    const badge = p.badge === 'featured'
+                        ? '<span class="tile-badge tile-badge-featured">★ Featured</span>'
+                        : p.badge === 'new'
+                            ? '<span class="tile-badge tile-badge-new">New</span>'
+                            : '';
+                    const dlBtn = isExternal ? '' : `<a class="btn-dl" href="${dlUrl}" download>⬇ Download</a>`;
                     return `<article class="tile" style="--accent:${p.accent};--accent-glow:${p.accentGlow || p.accent + '55'}">
-                        <div class="tile-poster"><img src="${poster}" alt="${p.title} poster" loading="lazy"></div>
+                        <div class="tile-poster">${badge}<img src="${poster}" alt="${p.title} poster" loading="lazy"></div>
                         <div class="tile-body">
                             <div class="tile-meta">
                                 <span class="category">${p.category}</span>
@@ -256,8 +282,8 @@
                             <p class="tile-desc">${p.description}</p>
                         </div>
                         <div class="tile-actions">
-                            <a class="btn-play" href="${playUrl}">▶ Play</a>
-                            <a class="btn-dl" href="${dlUrl}" download>⬇ Download</a>
+                            <a class="btn-play" href="${playUrl}"${playTarget}>${playLabel}</a>
+                            ${dlBtn}
                         </div>
                     </article>`;
                 }).join('');

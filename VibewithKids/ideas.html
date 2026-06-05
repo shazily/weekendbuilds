@@ -439,7 +439,7 @@
                 if (!r.ok) throw new Error('failed');
                 const data = await r.json();
                 el.innerHTML = '<ul class="dl-list">' +
-                    data.projects.map(p =>
+                    data.projects.filter(p => p.file && !p.external).map(p =>
                         `<li><a href="${base}${p.file || p.slug + '.html'}" download><strong>${p.title}</strong><span>.html ↓</span></a></li>`
                     ).join('') + '</ul>';
             } catch {
