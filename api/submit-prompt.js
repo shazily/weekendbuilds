@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     }
     if (type === 'prompt') {
         if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 10) {
-            return res.status(400).json({ error: 'Please write at least 10 characters for the vibe coding prompt.' });
+            return res.status(400).json({ error: 'Please write at least 10 characters for the prompt.' });
         }
         if (prompt.length > 8000) {
             return res.status(400).json({ error: 'Please keep your prompt under 8,000 characters.' });
@@ -72,7 +72,8 @@ export default async function handler(req, res) {
         category: categories.join(', '),
         author: author.trim().slice(0, 60),
         submittedAt: new Date().toISOString(),
-        approved: true
+        approved: true,
+        likes: 0
     };
     if (type === 'prompt') {
         submission.prompt = prompt.trim();

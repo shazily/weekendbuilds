@@ -1,0 +1,41 @@
+name: Increment community idea like
+
+on:
+  repository_dispatch:
+    types: [community-like]
+
+permissions:
+  contents: write
+
+jobs:
+  like:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump likes in community-submissions.json
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const id = context.payload.client_payload.id;
+            const jsonPath = 'VibewithKids/community-submissions.json';
+
+            let data = { submissions: [] };
+            if (fs.existsSync(jsonPath)) {
+              data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            }
+
+            const item = (data.submissions || []).find(s => s.id === id);
+            if (!item) {
+              core.setFailed(`Submission not found: ${id}`);
+              return;
+            }
+
+            item.likes = (Number(item.likes) || 0) + 1;
+            fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2) + '\n');
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Like community idea ${{ github.event.client_payload.id }}
+          file_pattern: VibewithKids/community-submissions.json

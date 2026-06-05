@@ -61,7 +61,12 @@
         .like-btn:hover { transform: scale(1.05); border-color: rgba(255,107,157,0.45); }
         .like-btn.liked { border-color: #ff6b9d; background: rgba(255,107,157,0.15); }
         .like-btn .heart { font-size: 1.2rem; line-height: 1; }
-        .like-btn .count { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.55); }
+        .like-btn .count {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 700;
+            color: rgba(248,244,255,0.85); min-width: 1.1rem; text-align: center; line-height: 1.2;
+        }
+        .like-btn.liked .count { color: #ff6b9d; }
+        .like-btn:disabled { cursor: default; opacity: 0.95; }
 
         .copy-btn {
             display: inline-flex; align-items: center; gap: 0.35rem;
@@ -187,16 +192,16 @@
                 <label>What are you sharing?</label>
                 <div class="type-pills" id="type-pills">
                     <button type="button" class="type-pill active" data-type="idea">Just an idea</button>
-                    <button type="button" class="type-pill" data-type="prompt">Idea with a vibe coding prompt</button>
+                    <button type="button" class="type-pill" data-type="prompt">Idea and prompt</button>
                 </div>
                 <label for="idea-name">Idea name</label>
                 <input type="text" id="idea-name" placeholder="e.g. Cosmic Pet Garden" maxlength="80" required>
                 <label for="prompt-text">Description</label>
                 <textarea id="prompt-text" placeholder="Describe the idea and what kids might build or learn..." maxlength="8000" required></textarea>
                 <div id="prompt-field-wrap">
-                    <label for="idea-prompt">Vibe coding prompt</label>
+                    <label for="idea-prompt">Prompt</label>
                     <p class="field-hint">This is the text other families can copy into their AI tool.</p>
-                    <textarea id="idea-prompt" placeholder="Write the full prompt here — e.g. Build a cosmic pet garden where..." maxlength="8000"></textarea>
+                    <textarea id="idea-prompt" placeholder="Write the full prompt here — e.g. Build a cosmic pet garden where kids can plant stars..." maxlength="8000"></textarea>
                 </div>
                 <label>Category</label>
                 <p class="field-hint" style="margin-top:0;margin-bottom:0.5rem">Pick one or more</p>
@@ -230,8 +235,38 @@
         document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
 
         const LIKED_KEY = 'vwk-liked-prompts';
+        const LIKED_IDEAS_KEY = 'vwk-liked-ideas';
         const copyTexts = {};
         let submissionType = 'idea';
+
+        function getLikedIdeasSession() {
+            try { return JSON.parse(sessionStorage.getItem(LIKED_IDEAS_KEY) || '[]'); } catch { return []; }
+        }
+        function markLikedIdeaSession(id) {
+            const ids = getLikedIdeasSession();
+            if (!ids.includes(id)) ids.push(id);
+            sessionStorage.setItem(LIKED_IDEAS_KEY, JSON.stringify(ids));
+        }
+        function hasLikedIdeaSession(id) {
+            return getLikedIdeasSession().includes(id);
+        }
+
+        async function copyText(text) {
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(text);
+                return;
+            }
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            if (!ok) throw new Error('copy failed');
+        }
 
         document.querySelectorAll('.type-pill').forEach(pill => {
             pill.addEventListener('click', () => {
@@ -324,7 +359,7 @@
             return cats.map(c => `<span class="tag">${escapeHtml(c)}</span>`).join('');
         }
 
-        function renderCommunityItem(s, count, liked) {
+        function renderCommunityItem(s) {
             const name = s.name ? `<div class="idea-name">${escapeHtml(s.name)}</div>` : '';
             const category = renderCategories(s);
             const body = escapeHtml(s.text || s.description || '');
@@ -334,6 +369,8 @@
             const copyBtn = hasPrompt
                 ? `<button type="button" class="copy-btn" data-copy-id="${escapeHtml(s.id)}">Copy this prompt</button>`
                 : '';
+            const count = Number(s.likes) || 0;
+            const liked = hasLikedIdeaSession(s.id);
             return `<div class="prompt-card community-card" data-id="${escapeHtml(s.id)}">
                 <div class="prompt-text">
                     ${name}
@@ -342,7 +379,7 @@
                     <div class="prompt-meta">${category}</div>
                     ${author}
                 </div>
-                <button class="like-btn${liked ? ' liked' : ''}" data-id="${escapeHtml(s.id)}" aria-label="Like this idea">
+                <button type="button" class="like-btn${liked ? ' liked' : ''}" data-id="${escapeHtml(s.id)}" data-community="1" aria-label="Like this idea"${liked ? ' disabled' : ''}>
                     <span class="heart">${liked ? '❤️' : '🤍'}</span>
                     <span class="count">${count}</span>
                 </button>
@@ -353,8 +390,12 @@
             container.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.addEventListener('click', async () => {
                     const text = copyTexts[btn.dataset.copyId] || '';
+                    if (!text) {
+                        btn.textContent = 'Nothing to copy';
+                        return;
+                    }
                     try {
-                        await navigator.clipboard.writeText(text);
+                        await copyText(text);
                         btn.classList.add('copied');
                         const prev = btn.textContent;
                         btn.textContent = 'Copied!';
@@ -364,7 +405,29 @@
                         }, 2000);
                     } catch {
                         btn.textContent = 'Copy failed';
+                        setTimeout(() => { btn.textContent = 'Copy this prompt'; }, 2000);
                     }
+                });
+            });
+        }
+
+        function bindCommunityLikeButtons(container) {
+            container.querySelectorAll('.like-btn[data-community]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.id;
+                    if (hasLikedIdeaSession(id) || btn.disabled) return;
+
+                    const countEl = btn.querySelector('.count');
+                    const current = parseInt(countEl.textContent, 10) || 0;
+                    countEl.textContent = current + 1;
+                    markLikedIdeaSession(id);
+                    btn.classList.add('liked');
+                    btn.querySelector('.heart').textContent = '❤️';
+                    btn.disabled = true;
+
+                    try {
+                        await fetch(`/api/like-idea?id=${encodeURIComponent(id)}`, { method: 'POST' });
+                    } catch (e) { console.error(e); }
                 });
             });
         }
@@ -450,19 +513,13 @@
         function renderCommunityList(items) {
             const list = document.getElementById('community-list');
             Object.keys(copyTexts).forEach(k => delete copyTexts[k]);
-            const liked = getLiked();
             if (!items.length) {
                 list.innerHTML = '<p class="empty-note">No community ideas yet — share yours below!</p>';
                 return;
             }
-            list.innerHTML = items.map(s => renderCommunityItem(s, 0, liked.includes(s.id))).join('');
-            bindLikeButtons(list);
+            list.innerHTML = items.map(s => renderCommunityItem(s)).join('');
+            bindCommunityLikeButtons(list);
             bindCopyButtons(list);
-            items.forEach(async (s) => {
-                const count = await fetchLikeCount(s.id);
-                const btn = list.querySelector(`.like-btn[data-id="${s.id}"] .count`);
-                if (btn) btn.textContent = count;
-            });
         }
 
         async function loadCommunity() {
@@ -498,7 +555,7 @@
             }
             if (submissionType === 'prompt' && prompt.length < 10) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = 'Please write at least 10 characters for the vibe coding prompt.'; return;
+                toast.textContent = 'Please write at least 10 characters for the prompt.'; return;
             }
             if (!categories.length) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
