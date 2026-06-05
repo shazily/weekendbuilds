@@ -35,8 +35,8 @@ function vwkRenderNav(active) {
     const base = VWK.siteRoot();
     const pages = [
         { id: 'home', label: 'Home', href: base },
-        { id: 'about', label: 'About', href: `${base}about` },
-        { id: 'ideas', label: 'Ideas', href: `${base}ideas` }
+        { id: 'ideas', label: 'Ideas', href: `${base}ideas` },
+        { id: 'about', label: 'About', href: `${base}about` }
     ];
     const logo = `${base}assets/weekend-builds-logo.svg`;
     return `<nav class="vwk-nav">
