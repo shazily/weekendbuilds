@@ -62,14 +62,17 @@ export async function appendCommunitySubmission(entry, token) {
 export async function appendSubmissionCsv(entry, token) {
     const path = 'data/submissions.csv';
     const existing = await githubGetFile(path, token);
+    const esc = (v) => `"${String(v || '').replace(/"/g, '""')}"`;
     const line = [
         entry.id,
-        `"${(entry.author || '').replace(/"/g, '""')}"`,
-        `"${(entry.text || '').replace(/"/g, '""')}"`,
+        esc(entry.name),
+        esc(entry.category),
+        esc(entry.author),
+        esc(entry.text),
         entry.submittedAt,
         entry.approved ? 'true' : 'false'
     ].join(',');
-    const header = 'id,author,text,submittedAt,approved';
+    const header = 'id,name,category,author,text,submittedAt,approved';
     const content = existing
         ? `${existing.content.trim()}\n${line}\n`
         : `${header}\n${line}\n`;

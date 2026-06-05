@@ -77,6 +77,7 @@
         }
         .submit-box h2 { font-size: 1rem; margin-bottom: 0.75rem; color: #fda4af; }
         .submit-box label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: rgba(248,244,255,0.65); display: block; margin-bottom: 0.35rem; }
+        .submit-box .field-hint { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.45); margin: -0.5rem 0 0.75rem; }
         .submit-box input, .submit-box textarea {
             width: 100%; padding: 0.65rem 0.85rem; margin-bottom: 0.75rem; border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06);
@@ -100,7 +101,8 @@
             display: none;
         }
         .section-label { font-size: 1rem; color: #fda4af; margin-bottom: 0.75rem; }
-        .community-card .author { font-weight: 600; color: #c4b5fd; margin-bottom: 0.35rem; }
+        .community-card .idea-name { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.35rem; }
+        .community-card .author { font-weight: 600; color: #c4b5fd; margin-top: 0.5rem; font-size: 0.8rem; }
         .empty-note { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: rgba(248,244,255,0.5); }
     </style>
 </head>
@@ -137,10 +139,15 @@
             </div>
             <div class="submit-box" style="margin-top:0">
                 <h2>Share your idea</h2>
+                <label for="idea-name">Idea name</label>
+                <input type="text" id="idea-name" placeholder="e.g. Cosmic Pet Garden" maxlength="80" required>
+                <label for="prompt-text">Prompt and description</label>
+                <textarea id="prompt-text" placeholder="Describe the vibe coding prompt and what kids will learn or build..." maxlength="500" required></textarea>
+                <label for="category">Category</label>
+                <input type="text" id="category" placeholder="Music, Science, Fun, Game" maxlength="40" required>
+                <p class="field-hint">e.g. Music, Science, Fun, Game</p>
                 <label for="author">Your name</label>
                 <input type="text" id="author" placeholder="Parent + kid names" maxlength="60" required>
-                <label for="prompt-text">Brief description of your vibe coding idea</label>
-                <textarea id="prompt-text" placeholder="Describe a fun project to build together this weekend..." maxlength="500" required></textarea>
                 <label class="check-row">
                     <input type="checkbox" id="child-safe">
                     <span>I confirm this idea is child-safe and family-friendly.</span>
@@ -199,10 +206,16 @@
         }
 
         function renderCommunityItem(s) {
+            const name = s.name ? `<div class="idea-name">${escapeHtml(s.name)}</div>` : '';
+            const category = s.category ? `<span class="tag">${escapeHtml(s.category)}</span>` : '';
+            const body = escapeHtml(s.text || s.description || '');
+            const author = s.author ? `<div class="author">— ${escapeHtml(s.author)}</div>` : '';
             return `<div class="prompt-card community-card">
                 <div class="prompt-text">
-                    <div class="author">${escapeHtml(s.author)}</div>
-                    ${escapeHtml(s.text)}
+                    ${name}
+                    ${body}
+                    <div class="prompt-meta">${category}</div>
+                    ${author}
                 </div>
             </div>`;
         }
@@ -310,7 +323,9 @@
         }
 
         document.getElementById('submit-btn').addEventListener('click', async () => {
+            const name = document.getElementById('idea-name').value.trim();
             const text = document.getElementById('prompt-text').value.trim();
+            const category = document.getElementById('category').value.trim();
             const author = document.getElementById('author').value.trim();
             const childSafe = document.getElementById('child-safe').checked;
             const toast = document.getElementById('toast');
@@ -318,13 +333,21 @@
 
             toast.style.display = 'none';
 
-            if (!author) {
+            if (!name) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = 'Please add your name.'; return;
+                toast.textContent = 'Please add an idea name.'; return;
             }
             if (text.length < 10) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = 'Please write at least 10 characters.'; return;
+                toast.textContent = 'Please write at least 10 characters for the prompt and description.'; return;
+            }
+            if (!category) {
+                toast.style.display = 'block'; toast.style.color = '#f87171';
+                toast.textContent = 'Please add a category.'; return;
+            }
+            if (!author) {
+                toast.style.display = 'block'; toast.style.color = '#f87171';
+                toast.textContent = 'Please add your name.'; return;
             }
             if (!childSafe) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
@@ -336,12 +359,14 @@
                 const r = await fetch('/api/submit-prompt', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text, author, childSafe: true })
+                    body: JSON.stringify({ name, text, category, author, childSafe: true })
                 });
                 const data = await r.json();
                 if (!r.ok) throw new Error(data.error || 'Could not save your idea.');
 
+                document.getElementById('idea-name').value = '';
                 document.getElementById('prompt-text').value = '';
+                document.getElementById('category').value = '';
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';
                 toast.style.color = '#4ade80';

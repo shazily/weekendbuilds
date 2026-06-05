@@ -11,12 +11,28 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-    const { text, author, childSafe } = req.body || {};
+    const { name, text, category, author, childSafe } = req.body || {};
+
+    if (!name || typeof name !== 'string' || name.trim().length < 2) {
+        return res.status(400).json({ error: 'Please add an idea name.' });
+    }
+    if (name.length > 80) {
+        return res.status(400).json({ error: 'Idea name is too long (max 80 characters).' });
+    }
     if (!text || typeof text !== 'string' || text.trim().length < 10) {
-        return res.status(400).json({ error: 'Please write at least 10 characters.' });
+        return res.status(400).json({ error: 'Please write at least 10 characters for the prompt and description.' });
     }
     if (text.length > 500) {
-        return res.status(400).json({ error: 'Please keep your idea under 500 characters.' });
+        return res.status(400).json({ error: 'Please keep your description under 500 characters.' });
+    }
+    if (!category || typeof category !== 'string' || !category.trim()) {
+        return res.status(400).json({ error: 'Please add a category.' });
+    }
+    if (category.length > 40) {
+        return res.status(400).json({ error: 'Category is too long (max 40 characters).' });
+    }
+    if (!author || typeof author !== 'string' || !author.trim()) {
+        return res.status(400).json({ error: 'Please add your name.' });
     }
     if (!childSafe) {
         return res.status(400).json({ error: 'Please confirm your idea is child-safe.' });
@@ -24,8 +40,10 @@ export default async function handler(req, res) {
 
     const submission = {
         id: `sub-${Date.now()}`,
+        name: name.trim(),
         text: text.trim(),
-        author: (author || 'Anonymous').trim().slice(0, 60),
+        category: category.trim(),
+        author: author.trim().slice(0, 60),
         submittedAt: new Date().toISOString(),
         approved: true
     };
@@ -38,7 +56,7 @@ export default async function handler(req, res) {
             return res.status(200).json({
                 ok: true,
                 submission,
-                message: 'Thanks! Your idea is live in the community list.'
+                message: 'Thanks! Your idea is live — see it under Ideas from the Community.'
             });
         } catch (e) {
             console.error('Store submission failed:', e);
