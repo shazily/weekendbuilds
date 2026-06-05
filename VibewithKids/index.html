@@ -46,17 +46,6 @@
         }
         .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
         .hero { text-align: center; padding: 1.5rem 0 2.5rem; }
-        .badge {
-            display: inline-flex; align-items: center; gap: 0.55rem;
-            padding: 0.4rem 1rem 0.4rem 0.45rem; border-radius: 999px;
-            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 600;
-            letter-spacing: 0.12em; text-transform: uppercase; color: rgba(248,244,255,0.9);
-            margin-bottom: 1.25rem;
-        }
-        .badge-logo { width: 28px; height: 28px; flex-shrink: 0; }
-        .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 12px #4ade80; animation: pulse 2s ease infinite; }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
         .hero h1 {
             font-size: clamp(2.4rem, 8vw, 4.2rem); font-weight: 700; line-height: 1.05;
             background: linear-gradient(135deg, #fff 0%, #c4b5fd 40%, #00d2ff 75%, #ff6b9d 100%);
@@ -144,11 +133,6 @@
     <div class="page">
         <div id="nav-slot"></div>
         <header class="hero">
-            <div class="badge">
-                <img class="badge-logo" src="/VibewithKids/assets/weekend-builds-logo.svg" alt="" width="28" height="28">
-                <span class="badge-dot"></span>
-                <span id="series-label">Weekend Builds</span>
-            </div>
             <h1 id="hero-title">Vibe with Kids</h1>
             <p class="tagline" id="hero-tagline">Loading adventures...</p>
             <div class="hero-stats">
@@ -208,7 +192,6 @@
 
                 document.getElementById('hero-title').textContent = data.series || VWK.seriesName;
                 document.getElementById('hero-tagline').textContent = data.tagline || '';
-                document.getElementById('series-label').textContent = data.lab || VWK.labName;
                 document.getElementById('stat-count').textContent = data.projects.length;
 
                 if (!data.projects.length) {
