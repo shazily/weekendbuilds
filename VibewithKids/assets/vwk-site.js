@@ -1,5 +1,5 @@
 window.VWK = {
-    labName: 'Weekend Labs',
+    labName: 'Weekend Builds',
     seriesName: 'Vibe with Kids',
     author: 'Shazily Munawar',
     coAuthor: 'Zizou',
@@ -38,10 +38,10 @@ function vwkRenderNav(active) {
         { id: 'about', label: 'About', href: `${base}about` },
         { id: 'ideas', label: 'Ideas', href: `${base}ideas` }
     ];
-    const logo = `${base}assets/weekend-labs-logo.svg`;
+    const logo = `${base}assets/weekend-builds-logo.svg`;
     return `<nav class="vwk-nav">
         <a class="vwk-nav-brand" href="${base}">
-            <img class="vwk-logo" src="${logo}" alt="Weekend Labs logo" width="32" height="32">
+            <img class="vwk-logo" src="${logo}" alt="Weekend Builds" width="36" height="36">
             <span class="vwk-nav-brand-text">
                 <span class="vwk-nav-lab">${VWK.labName}</span>
                 <span class="vwk-nav-series">${VWK.seriesName}</span>

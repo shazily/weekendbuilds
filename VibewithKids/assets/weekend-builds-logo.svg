@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="Weekend Builds">
+  <defs>
+    <linearGradient id="wb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="55%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#ff6b9d"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#wb)"/>
+  <rect x="8" y="24" width="11" height="9" rx="2" fill="#fff" opacity="0.92"/>
+  <rect x="14" y="16" width="11" height="9" rx="2" fill="#fff"/>
+  <rect x="20" y="8" width="11" height="9" rx="2" fill="#fff"/>
+  <circle cx="30" cy="10" r="3.5" fill="#4ade80"/>
+</svg>
