@@ -1,3 +1,94 @@
 {
-  "prompts": []
+  "prompts": [
+    {
+      "id": "lib-01-coordinates-flight",
+      "number": "01",
+      "name": "Coordinates Flight Simulator",
+      "text": "A 2D flight grid mapping tool where kids pilot a little plane using angle and speed sliders. Teaches X/Y grid coordinates, degree navigation, and world landmarks.",
+      "categories": ["Geography", "Math"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as an expert Creative Technologist. Build a single-file interactive app called \"Coordinates Flight Simulator.\"\n\nThe Canvas: Place a large 2D vector grid (X axis from -500 to +500, Y axis from -500 to +500) in the center of the screen. Scatter 5 major world landmarks at real coordinate points (e.g., Pyramids at [200, 100], Eiffel Tower at [-150, 300]) represented as unique emojis.\n\nThe Plane: The player controls a tiny airplane emoji. The plane is controlled by two HTML sliders at the top: Slider 1 controls \"Angle of Rotation\" (0 to 360 degrees). Slider 2 controls \"Forward Speed\" (0 to 10 pixels per frame).\n\nThe Logic: As the plane moves based on the sliders, output its live [X, Y] coordinates and heading angle in big bold text at the top. When the plane gets within 20 pixels of a landmark, flash the screen green and display a fun geographical pop-up fact about that location.\n\nPack all HTML, CSS, and JS into a single document. No external images or libraries."
+    },
+    {
+      "id": "lib-02-cryptogram-decoder",
+      "number": "02",
+      "name": "Cryptogram Riddle Decoder",
+      "text": "A spy-themed decoder game where kids translate phrases from ancient writing systems (like Egyptian hieroglyphs or Viking runes) using a visual key.",
+      "categories": ["History", "Language"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as a UI Developer and Educational Content Designer. Build a single-file application called \"The Ancient Codebreaker Lab.\"\n\nThe Setup: At the top, show a visual \"Decoder Key\" mapping standard alphabet letters (A-Z) to historical symbols. Use clean inline SVG shapes or a reliable unicode symbol set representing ancient runes/glyphs.\n\nThe Game: The app generates a random short message (e.g., \"THE PHARAOHS TREASURE IS IN THE TOMB\"). On the screen, this message is displayed entirely in the ancient symbols.\n\nThe Interface: Below the secret message, provide an interactive text input box. As the user types their English translation, the app checks the characters in real-time.\n\nWin Condition: If they decode the entire phrase correctly, trigger a stylized screen flash and unlock a short, engaging text story revealing the historical context of that message. Include a \"New Puzzle\" button to swap between 5 different built-in historical phrases.\n\nEnsure the code is robust, fully stylized with a dark, sleek archaeology theme, and packaged inside one single HTML file."
+    },
+    {
+      "id": "lib-03-vector-billiards",
+      "number": "03",
+      "name": "The Frictionless Vector Pool Table",
+      "text": "A 2D collision physics playground. Kids launch a pool ball at custom angles and power levels to learn about momentum, reflections, and friction vectors.",
+      "categories": ["Physics", "Math"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as a Game Engine Developer. Build a single-file interactive 2D physics sandbox called \"Vector Billiards Lab.\"\n\nThe Playground: Create a dark-themed rectangular canvas in the center representing a billiard table.\n\nThe Ball: Place a glowing neon circle in the center.\n\nThe Controls: Add an interactive \"Aiming Arrow\" protruding from the ball. The player clicks and drags a slider or uses mouse movement to change the arrow's angle (Direction) and length (Power/Velocity). Clicking a big \"LAUNCH\" button sets the ball in motion.\n\nThe Physics: The ball must bounce perfectly off the canvas boundaries using simple reflection physics (Velocity_X = -Velocity_X on hitting vertical walls). Draw a fading trail behind the ball showing its exact geometric path.\n\nLearning Overlay: Display real-time data panels showing: \"Current Angle\", \"Velocity Vector\", and \"Total Bounces\". Add a slider to let kids turn on \"Friction\" to watch the ball naturally slow down, or keep it at 0 for an infinite geometric bounce display.\n\nDeliver this as one completely functional HTML file."
+    },
+    {
+      "id": "lib-04-element-alchemist",
+      "number": "04",
+      "name": "Periodic Element Compound Alchemist",
+      "text": "A casual chemical merging game. Kids drag and drop atomic elements onto a workbench to see if they bind into molecules, teaching basic chemical formulas.",
+      "categories": ["Chemistry", "Science"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as an Educational Game Developer. Create a single-file interactive compound mixer called \"The Element Alchemist.\"\n\nThe Canvas: A split-screen UI. On the left side, a sidebar displaying cards for 5 fundamental elements: Hydrogen (H), Oxygen (O), Carbon (C), Sodium (Na), and Chlorine (Cl). Each card has a distinct neon color border.\n\nThe Bench: On the right side, an open workbench area. Users can click an element on the left to spawn its atomic icon onto the workbench.\n\nThe Interaction: Users can drag the atomic icons around the workbench canvas. If they drag an Oxygen icon onto two Hydrogen icons, the three items fuse together with an animated flash effect and transform into a new card labeled \"Water (H2O)!\"\n\nFormula Bank: Program the logic to recognize basic combinations:\n- H + H + O = Water (H2O)\n- Na + Cl = Salt (NaCl)\n- C + O + O = Carbon Dioxide (CO2)\n\nThe Recipe Book: Keep a checklist at the bottom of the screen showing which chemical compounds the player has successfully discovered.\n\nOutput the code as a single HTML file with embedded CSS and raw JavaScript canvas/DOM tracking."
+    },
+    {
+      "id": "lib-05-biome-weather",
+      "number": "05",
+      "name": "Ecosystem Climate Simulator",
+      "text": "A systemic simulation where adjusting sliders for temperature and humidity instantly changes the visual biome on screen, teaching meteorology cycles.",
+      "categories": ["Meteorology", "Science"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as a Creative Front-End Developer. Build a single-file dynamic simulator called \"The Biome Weather Machine.\"\n\nThe Control Panel: Place two massive sliders at the top: \"Temperature\" (-20°C to 50°C) and \"Humidity\" (0% to 100%).\n\nThe Display Window: The lower half of the screen is a large canvas or styled container that visually represents an ecosystem using pure CSS layout and emojis.\n\nThe Reactive Logic: The ecosystem transforms in real-time based on the sliders:\n- High Temp + Low Humidity: Background turns sandy yellow, spawns cactus and camel emojis, display text reads: \"Biome: Arid Desert\".\n- High Temp + High Humidity: Background turns deep green, rain drops fall down the screen, spawns tropical emojis, display text reads: \"Biome: Tropical Rainforest\".\n- Low Temp: Background turns white, snowflakes fall down, spawns winter emojis, text reads: \"Biome: Arctic Tundra\".\n\nLive Indicators: Show simple gauges displaying evaporation rates and cloud density based on the input values.\n\nDeliver the solution as a single copy-pasteable HTML document."
+    },
+    {
+      "id": "lib-06-mondrian-fractions",
+      "number": "06",
+      "name": "The Mondrian Fraction Painter",
+      "text": "An abstract art canvas inspired by Piet Mondrian. Kids click sections of the grid to slice them into halves or quarters, calculating the area fractions of each color used.",
+      "categories": ["Geometry", "Art"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as an expert Creative Technologist. Build an app called \"Mondrian Fraction Studio\" inside a single standalone HTML file.\n\nThe Canvas: Generate a large square grid that starts as a single white block (1/1).\n\nThe Slicing Mechanic: When a user clicks anywhere on a block, the app splits that specific block either vertically or horizontally into two equal halves.\n\nThe Paint Bucket: Provide a color picker with Mondrian's classic palette: Bold Red, Bright Blue, Yellow, and Black. Clicking a sub-block fills it with that color.\n\nThe Math Calculator: At the right side of the screen, show a live mathematical breakdown of the canvas composition based on the area of the squares. For example: \"Red Area: 1/4 (25%) | Blue Area: 1/8 (12.5%) | White Area: 5/8 (62.5%)\".\n\nEnsure the interface is sharp, responsive, and contains all logic and layout frameworks inside a single text file."
+    },
+    {
+      "id": "lib-07-candy-shop-budget",
+      "number": "07",
+      "name": "The Candy Shop Budget Tycoon",
+      "text": "A gamified shopping simulator where kids spend a randomized allowance, tracking mental math addition and subtraction with live coin updates.",
+      "categories": ["Math"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as a Front-End Developer. Build a single-file responsive web app called \"The Sweet Shop Math Challenge.\"\n\nThe Goal: The player is given a random budget between $5.00 and $15.00 at the start of the game. They must add treats to their cart without going over their budget.\n\nThe Shop UI: Create a grid of 6 items using emojis (e.g., Chocolate Bar for $1.50, Gummy Bears for $0.75, Ice Cream for $2.20). Each item has an \"Add to Cart\" and \"Remove\" button.\n\nLive Math Calculation: As items are added, show a live calculation: \"Starting Budget\" - \"Current Total\" = \"Money Left\".\n\nWin Condition: Add a \"Check Out\" button. If they spend exactly their budget or get within 10 cents of it without going over, show a celebration confetti screen (built with CSS/JS animations). If they go over budget, show a friendly warning to try again.\n\nPut all code into a single, clean HTML document."
+    },
+    {
+      "id": "lib-08-dinosaur-scaler",
+      "number": "08",
+      "name": "The Prehistoric Dinosaur Scaler",
+      "text": "A dynamic size comparison canvas. Kids select prehistoric animals and see them scaled next to a kid and a school bus to understand biological scale.",
+      "categories": ["Biology", "Science"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as an expert Creative Developer. Build a single-file, interactive HTML5 web page called \"Dinosaur Scale Explorer.\"\n\nVisual Elements: Use a minimalist, modern dark UI. Show a 2D canvas or a clean visual grid at the bottom. Render a stylized silhouette or vector shape of a kid (standing at 1.4 meters) and a standard School Bus (12 meters long).\n\nThe Interactive Element: Add a large, easy-to-use slider or select field at the top. Moving it cycles through 5 different prehistoric creatures (e.g., Velociraptor, Stegosaurus, Triceratops, T-Rex, Argentinosaurus).\n\nDynamic Scale: When a dinosaur is selected, its relative size must change dynamically on the screen next to the kid and the bus so the user can see exactly how massive it was.\n\nFun Facts: Display a card with bite-sized facts about each dinosaur's weight, habitat, and era that updates instantly.\n\nEnsure all CSS, HTML, and JavaScript are in one single file. No external images; use standard SVG paths or canvas drawings for the shapes."
+    },
+    {
+      "id": "lib-09-logic-gate-sandbox",
+      "number": "09",
+      "name": "Logic Gate Circuit Sandbox",
+      "text": "A visual electronics playground. Kids toggle input switches to feed current through AND, OR, and NOT gates to turn a virtual light bulb on, introducing computing logic.",
+      "categories": ["Electronics", "Computing"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as a UI Engineer and STEM Educator. Build a single-file app called \"Digital Circuit Sandbox.\"\n\nThe Engine: Create a visual workspace demonstrating computing logic gates (AND, OR, NOT).\n\nInteractive Inputs: On the left, place two toggle switches labeled Input A and Input B (represented as red/green lights for Off/On).\n\nThe Gates: In the center, place three selectable node containers representing the logic gates. Clicking a gate switches the mode of the circuit.\n\nThe Output: On the far right, show a light bulb emoji. Circuit logic calculates the binary current path in real-time. If the AND gate is active and both switches are toggled ON, draw a glowing neon line connecting to the light bulb, causing it to turn bright yellow with CSS animation. If the logic isn't met, the path turns grey and the bulb goes dark. Include short text overlays explaining the logic path (e.g., \"AND requires BOTH switches to be true!\").\n\nPackage everything as one independent HTML file."
+    },
+    {
+      "id": "lib-10-architectural-stress",
+      "number": "10",
+      "name": "Architectural Stress Tester",
+      "text": "A structural history engine. Kids build columns from ancient materials and crank an earthquake slider to test structural geometry and stress thresholds.",
+      "categories": ["History", "Architecture"],
+      "tags": ["Single HTML", "~30 min"],
+      "prompt": "Act as a Game Developer and Physics Instructor. Build a single-file application called \"Ancient Structural Stress Lab.\"\n\nThe Workspace: Center a 2D physics block grid canvas. Provide a building menu offering three materials with different properties: Ancient Egyptian Granite (Heavy, rigid), Roman Brick (Balanced), and Timber Wood (Light, flexible).\n\nThe Building Stage: Let kids click the grid to stack columns up to 5 tiers high.\n\nThe Stress Test: Add a big red slider labeled \"Seismic Intensity / Earthquake.\" As the user increases the slider, apply horizontal sine-wave vibrations to the base coordinates of the building structure.\n\nFailure Logic: Calculate structural collapse using basic geometric check bounds (if column pieces tilt beyond a specific angle vector, they tip over and crash downward). Display data tracking \"Max Structural Integrity\" and \"Collapse Point Threshold.\"\n\nDeliver this entire interactive application in a single, copy-pasteable HTML file."
+    }
+  ]
 }

@@ -65,6 +65,7 @@
         .prompt-text { flex: 1; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; line-height: 1.55; color: rgba(248,244,255,0.9); }
         .prompt-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
         .tag { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 6px; background: rgba(0,210,255,0.15); color: #7dd3fc; font-family: 'Space Grotesk', sans-serif; }
+        .tag.meta { background: rgba(255,255,255,0.08); color: rgba(248,244,255,0.55); border: 1px solid rgba(255,255,255,0.1); }
 
         .social-footer {
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -351,6 +352,16 @@
         }
         .community-card .idea-name { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.35rem; }
         .community-card .author { font-weight: 600; color: #c4b5fd; margin-top: 0.5rem; font-size: 0.8rem; }
+        .library-card .prompt-text { padding: 1.1rem 1.2rem; }
+        .library-card .prompt-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(0, 210, 255, 0.75);
+            margin-bottom: 0.25rem;
+        }
         .empty-note { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: rgba(248,244,255,0.5); }
     </style>
 </head>
@@ -369,7 +380,8 @@
         </div>
 
         <div class="tab-panel active" id="panel-prompts" role="tabpanel">
-            <p class="empty-note" id="prompt-list"></p>
+            <p class="section-label">Curated vibe coding prompts — single HTML, ~30 minutes each</p>
+            <div class="prompt-list" id="prompt-list"></div>
         </div>
 
         <div class="tab-panel" id="panel-downloads" role="tabpanel">
@@ -564,15 +576,29 @@
             } catch { return 0; }
         }
 
-        function renderCuratedPrompt(p, count, liked) {
-            const tags = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-            const age = p.age ? `<span class="tag">Ages ${p.age}</span>` : '';
-            return `<div class="prompt-card" data-id="${p.id}">
-                <div class="prompt-text">${p.text}<div class="prompt-meta">${age}${tags}</div></div>
-                <button class="like-btn${liked ? ' liked' : ''}" data-id="${p.id}" aria-label="Like this prompt">
-                    <span class="heart">${liked ? '❤️' : '🤍'}</span>
-                    <span class="count">${count}</span>
-                </button>
+        function renderTags(items, meta) {
+            const cls = meta ? 'tag meta' : 'tag';
+            return (items || []).map(t => `<span class="${cls}">${escapeHtml(t)}</span>`).join('');
+        }
+
+        function renderLibraryPrompt(p) {
+            if (p.prompt) copyTexts[p.id] = p.prompt;
+            const number = p.number ? `<div class="prompt-number">Prompt ${escapeHtml(p.number)}</div>` : '';
+            const name = p.name ? `<div class="idea-name">${escapeHtml(p.name)}</div>` : '';
+            const body = escapeHtml(p.text || '');
+            const categories = renderTags(p.categories, false);
+            const extraTags = renderTags(p.tags, true);
+            const copyBtn = p.prompt
+                ? `<button type="button" class="copy-btn" data-copy-id="${escapeHtml(p.id)}">Copy this prompt</button>`
+                : '';
+            return `<div class="prompt-card community-card library-card" data-id="${escapeHtml(p.id)}">
+                <div class="prompt-text">
+                    ${number}
+                    ${name}
+                    ${body}
+                    ${copyBtn}
+                    <div class="prompt-meta">${categories}${extraTags}</div>
+                </div>
             </div>`;
         }
 
@@ -714,28 +740,18 @@
                 const data = await r.json();
                 curated = data.prompts || [];
             } catch {
-                list.textContent = 'Could not load prompts.';
+                list.innerHTML = '<p class="empty-note">Could not load prompts.</p>';
                 return;
             }
 
             if (!curated.length) {
-                list.textContent = 'Our prompt library is coming soon — check back shortly.';
+                list.innerHTML = '<p class="empty-note">Our prompt library is coming soon — check back shortly.</p>';
                 return;
             }
 
-            const liked = getLiked();
-            const wrapper = document.createElement('div');
-            wrapper.className = 'prompt-list';
-            wrapper.innerHTML = curated.map(p => renderCuratedPrompt(p, 0, liked.includes(p.id))).join('');
-            list.replaceWith(wrapper);
-            wrapper.id = 'prompt-list';
-            bindLikeButtons(wrapper);
-
-            curated.forEach(async (p) => {
-                const count = await fetchLikeCount(p.id);
-                const btn = wrapper.querySelector(`.like-btn[data-id="${p.id}"] .count`);
-                if (btn) btn.textContent = count;
-            });
+            Object.keys(copyTexts).forEach(k => { if (k.startsWith('lib-')) delete copyTexts[k]; });
+            list.innerHTML = curated.map(p => renderLibraryPrompt(p)).join('');
+            bindCopyButtons(list);
         }
 
         async function loadDownloads() {
