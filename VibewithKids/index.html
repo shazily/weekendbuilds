@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe with Kids</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0618;
+            --accent: #00d2ff;
+            --gold: #ffd700;
+            --purple: #a855f7;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at top, #1a0a3e 0%, var(--bg) 60%);
+            color: #fff;
+            font-family: 'Fredoka One', cursive;
+            padding: 2rem 1.5rem 3rem;
+        }
+        header { text-align: center; margin-bottom: 2.5rem; }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: var(--accent);
+            text-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
+            letter-spacing: 4px;
+        }
+        .subtitle {
+            margin-top: 0.75rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 400;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(0, 20, 40, 0.7);
+            border: 2px solid rgba(0, 210, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.75rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.25);
+        }
+        .card h2 { font-size: 1.4rem; color: var(--gold); }
+        .card p {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+        .tag {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid var(--purple);
+            color: #d8b4fe;
+            align-self: flex-start;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>VIBE WITH KIDS</h1>
+        <p class="subtitle">Weekend builds — vibe coded together</p>
+    </header>
+
+    <main class="grid">
+        <a class="card" href="starrun_v2.1">
+            <span class="tag">Game</span>
+            <h2>Galactic Ranger</h2>
+            <p>Space shooter. Dodge asteroids, blast enemies, rack up galactic bucks.</p>
+        </a>
+        <a class="card" href="neon_nebula_v2">
+            <span class="tag">Visual</span>
+            <h2>Perfect Blue</h2>
+            <p>Neon nebula canvas. Keyboard-driven particles and reactive sound.</p>
+        </a>
+        <a class="card" href="wigglysounds_v2">
+            <span class="tag">Music</span>
+            <h2>Sound Wizard</h2>
+            <p>Hand-tracking synth. Wave your hands to control pitch and volume.</p>
+        </a>
+    </main>
+
+    <footer>Weekendbuilds · Shazily Munawar</footer>
+</body>
+</html>

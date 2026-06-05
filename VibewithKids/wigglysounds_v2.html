@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Wizard | V1.6 FIXED</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pitch-color: #FFD700; /* Gold */
+            --vol-color: #00FFFF;   /* Cyan */
+            --bg-color: #2a0a4d;    /* Deep purple magic bg */
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(circle at center, #4a148c 0%, var(--bg-color) 100%);
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* --- VISUALIZER --- */
+        .visualizer-stage {
+            position: relative; width: 100%; height: 180px;
+            background: rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center;
+            border-bottom: 4px solid #FFD700;
+        }
+        #wave-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        /* --- CAMERA --- */
+        .camera-container {
+            position: relative; width: 640px; height: 480px; margin-top: 10px;
+            border: 8px solid #fff; border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            background: #000; overflow: hidden;
+        }
+        video { display: none; }
+        canvas#output-canvas { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            transform: scaleX(-1); z-index: 5;
+        }
+
+        /* --- ZONES --- */
+        .zone-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; opacity: 0.2; pointer-events: none; z-index: 1;
+        }
+        .zone { 
+            flex: 1; border-right: 2px dashed rgba(255,255,255,0.3);
+            display: flex; justify-content: center; align-items: flex-end;
+            padding-bottom: 20px; font-size: 2rem; color: white;
+        }
+        .zone-low { background: #ff3333; }
+        .zone-mid { background: #33ff33; }
+        .zone-high { background: #3399ff; border-right: none; }
+
+        /* --- SIDE BARS --- */
+        .side-meter {
+            position: absolute; bottom: 20px; width: 60px; height: 300px;
+            background: rgba(0,0,0,0.6); border: 2px solid white; border-radius: 10px;
+            z-index: 20; overflow: visible; display: flex; align-items: flex-end; justify-content: center;
+        }
+        #vol-meter { left: 20px; border-color: var(--vol-color); }
+        #pitch-meter { right: 20px; border-color: var(--pitch-color); }
+
+        .meter-fill { width: 100%; height: 0%; transition: height 0.1s; }
+        
+        .meter-info {
+            position: absolute; top: -40px; width: 120px; left: 50%; transform: translateX(-50%);
+            text-align: center; font-size: 1.5rem; text-shadow: 2px 2px 0px black;
+            background: rgba(0,0,0,0.6); padding: 5px; border-radius: 5px;
+        }
+
+        /* --- HUD --- */
+        .hud-overlay {
+            position: absolute; width: 100%; bottom: 10px; 
+            display: flex; justify-content: space-between; padding: 0 80px; box-sizing: border-box;
+            z-index: 25; pointer-events: none;
+        }
+        .hud-text { 
+            font-size: 1.2rem; text-shadow: 2px 2px 4px #000; 
+            background: rgba(0,0,0,0.9); padding: 5px 15px; border-radius: 10px; 
+            border: 1px solid white;
+        }
+
+        /* --- VISUAL CLUES --- */
+        .guide-overlay {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            z-index: 15; text-align: center; pointer-events: none; opacity: 0.9;
+        }
+        #vol-guide { left: 100px; color: var(--vol-color); }
+        #pitch-guide { right: 100px; color: var(--pitch-color); }
+        
+        .guide-icon { font-size: 5rem; display: block; text-shadow: 0 0 10px #000; }
+        .guide-text { font-size: 1.5rem; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; }
+
+        @keyframes wiggle { 0%, 100% { transform: translateX(-10px); } 50% { transform: translateX(10px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(10px); } 50% { transform: translateY(-10px); } }
+        .wiggle-anim { animation: wiggle 1.5s infinite ease-in-out; }
+        .bounce-anim { animation: bounce 1.5s infinite ease-in-out; }
+
+        /* Start Button */
+        #start-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(42, 10, 77, 0.98); z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        button {
+            padding: 20px 50px; font-size: 2rem; background: #ff0055; color: white; border: none;
+            border-radius: 50px; cursor: pointer; font-family: 'Fredoka One';
+            box-shadow: 0 10px 0 #990033; transition: transform 0.1s;
+        }
+        button:active { transform: translateY(10px); box-shadow: none;}
+        
+        /* The Brain Readout */
+        #edu-readout {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            font-size: 1.5rem; color: #FFD700; text-align: center;
+            background: rgba(0,0,0,0.85); padding: 10px 30px; border-radius: 50px; 
+            min-height: 40px; border: 2px solid white; z-index: 30;
+            width: 80%; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        footer { margin-top: auto; margin-bottom: 10px; color: rgba(255,255,255,0.6); }
+    </style>
+</head>
+<body>
+
+    <div id="start-overlay">
+        <h1 style="font-size: 4rem;">Sound Wizard Academy</h1>
+        <p style="font-size: 1.5rem;">Version 1.6:</p>
+        <button id="start-btn">START MAGIC</button>
+    </div>
+
+    <div class="visualizer-stage">
+        <canvas id="wave-canvas"></canvas>
+    </div>
+
+    <div class="camera-container">
+        <video id="input-video"></video>
+        
+        <div id="edu-readout">Waiting for hands... 👋</div>
+        
+        <div class="zone-layer">
+            <div class="zone zone-low">LOW</div>
+            <div class="zone zone-mid">MID</div>
+            <div class="zone zone-high">HIGH</div>
+        </div>
+
+        <canvas id="output-canvas" width="640" height="480"></canvas>
+
+        <div id="vol-guide" class="guide-overlay">
+            <div class="guide-icon bounce-anim">↕️</div>
+            <div class="guide-text">LEFT HAND<br>RAISE</div>
+        </div>
+        <div id="pitch-guide" class="guide-overlay">
+            <div class="guide-icon wiggle-anim">↔️</div>
+            <div class="guide-text">RIGHT HAND<br>WIGGLE</div>
+        </div>
+
+        <div id="vol-meter" class="side-meter">
+            <div class="meter-info" id="vol-text" style="color: var(--vol-color);">0%</div>
+            <div id="vol-fill" class="meter-fill" style="background: var(--vol-color);"></div>
+        </div>
+        
+        <div id="pitch-meter" class="side-meter">
+            <div class="meter-info" id="hz-text" style="color: var(--pitch-color);">0 Hz</div>
+            <div id="pitch-fill" class="meter-fill" style="background: var(--pitch-color);"></div>
+        </div>
+
+        <div class="hud-overlay">
+            <div class="hud-text" style="color: var(--vol-color);">LEFT: Volume ↕</div>
+            <div class="hud-text" style="color: var(--pitch-color);">RIGHT: Pitch ↔</div>
+        </div>
+
+    </div>
+
+    <footer>Version 1.0 - Created by Shazily Munawar</footer>
+
+    <script>
+        const videoElement = document.getElementById('input-video');
+        const canvasElement = document.getElementById('output-canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        const waveCanvas = document.getElementById('wave-canvas');
+        const waveCtx = waveCanvas.getContext('2d');
+        const eduReadout = document.getElementById('edu-readout');
+        
+        // UI Elements
+        const volFill = document.getElementById('vol-fill');
+        const pitchFill = document.getElementById('pitch-fill');
+        const volText = document.getElementById('vol-text');
+        const hzText = document.getElementById('hz-text');
+        
+        const pitchGuide = document.getElementById('pitch-guide');
+        const volGuide = document.getElementById('vol-guide');
+
+        function resizeWave() {
+            waveCanvas.width = window.innerWidth;
+            waveCanvas.height = 180;
+        }
+        window.addEventListener('resize', resizeWave);
+        resizeWave();
+
+        let audioStarted = false;
+        let osc, gainNode, reverb;
+
+        // Config
+        const config = { minHz: 150, maxHz: 800, minVol: -60, maxVol: -5 };
+        let currentHz = 0; 
+        let currentVolDB = -60;
+        let wavePhase = 0;
+
+        function initAudio() {
+            gainNode = new Tone.Gain(0).toDestination();
+            reverb = new Tone.Reverb({ decay: 3, wet: 0.3 }).toDestination();
+            osc = new Tone.Oscillator(440, "triangle").connect(gainNode);
+            gainNode.connect(reverb);
+            osc.start();
+            audioStarted = true;
+        }
+
+        function drawWave() {
+            if (!audioStarted) return;
+            waveCtx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
+            waveCtx.lineWidth = 5;
+            waveCtx.strokeStyle = '#00FFFF'; 
+            waveCtx.beginPath();
+
+            const width = waveCanvas.width;
+            const height = waveCanvas.height;
+            const centerY = height / 2;
+
+            let amplitude = 2;
+            if(currentVolDB > -55) {
+                amplitude = ((currentVolDB - config.minVol) / (config.maxVol - config.minVol)) * 80;
+            }
+            if(currentHz === 0) amplitude = 0;
+
+            const freqScale = currentHz * 0.0005;
+
+            for (let x = 0; x < width; x++) {
+                const y = centerY + Math.sin(x * freqScale * 20 + wavePhase) * amplitude;
+                if(x===0) waveCtx.moveTo(x, y);
+                else waveCtx.lineTo(x, y);
+            }
+            waveCtx.stroke();
+            wavePhase -= 0.2; 
+            requestAnimationFrame(drawWave);
+        }
+
+        function updateEducationalText(hz) {
+             let msg = "";
+             if (hz < 250) {
+                 msg = `LOW FREQUENCY (${Math.round(hz)} Hz): Long, slow waves like a bear growl! 🐻`;
+                 eduReadout.style.color = "#ff6666"; 
+             } else if (hz < 500) {
+                 msg = `MID FREQUENCY (${Math.round(hz)} Hz): Medium waves like a human voice! 🗣️`;
+                 eduReadout.style.color = "#66ff66"; 
+             } else {
+                 msg = `HIGH FREQUENCY (${Math.round(hz)} Hz): Fast, short waves like a bird chirp! 🐦`;
+                 eduReadout.style.color = "#66ccff"; 
+             }
+             eduReadout.innerText = msg;
+        }
+
+        function onResults(results) {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+            let volHandFound = false;   // Physical LEFT Hand
+            let pitchHandFound = false; // Physical RIGHT Hand
+
+            if (results.multiHandLandmarks) {
+                for (let i = 0; i < results.multiHandLandmarks.length; i++) {
+                    const lm = results.multiHandLandmarks[i];
+                    const label = results.multiHandedness[i].label; 
+                    const tip = lm[8];
+
+                    // Draw Skeletons
+                    // "Right" label corresponds to Physical Left Hand (on mirror) = Cyan/Volume
+                    // "Left" label corresponds to Physical Right Hand (on mirror) = Gold/Pitch
+                    const color = label === 'Right' ? '#00FFFF' : '#FFD700';
+                    drawConnectors(canvasCtx, lm, HAND_CONNECTIONS, {color: color, lineWidth: 5});
+                    drawLandmarks(canvasCtx, lm, {color: 'white', lineWidth: 2, radius: 4});
+
+                    // --- SWAPPED LOGIC ---
+                    if (label === 'Right') {
+                        // === VOLUME HAND (PHYSICAL LEFT) ===
+                        // MediaPipe calls this 'Right' because it looks like a right hand in non-mirrored view
+                        volHandFound = true;
+                        
+                        // Y Axis logic: 1.0 (Top) -> 0.0 (Bottom)
+                        const y = 1.0 - tip.y; 
+                        currentVolDB = config.minVol + (y * (config.maxVol - config.minVol));
+
+                        // Update Left Bar
+                        const volPct = Math.max(0, Math.round(y * 100));
+                        volFill.style.height = volPct + "%";
+                        volText.innerText = volPct + "%";
+                    } 
+                    else if (label === 'Left') {
+                        // === PITCH HAND (PHYSICAL RIGHT) ===
+                        pitchHandFound = true;
+                        
+                        // X Axis logic: 1.0 (Left) -> 0.0 (Right)
+                        const x = 1.0 - tip.x; 
+                        currentHz = config.minHz + (x * (config.maxHz - config.minHz));
+                        
+                        // Update Right Bar
+                        const pitchPct = ((currentHz - config.minHz) / (config.maxHz - config.minHz)) * 100;
+                        pitchFill.style.height = pitchPct + "%";
+                        hzText.innerText = Math.round(currentHz) + " Hz";
+
+                        // Update Brain text
+                        updateEducationalText(currentHz);
+                    }
+                }
+            }
+
+            // --- HIDE/SHOW GUIDES ---
+            volGuide.style.display = volHandFound ? 'none' : 'block';
+            pitchGuide.style.display = pitchHandFound ? 'none' : 'block';
+
+            if (audioStarted) {
+                
+                // --- RESET LOGIC ---
+                if(!volHandFound) {
+                    currentVolDB = -60;
+                    volFill.style.height = "0%";
+                    volText.innerText = "0%";
+                }
+
+                if(!pitchHandFound) {
+                    currentHz = 0; 
+                    pitchFill.style.height = "0%";
+                    hzText.innerText = "0 Hz";
+                }
+
+                if(!pitchHandFound && !volHandFound) {
+                    eduReadout.innerText = "Waiting for hands... (Hz = Speed of Sound!)";
+                    eduReadout.style.color = "#FFD700";
+                }
+
+                // Apply to Audio
+                if (currentHz > 0) {
+                    osc.frequency.rampTo(currentHz, 0.1);
+                }
+                
+                // Mute logic
+                const target = volHandFound ? currentVolDB : config.minVol;
+                gainNode.gain.rampTo(Tone.dbToGain(target), 0.1);
+            }
+            canvasCtx.restore();
+        }
+
+        const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+        hands.setOptions({ maxNumHands: 2, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+        hands.onResults(onResults);
+
+        const cam = new Camera(videoElement, {
+            onFrame: async () => { await hands.send({image: videoElement}); },
+            width: 640, height: 480
+        });
+
+        document.getElementById('start-btn').addEventListener('click', async () => {
+            try {
+                await Tone.start();
+                initAudio();
+                await cam.start();
+                document.getElementById('start-overlay').style.display = 'none';
+                drawWave();
+            } catch (e) { alert("Error: " + e.message); }
+        });
+    </script>
+</body>
+</html>
