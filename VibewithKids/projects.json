@@ -29,7 +29,19 @@
       "accent": "#00d2ff",
       "accentGlow": "rgba(0, 210, 255, 0.45)",
       "badge": "new",
-      "desktopOnly": false
+      "desktopOnly": false,
+      "nerdInfo": {
+        "uses": "Download the single HTML file and open it in any modern browser — no install needed. Kids steer lanes, jump, and slide through a 3D endless runner, collect energy coins, and pause at holocrons to answer trivia. Correct answers earn Astro Bucks; wrong answers cost a life. Great for active recall after a lesson or as a weekend vibe-coding demo to remix.",
+        "promptHint": "Ask your AI to act as a game developer and build a single-file 3D endless runner: three lanes, jump + slide, procedural obstacles, collectible coins, trivia modal gates, lives/score HUD, and Web Audio sound effects — all in one HTML document loaded from CDNs.",
+        "buildPrompt": "Act as an expert Creative Technologist and Game Developer. Build a single self-contained HTML file for a kid-friendly 3D endless runner called \"Galactic Ranger.\"\n\nTech: Use Three.js (r128) for 3D rendering and Tween.js for camera intro animation. Use the Web Audio API for jump, coin, crash, and trivia sounds — no external audio files.\n\nGameplay: Three-lane runner (left/center/right). Arrow keys or touch swipes change lanes; up = jump, down = slide under low obstacles. Spawn coin rings, block crates, laser gates (slide under), and glowing holocrons that pause the game and show a multiple-choice trivia question.\n\nProgression: 5 lives, score from coins, Astro Bucks for correct answers, 10 questions per sector then speed increases. Include start screen with codename input, pause, game over stats, and mobile touch controls.\n\nStyle: Dark sci-fi HUD, Orbitron font, teal/cyan accents. Pack everything into one HTML file with CDN script tags only.",
+        "libraries": [
+          { "name": "Three.js", "detail": "r128 — 3D scene, camera, meshes, particles" },
+          { "name": "Tween.js", "detail": "18.6.4 — cinematic camera fly-in on launch" },
+          { "name": "Web Audio API", "detail": "Procedural SFX (jump, coin, crash, trivia)" },
+          { "name": "Google Fonts", "detail": "Orbitron — sci-fi HUD typography" }
+        ],
+        "stack": ["Single HTML file", "CDN scripts only", "Mobile touch + keyboard", "localStorage high scores"]
+      }
     },
     {
       "slug": "neon_nebula_v2",
@@ -41,7 +53,18 @@
       "poster": "assets/posters/neon_nebula.svg",
       "accent": "#00f2ff",
       "accentGlow": "rgba(0, 242, 255, 0.4)",
-      "desktopOnly": true
+      "desktopOnly": true,
+      "nerdInfo": {
+        "uses": "Open in Chrome or Edge on a laptop/desktop with a webcam. Allow camera access when prompted, then use your hand in frame to push and spin a live 3D particle galaxy. Kids feel momentum and spatial force visually — ideal for a physics or astronomy conversation starter. Not designed for phones (needs webcam + GPU).",
+        "promptHint": "Prompt for a single HTML Three.js simulation where MediaPipe Hands tracks one hand and applies force to thousands of colored particles arranged as a nebula — include velocity trails, a Star-Wars-style intro, and on-screen physics readouts.",
+        "buildPrompt": "Act as a Creative Technologist specializing in interactive science demos. Build one self-contained HTML file called \"Perfect Blue\" — a hand-controlled 3D galaxy simulation.\n\nTech: Three.js (0.128) for a particle nebula (thousands of points with color gradients). MediaPipe Hands + Camera Utils for webcam hand tracking in the browser.\n\nInteraction: Map hand position and movement to a force vector that pushes nearby particles. Show velocity trails, particle count, and a simple force readout. Include a cinematic text intro overlay and a minimal HUD.\n\nVisuals: Deep space black background, cyan accent color, bloom-like glow on particles, smooth camera. No external assets — procedural only.\n\nRequirements: Single HTML file, CDN scripts, desktop browser with webcam. Graceful message if camera denied.",
+        "libraries": [
+          { "name": "Three.js", "detail": "0.128 — WebGL particle nebula & camera" },
+          { "name": "MediaPipe Hands", "detail": "Real-time hand landmark tracking via webcam" },
+          { "name": "MediaPipe Camera Utils", "detail": "Webcam frame pipeline for Hands" }
+        ],
+        "stack": ["Single HTML file", "Webcam required", "Desktop recommended", "WebGL"]
+      }
     },
     {
       "slug": "wigglysounds_v2",
@@ -53,7 +76,20 @@
       "poster": "assets/posters/wigglysounds.svg",
       "accent": "#ff1a5e",
       "accentGlow": "rgba(255, 26, 94, 0.4)",
-      "desktopOnly": true
+      "desktopOnly": true,
+      "nerdInfo": {
+        "uses": "Open on a desktop/laptop with a webcam and speakers. Hold your hand up — vertical position controls pitch (frequency), horizontal spread controls volume (amplitude). Kids see the waveform react in real time, turning abstract sound concepts into something they can literally wave at. Best with headphones and good lighting for hand tracking.",
+        "promptHint": "Ask for a single HTML music-science toy: MediaPipe hand tracking drives a Tone.js oscillator — hand height = frequency, hand openness or x-position = amplitude — with a colorful animated waveform and kid-friendly wizard theme.",
+        "buildPrompt": "Act as an Audio-Visual Creative Technologist. Build a single HTML file called \"Sound Wizard Academy\" that teaches frequency and amplitude through hand control.\n\nTech: Tone.js for real-time oscillator synthesis. MediaPipe Hands (+ camera utils) to track one hand from the webcam.\n\nMapping: Hand Y position → oscillator frequency (e.g. 200–800 Hz). Hand X position or palm size → amplitude/volume. Draw a live animated waveform or wiggly line that responds instantly.\n\nUX: Playful wizard theme (Fredoka One font), big labels for \"Pitch\" and \"Volume\", a start button that unlocks audio context (browser requirement), and a mirror video preview.\n\nDeliver as one self-contained HTML file using CDN scripts only. Include a note that microphone is not required — camera only.",
+        "libraries": [
+          { "name": "Tone.js", "detail": "14.8.49 — browser audio synthesis" },
+          { "name": "MediaPipe Hands", "detail": "Hand landmark tracking" },
+          { "name": "MediaPipe Camera Utils", "detail": "Webcam feed for tracking" },
+          { "name": "MediaPipe Drawing Utils", "detail": "Hand skeleton overlay (optional)" },
+          { "name": "Google Fonts", "detail": "Fredoka One — playful wizard UI" }
+        ],
+        "stack": ["Single HTML file", "Webcam + speakers", "Desktop recommended", "Web Audio via Tone.js"]
+      }
     }
   ]
 }

@@ -43,15 +43,38 @@
         .card p { font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; line-height: 1.6; color: rgba(248,244,255,0.78); margin: 0; }
 
         .dl-list { list-style: none; padding: 0; margin: 0.75rem 0 0; }
-        .dl-list a {
+        .dl-item { display: flex; gap: 0.45rem; margin-bottom: 0.4rem; align-items: stretch; }
+        .dl-list a, .dl-download {
+            flex: 1;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0.65rem 0.85rem; margin-bottom: 0.4rem; border-radius: 10px;
+            padding: 0.65rem 0.85rem; border-radius: 10px;
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
             color: #fff; text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
             transition: border-color 0.2s, background 0.2s;
         }
-        .dl-list a:hover { border-color: rgba(0,210,255,0.45); background: rgba(0,210,255,0.1); }
+        .dl-list a:hover, .dl-download:hover { border-color: rgba(0,210,255,0.45); background: rgba(0,210,255,0.1); }
         .dl-list span { color: rgba(248,244,255,0.5); font-size: 0.75rem; }
+        .nerd-info-btn {
+            flex-shrink: 0;
+            padding: 0 0.85rem;
+            min-width: 88px;
+            border-radius: 10px;
+            border: 1px solid rgba(167, 139, 250, 0.45);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(0, 210, 255, 0.08));
+            color: #ddd6fe;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
+        }
+        .nerd-info-btn:hover {
+            border-color: rgba(167, 139, 250, 0.75);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(0, 210, 255, 0.14));
+            transform: translateY(-1px);
+        }
 
         .prompt-list { display: flex; flex-direction: column; gap: 0.85rem; }
         .prompt-card {
@@ -395,6 +418,354 @@
             transition: background 0.15s;
         }
         .community-submit-cta:hover { background: #33dbff; }
+
+        .library-card-clickable {
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .library-card-clickable:hover,
+        .library-card-clickable:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(0, 210, 255, 0.4);
+            box-shadow: 0 10px 36px rgba(0, 210, 255, 0.12);
+            outline: none;
+        }
+        .library-card-hint {
+            margin-top: 0.85rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: rgba(0, 210, 255, 0.9);
+            letter-spacing: 0.01em;
+        }
+
+        .prompt-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .prompt-modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .prompt-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(4, 2, 14, 0.78);
+            backdrop-filter: blur(10px);
+        }
+        .prompt-modal-panel {
+            position: relative;
+            width: min(700px, 100%);
+            max-height: min(88vh, 760px);
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 210, 255, 0.28);
+            background: linear-gradient(165deg, rgba(14, 10, 36, 0.98), rgba(6, 4, 18, 0.98));
+            box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55), 0 0 70px rgba(124, 58, 237, 0.18);
+            transform: scale(0.94) translateY(16px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+            overflow: hidden;
+        }
+        .prompt-modal.open .prompt-modal-panel {
+            transform: scale(1) translateY(0);
+        }
+        .prompt-modal-header {
+            padding: 1.35rem 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+        .prompt-modal-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(0, 210, 255, 0.8);
+            margin-bottom: 0.3rem;
+        }
+        .prompt-modal-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.3;
+        }
+        .prompt-modal-meta {
+            margin-top: 0.65rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+        .prompt-modal-body-wrap {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.15rem 1.5rem;
+            min-height: 0;
+        }
+        .prompt-modal-body {
+            margin: 0;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9375rem;
+            line-height: 1.65;
+            color: rgba(248, 244, 255, 0.88);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .prompt-modal-footer {
+            padding: 1rem 1.5rem 1.35rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+        .prompt-modal-close {
+            position: absolute;
+            top: 0.85rem;
+            right: 0.85rem;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(248, 244, 255, 0.7);
+            font-size: 1.35rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .prompt-modal-close:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+        .prompt-modal-copy {
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 210, 255, 0.45);
+            background: rgba(0, 210, 255, 0.14);
+            color: #00d2ff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .prompt-modal-copy:hover { background: rgba(0, 210, 255, 0.22); border-color: rgba(0, 210, 255, 0.6); }
+        .prompt-modal-copy.copied { border-color: rgba(74, 222, 128, 0.5); color: #4ade80; background: rgba(74, 222, 128, 0.12); }
+
+        /* NERD INFO MODAL */
+        .nerd-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .nerd-modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .nerd-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(4, 2, 14, 0.82);
+            backdrop-filter: blur(12px);
+        }
+        .nerd-modal-panel {
+            position: relative;
+            width: min(720px, 100%);
+            max-height: min(90vh, 820px);
+            display: flex;
+            flex-direction: column;
+            border-radius: 18px;
+            border: 1px solid rgba(167, 139, 250, 0.35);
+            background: linear-gradient(165deg, rgba(16, 10, 40, 0.98), rgba(6, 4, 18, 0.98));
+            box-shadow: 0 32px 100px rgba(0, 0, 0, 0.6), 0 0 80px rgba(124, 58, 237, 0.2);
+            transform: scale(0.94) translateY(16px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+            overflow: hidden;
+        }
+        .nerd-modal.open .nerd-modal-panel { transform: scale(1) translateY(0); }
+        .nerd-modal-accent {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(90deg, #7c3aed, #00d2ff);
+            flex-shrink: 0;
+        }
+        .nerd-modal-header {
+            padding: 1.35rem 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+        .nerd-modal-kicker {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(167, 139, 250, 0.95);
+            margin-bottom: 0.35rem;
+        }
+        .nerd-modal-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.25;
+        }
+        .nerd-modal-sub {
+            margin-top: 0.35rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            color: rgba(248, 244, 255, 0.55);
+        }
+        .nerd-modal-tags {
+            margin-top: 0.65rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+        .nerd-modal-body-wrap {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.15rem 1.5rem 1.25rem;
+            min-height: 0;
+        }
+        .nerd-section { margin-bottom: 1.35rem; }
+        .nerd-section:last-child { margin-bottom: 0; }
+        .nerd-section h3 {
+            margin: 0 0 0.55rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(0, 210, 255, 0.85);
+        }
+        .nerd-section p {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.65;
+            color: rgba(248, 244, 255, 0.82);
+        }
+        .nerd-lib-list { display: flex; flex-direction: column; gap: 0.45rem; }
+        .nerd-lib-item {
+            padding: 0.65rem 0.75rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nerd-lib-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .nerd-lib-detail {
+            margin-top: 0.2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(248, 244, 255, 0.55);
+            line-height: 1.45;
+        }
+        .nerd-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.65rem;
+        }
+        .nerd-stack span {
+            font-size: 0.65rem;
+            padding: 0.22rem 0.5rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(248, 244, 255, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .nerd-prompt-box {
+            margin-top: 0.65rem;
+            padding: 0.85rem 1rem;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: rgba(248, 244, 255, 0.78);
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .nerd-modal-footer {
+            padding: 1rem 1.5rem 1.35rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            flex-shrink: 0;
+        }
+        .nerd-modal-close {
+            position: absolute;
+            top: 0.85rem;
+            right: 0.85rem;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(248, 244, 255, 0.7);
+            font-size: 1.35rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            z-index: 1;
+        }
+        .nerd-modal-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+        .nerd-modal-copy, .nerd-modal-dl {
+            padding: 0.65rem 1.15rem;
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .nerd-modal-copy {
+            border: 1px solid rgba(167, 139, 250, 0.5);
+            background: rgba(124, 58, 237, 0.2);
+            color: #ddd6fe;
+        }
+        .nerd-modal-copy:hover { background: rgba(124, 58, 237, 0.32); border-color: rgba(167, 139, 250, 0.7); }
+        .nerd-modal-copy.copied { border-color: rgba(74, 222, 128, 0.5); color: #4ade80; background: rgba(74, 222, 128, 0.12); }
+        .nerd-modal-dl {
+            border: 1px solid rgba(0, 210, 255, 0.45);
+            background: rgba(0, 210, 255, 0.14);
+            color: #00d2ff;
+        }
+        .nerd-modal-dl:hover { background: rgba(0, 210, 255, 0.22); border-color: rgba(0, 210, 255, 0.6); }
     </style>
 </head>
 <body>
@@ -493,6 +864,59 @@
 
         <div id="footer-slot"></div>
     </div>
+
+    <div id="nerd-modal" class="nerd-modal" aria-hidden="true">
+        <div class="nerd-modal-backdrop" data-close-nerd></div>
+        <div class="nerd-modal-panel" role="dialog" aria-modal="true" aria-labelledby="nerd-modal-title">
+            <div class="nerd-modal-accent" id="nerd-modal-accent"></div>
+            <button type="button" class="nerd-modal-close" aria-label="Close">&times;</button>
+            <div class="nerd-modal-header">
+                <div class="nerd-modal-kicker">Nerd info</div>
+                <div class="nerd-modal-title" id="nerd-modal-title"></div>
+                <div class="nerd-modal-sub" id="nerd-modal-sub"></div>
+                <div class="nerd-modal-tags" id="nerd-modal-tags"></div>
+            </div>
+            <div class="nerd-modal-body-wrap" id="nerd-modal-body-wrap">
+                <section class="nerd-section">
+                    <h3>What it's for</h3>
+                    <p id="nerd-modal-uses"></p>
+                </section>
+                <section class="nerd-section">
+                    <h3>Libraries</h3>
+                    <div class="nerd-lib-list" id="nerd-modal-libraries"></div>
+                    <div class="nerd-stack" id="nerd-modal-stack"></div>
+                </section>
+                <section class="nerd-section">
+                    <h3>Build your own</h3>
+                    <p id="nerd-modal-prompt-hint"></p>
+                    <div class="nerd-prompt-box" id="nerd-modal-prompt"></div>
+                </section>
+            </div>
+            <div class="nerd-modal-footer">
+                <button type="button" class="nerd-modal-copy" id="nerd-modal-copy">Copy starter prompt</button>
+                <a class="nerd-modal-dl" id="nerd-modal-download" href="#" download>Download .html</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="prompt-modal" class="prompt-modal" aria-hidden="true">
+        <div class="prompt-modal-backdrop" data-close-modal></div>
+        <div class="prompt-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prompt-modal-name">
+            <button type="button" class="prompt-modal-close" aria-label="Close">&times;</button>
+            <div class="prompt-modal-header">
+                <div class="prompt-modal-number" id="prompt-modal-number"></div>
+                <div class="prompt-modal-name" id="prompt-modal-name"></div>
+                <div class="prompt-modal-meta" id="prompt-modal-meta"></div>
+            </div>
+            <div class="prompt-modal-body-wrap" id="prompt-modal-body-wrap">
+                <pre class="prompt-modal-body" id="prompt-modal-body"></pre>
+            </div>
+            <div class="prompt-modal-footer">
+                <button type="button" class="prompt-modal-copy" id="prompt-modal-copy">Copy full prompt</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/VibewithKids/assets/vwk-site.js"></script>
     <script>
         document.getElementById('nav-slot').innerHTML = vwkRenderNav('ideas');
@@ -501,7 +925,12 @@
         const LIKED_KEY = 'vwk-liked-prompts';
         const LIKED_IDEAS_KEY = 'vwk-liked-ideas';
         const copyTexts = {};
+        const libraryPrompts = {};
+        const downloadProjects = {};
         let submissionType = 'idea';
+        let promptModalReady = false;
+        let nerdModalReady = false;
+        let activeNerdSlug = null;
 
         function getLikedIdeasSession() {
             try { return JSON.parse(sessionStorage.getItem(LIKED_IDEAS_KEY) || '[]'); } catch { return []; }
@@ -614,24 +1043,98 @@
         }
 
         function renderLibraryPrompt(p) {
-            if (p.prompt) copyTexts[p.id] = p.prompt;
+            libraryPrompts[p.id] = p;
             const number = p.number ? `<div class="prompt-number">Prompt ${escapeHtml(p.number)}</div>` : '';
             const name = p.name ? `<div class="idea-name">${escapeHtml(p.name)}</div>` : '';
             const body = escapeHtml(p.text || '');
             const categories = renderTags(p.categories, false);
             const extraTags = renderTags(p.tags, true);
-            const copyBtn = p.prompt
-                ? `<button type="button" class="copy-btn" data-copy-id="${escapeHtml(p.id)}">Copy this prompt</button>`
+            const hint = p.prompt
+                ? '<div class="library-card-hint">View full prompt →</div>'
                 : '';
-            return `<div class="prompt-card community-card library-card" data-id="${escapeHtml(p.id)}">
+            return `<div class="prompt-card community-card library-card library-card-clickable" data-id="${escapeHtml(p.id)}" data-prompt-id="${escapeHtml(p.id)}" tabindex="0" role="button" aria-label="View full prompt: ${escapeHtml(p.name || 'Prompt')}">
                 <div class="prompt-text">
                     ${number}
                     ${name}
                     ${body}
-                    ${copyBtn}
+                    ${hint}
                     <div class="prompt-meta">${categories}${extraTags}</div>
                 </div>
             </div>`;
+        }
+
+        let activePromptId = null;
+
+        function closePromptModal() {
+            const modal = document.getElementById('prompt-modal');
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            activePromptId = null;
+        }
+
+        function openPromptModal(id) {
+            initPromptModal();
+            const p = libraryPrompts[id];
+            if (!p?.prompt) return;
+            activePromptId = id;
+            const modal = document.getElementById('prompt-modal');
+            document.getElementById('prompt-modal-number').textContent = p.number ? `Prompt ${p.number}` : '';
+            document.getElementById('prompt-modal-name').textContent = p.name || '';
+            document.getElementById('prompt-modal-body').textContent = p.prompt;
+            document.getElementById('prompt-modal-meta').innerHTML =
+                renderTags(p.categories, false) + renderTags(p.tags, true);
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            modal.querySelector('.prompt-modal-body-wrap')?.scrollTo(0, 0);
+        }
+
+        function initPromptModal() {
+            if (promptModalReady) return;
+            promptModalReady = true;
+            const modal = document.getElementById('prompt-modal');
+            const copyBtn = document.getElementById('prompt-modal-copy');
+
+            modal.querySelector('.prompt-modal-close')?.addEventListener('click', closePromptModal);
+            modal.querySelector('[data-close-modal]')?.addEventListener('click', closePromptModal);
+            modal.querySelector('.prompt-modal-panel')?.addEventListener('click', e => e.stopPropagation());
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) closePromptModal();
+            });
+
+            copyBtn?.addEventListener('click', async () => {
+                const p = activePromptId ? libraryPrompts[activePromptId] : null;
+                const text = p?.prompt || '';
+                if (!text) return;
+                try {
+                    await copyText(text);
+                    copyBtn.classList.add('copied');
+                    const prev = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.textContent = prev;
+                    }, 2000);
+                } catch {
+                    copyBtn.textContent = 'Copy failed';
+                    setTimeout(() => { copyBtn.textContent = 'Copy full prompt'; }, 2000);
+                }
+            });
+        }
+
+        function bindLibraryCards(container) {
+            container.querySelectorAll('.library-card-clickable').forEach(card => {
+                const id = card.dataset.promptId;
+                card.addEventListener('click', () => openPromptModal(id));
+                card.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openPromptModal(id);
+                    }
+                });
+            });
         }
 
         function renderCategories(s) {
@@ -781,9 +1284,10 @@
                 return;
             }
 
-            Object.keys(copyTexts).forEach(k => { if (k.startsWith('lib-')) delete copyTexts[k]; });
+            Object.keys(libraryPrompts).forEach(k => delete libraryPrompts[k]);
             list.innerHTML = curated.map(p => renderLibraryPrompt(p)).join('');
-            bindCopyButtons(list);
+            bindLibraryCards(list);
+            initPromptModal();
         }
 
         async function loadDownloads() {
@@ -793,13 +1297,114 @@
                 const r = await fetch(`${base}projects.json`);
                 if (!r.ok) throw new Error('failed');
                 const data = await r.json();
+                const items = data.projects.filter(p => p.file && !p.external);
+                Object.keys(downloadProjects).forEach(k => delete downloadProjects[k]);
+                items.forEach(p => { downloadProjects[p.slug] = p; });
                 el.innerHTML = '<ul class="dl-list">' +
-                    data.projects.filter(p => p.file && !p.external).map(p =>
-                        `<li><a href="${base}${p.file || p.slug + '.html'}" download><strong>${p.title}</strong><span>.html ↓</span></a></li>`
-                    ).join('') + '</ul>';
+                    items.map(p => {
+                        const href = `${base}${p.file || p.slug + '.html'}`;
+                        const nerdBtn = p.nerdInfo
+                            ? `<button type="button" class="nerd-info-btn" data-slug="${escapeHtml(p.slug)}" aria-label="Nerd info for ${escapeHtml(p.title)}">Nerd info</button>`
+                            : '';
+                        return `<li class="dl-item">
+                            <a class="dl-download" href="${href}" download><strong>${escapeHtml(p.title)}</strong><span>.html ↓</span></a>
+                            ${nerdBtn}
+                        </li>`;
+                    }).join('') + '</ul>';
+                bindNerdInfoButtons(el);
+                initNerdModal();
             } catch {
                 el.innerHTML = '<p class="empty-note">Could not load downloads.</p>';
             }
+        }
+
+        function closeNerdModal() {
+            const modal = document.getElementById('nerd-modal');
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            activeNerdSlug = null;
+        }
+
+        function openNerdModal(slug) {
+            initNerdModal();
+            const p = downloadProjects[slug];
+            if (!p?.nerdInfo) return;
+            activeNerdSlug = slug;
+            const info = p.nerdInfo;
+            const modal = document.getElementById('nerd-modal');
+            const accent = p.accent || '#7c3aed';
+            document.getElementById('nerd-modal-accent').style.background =
+                `linear-gradient(90deg, ${accent}, #00d2ff)`;
+            document.getElementById('nerd-modal-title').textContent = p.title || '';
+            document.getElementById('nerd-modal-sub').textContent =
+                [p.subtitle, p.category].filter(Boolean).join(' · ');
+            document.getElementById('nerd-modal-tags').innerHTML =
+                p.category ? `<span class="tag">${escapeHtml(p.category)}</span>` : '';
+            if (p.desktopOnly) {
+                document.getElementById('nerd-modal-tags').innerHTML +=
+                    '<span class="tag meta">Desktop + webcam</span>';
+            }
+            document.getElementById('nerd-modal-uses').textContent = info.uses || '';
+            document.getElementById('nerd-modal-libraries').innerHTML = (info.libraries || [])
+                .map(lib => `<div class="nerd-lib-item">
+                    <div class="nerd-lib-name">${escapeHtml(lib.name)}</div>
+                    <div class="nerd-lib-detail">${escapeHtml(lib.detail || '')}</div>
+                </div>`).join('');
+            document.getElementById('nerd-modal-stack').innerHTML = (info.stack || [])
+                .map(s => `<span>${escapeHtml(s)}</span>`).join('');
+            document.getElementById('nerd-modal-prompt-hint').textContent = info.promptHint || '';
+            document.getElementById('nerd-modal-prompt').textContent = info.buildPrompt || '';
+            const dl = document.getElementById('nerd-modal-download');
+            dl.href = `${VWK.siteRoot()}${p.file || p.slug + '.html'}`;
+            dl.style.display = p.file ? '' : 'none';
+            const copyBtn = document.getElementById('nerd-modal-copy');
+            copyBtn.style.display = info.buildPrompt ? '' : 'none';
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('nerd-modal-body-wrap')?.scrollTo(0, 0);
+        }
+
+        function initNerdModal() {
+            if (nerdModalReady) return;
+            nerdModalReady = true;
+            const modal = document.getElementById('nerd-modal');
+            modal.querySelector('.nerd-modal-close')?.addEventListener('click', closeNerdModal);
+            modal.querySelector('[data-close-nerd]')?.addEventListener('click', closeNerdModal);
+            modal.querySelector('.nerd-modal-panel')?.addEventListener('click', e => e.stopPropagation());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) closeNerdModal();
+            });
+            document.getElementById('nerd-modal-copy')?.addEventListener('click', async () => {
+                const p = activeNerdSlug ? downloadProjects[activeNerdSlug] : null;
+                const text = p?.nerdInfo?.buildPrompt || '';
+                if (!text) return;
+                const btn = document.getElementById('nerd-modal-copy');
+                try {
+                    await copyText(text);
+                    btn.classList.add('copied');
+                    const prev = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.textContent = prev;
+                    }, 2000);
+                } catch {
+                    btn.textContent = 'Copy failed';
+                    setTimeout(() => { btn.textContent = 'Copy starter prompt'; }, 2000);
+                }
+            });
+        }
+
+        function bindNerdInfoButtons(container) {
+            container.querySelectorAll('.nerd-info-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openNerdModal(btn.dataset.slug);
+                });
+            });
         }
 
         function renderCommunityList(items) {
