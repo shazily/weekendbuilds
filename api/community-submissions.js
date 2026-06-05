@@ -6,12 +6,10 @@ const RAW_URL =
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Cache-Control', 'public, max-age=60');
+    res.setHeader('Cache-Control', 'no-store');
 
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
-
-    const approvedOnly = req.query.approved !== 'false';
 
     try {
         let data = null;
@@ -31,9 +29,7 @@ export default async function handler(req, res) {
             if (r.ok) data = await r.json();
         }
 
-        const submissions = (data?.submissions || []).filter(s =>
-            approvedOnly ? s.approved !== false : true
-        );
+        const submissions = (data?.submissions || []).filter(s => s.approved !== false);
 
         return res.status(200).json({ submissions });
     } catch (e) {

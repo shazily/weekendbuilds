@@ -13,65 +13,39 @@ export default async function handler(req, res) {
 
     const { text, author, childSafe } = req.body || {};
     if (!text || typeof text !== 'string' || text.trim().length < 10) {
-        return res.status(400).json({ error: 'Prompt must be at least 10 characters' });
+        return res.status(400).json({ error: 'Please write at least 10 characters.' });
     }
     if (text.length > 500) {
-        return res.status(400).json({ error: 'Prompt too long (max 500 chars)' });
+        return res.status(400).json({ error: 'Please keep your idea under 500 characters.' });
     }
     if (!childSafe) {
-        return res.status(400).json({ error: 'Please confirm your idea is child-safe' });
+        return res.status(400).json({ error: 'Please confirm your idea is child-safe.' });
     }
 
-    const payload = {
+    const submission = {
         id: `sub-${Date.now()}`,
         text: text.trim(),
         author: (author || 'Anonymous').trim().slice(0, 60),
         submittedAt: new Date().toISOString(),
-        approved: false
+        approved: true
     };
 
     const token = process.env.GITHUB_TOKEN;
-    let stored = 'pending';
-
     if (token) {
         try {
-            const issueRes = await fetch('https://api.github.com/repos/shazily/weekendbuilds/issues', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/vnd.github+json',
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'weekendbuilds-vwk'
-                },
-                body: JSON.stringify({
-                    title: `[Prompt] ${payload.text.slice(0, 72)}${payload.text.length > 72 ? '…' : ''}`,
-                    body: `**Submitted by:** ${payload.author}\n**Date:** ${payload.submittedAt}\n**Child-safe confirmed:** yes\n\n---\n\n${payload.text}`,
-                    labels: ['prompt-submission']
-                })
+            await appendSubmissionCsv(submission, token);
+            await appendCommunitySubmission(submission, token);
+            return res.status(200).json({
+                ok: true,
+                submission,
+                message: 'Thanks! Your idea is live in the community list.'
             });
-
-            if (issueRes.ok) {
-                const issue = await issueRes.json();
-                stored = 'github';
-                await appendSubmissionCsv(payload, token);
-                await appendCommunitySubmission(payload, token);
-                return res.status(200).json({
-                    ok: true,
-                    stored,
-                    approved: false,
-                    issueUrl: issue.html_url,
-                    message: 'Thanks! We review every idea for child-safety before it appears in the community list.'
-                });
-            }
         } catch (e) {
-            console.error('GitHub store failed:', e);
+            console.error('Store submission failed:', e);
         }
     }
 
-    return res.status(200).json({
-        ok: true,
-        stored: 'local',
-        approved: false,
-        message: 'Received — add GITHUB_TOKEN on Vercel to persist submissions for everyone.'
+    return res.status(503).json({
+        error: 'We could not save your idea right now. Please try again in a moment.'
     });
 }

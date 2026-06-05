@@ -1,34 +1,3 @@
 {
-  "prompts": [
-    {
-      "id": "cosmic-pet",
-      "text": "Build a cosmic pet simulator where you feed stars to a friendly alien creature and it grows new colors.",
-      "age": "7-10",
-      "tags": ["creative", "colors"]
-    },
-    {
-      "id": "beat-box",
-      "text": "Create a drum pad you control with keyboard keys — each key plays a different silly sound effect.",
-      "age": "6+",
-      "tags": ["music", "keyboard"]
-    },
-    {
-      "id": "story-spinner",
-      "text": "Make a story spinner: click a button and it randomly picks a hero, a place, and a problem to solve.",
-      "age": "8+",
-      "tags": ["writing", "random"]
-    },
-    {
-      "id": "gravity-ball",
-      "text": "Code a canvas game where you draw ramps and watch a ball bounce with fake gravity.",
-      "age": "9+",
-      "tags": ["physics", "game"]
-    },
-    {
-      "id": "emoji-weather",
-      "text": "Build a weather app that shows emoji animations for sun, rain, snow, and thunderstorms.",
-      "age": "6+",
-      "tags": ["visual", "fun"]
-    }
-  ]
+  "prompts": []
 }
