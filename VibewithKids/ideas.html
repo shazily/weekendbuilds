@@ -149,46 +149,50 @@
         #prompt-field-wrap { display: none; }
         #prompt-field-wrap.visible { display: block; }
 
-        /* Submit panel — clean, adult form UX */
+        /* Submit panel — light card on dark page for readability */
         .submit-notice {
             display: flex; gap: 0.65rem; align-items: flex-start;
-            background: rgba(0, 210, 255, 0.06); border: 1px solid rgba(0, 210, 255, 0.2);
+            background: #e8f7fc;
+            border: 1px solid #b8e6f5;
             border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1rem;
             font-family: 'Space Grotesk', sans-serif; font-size: 0.8125rem; line-height: 1.55;
-            color: rgba(248, 244, 255, 0.75);
+            color: #0c4a6e;
         }
         .submit-notice-icon {
             flex-shrink: 0; width: 18px; height: 18px; margin-top: 0.1rem;
-            color: #00d2ff;
+            color: #0891b2;
         }
-        .submit-notice strong { color: #e0f2fe; font-weight: 600; }
+        .submit-notice strong { color: #0369a1; font-weight: 600; }
         .submit-notice p { margin: 0; }
 
         .submit-box {
-            background: rgba(6, 4, 18, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(180deg, #faf9fe 0%, #f2f0f8 100%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 12px;
             padding: 0;
             margin-top: 0;
             overflow: hidden;
             font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+            color: #1e1b2e;
         }
         .submit-header {
             padding: 1.35rem 1.35rem 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(30, 27, 46, 0.08);
+            background: rgba(255, 255, 255, 0.45);
         }
         .submit-header h2 {
             margin: 0 0 0.35rem;
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.125rem;
             font-weight: 600;
-            color: #f8f4ff;
+            color: #1a1630;
             letter-spacing: -0.01em;
         }
         .submit-sub {
             margin: 0;
             font-size: 0.8125rem;
-            color: rgba(248, 244, 255, 0.5);
+            color: #5c5678;
             line-height: 1.5;
         }
         .submit-body { padding: 1.25rem 1.35rem 1.35rem; }
@@ -199,13 +203,13 @@
             font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 0.02em;
-            color: rgba(248, 244, 255, 0.55);
+            color: #4a4568;
             margin-bottom: 0.45rem;
             text-transform: none;
         }
         .form-hint {
             font-size: 0.75rem;
-            color: rgba(248, 244, 255, 0.4);
+            color: #7a7494;
             margin: -0.25rem 0 0.5rem;
             line-height: 1.45;
         }
@@ -216,8 +220,8 @@
             gap: 0;
             padding: 3px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #e8e5f0;
+            border: 1px solid #d4cfe0;
         }
         .type-segment .type-pill {
             font-family: 'Space Grotesk', sans-serif;
@@ -227,17 +231,17 @@
             border-radius: 6px;
             border: none;
             background: transparent;
-            color: rgba(248, 244, 255, 0.55);
+            color: #5c5678;
             cursor: pointer;
             transition: background 0.15s, color 0.15s, box-shadow 0.15s;
             text-transform: none;
             letter-spacing: 0;
         }
-        .type-segment .type-pill:hover { color: rgba(248, 244, 255, 0.85); }
+        .type-segment .type-pill:hover { color: #1a1630; }
         .type-segment .type-pill.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+            background: #fff;
+            color: #1a1630;
+            box-shadow: 0 1px 4px rgba(30, 27, 46, 0.12);
         }
 
         .submit-box input,
@@ -247,21 +251,21 @@
             padding: 0.7rem 0.85rem;
             margin-bottom: 0;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.04);
-            color: #f8f4ff;
+            border: 1px solid #cfc9dc;
+            background: #fff;
+            color: #1a1630;
             font-family: 'Space Grotesk', sans-serif;
             font-size: 0.875rem;
             line-height: 1.45;
-            transition: border-color 0.15s, background 0.15s;
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
         .submit-box input::placeholder,
-        .submit-box textarea::placeholder { color: rgba(248, 244, 255, 0.28); }
+        .submit-box textarea::placeholder { color: #9d97b0; }
         .submit-box input:focus,
         .submit-box textarea:focus {
             outline: none;
-            border-color: rgba(0, 210, 255, 0.45);
-            background: rgba(255, 255, 255, 0.06);
+            border-color: #00b8d9;
+            box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.2);
         }
         .submit-box textarea { min-height: 120px; resize: vertical; }
         #prompt-field-wrap textarea { min-height: 140px; }
@@ -277,21 +281,21 @@
             font-weight: 500;
             padding: 0.38rem 0.7rem;
             border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.03);
-            color: rgba(248, 244, 255, 0.7);
+            border: 1px solid #cfc9dc;
+            background: #fff;
+            color: #4a4568;
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s, color 0.15s;
             text-transform: none;
         }
         .cat-pill:hover {
-            background: rgba(255, 255, 255, 0.07);
-            color: #fff;
+            border-color: #00b8d9;
+            color: #1a1630;
         }
         .cat-pill.active {
-            background: rgba(0, 210, 255, 0.12);
-            border-color: rgba(0, 210, 255, 0.35);
-            color: #e0f2fe;
+            background: #e6f9fd;
+            border-color: #00b8d9;
+            color: #047a94;
         }
         #category-other-wrap { display: none; margin-top: 0.65rem; }
         #category-other-wrap.visible { display: block; }
@@ -299,7 +303,7 @@
         .submit-footer {
             margin-top: 1.25rem;
             padding-top: 1.15rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(30, 27, 46, 0.08);
         }
         .check-row {
             display: flex;
@@ -307,7 +311,7 @@
             gap: 0.6rem;
             margin-bottom: 1rem;
             font-size: 0.8125rem;
-            color: rgba(248, 244, 255, 0.65);
+            color: #4a4568;
             line-height: 1.45;
             cursor: pointer;
         }
@@ -315,7 +319,7 @@
             width: 16px;
             height: 16px;
             margin: 0.15rem 0 0;
-            accent-color: #00d2ff;
+            accent-color: #00b8d9;
             flex-shrink: 0;
         }
         #submit-btn {
@@ -323,8 +327,8 @@
             padding: 0.75rem 1.25rem;
             border: none;
             border-radius: 8px;
-            background: #00d2ff;
-            color: #041018;
+            background: #0891b2;
+            color: #fff;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 600;
             font-size: 0.875rem;
@@ -333,7 +337,7 @@
             cursor: pointer;
             transition: background 0.15s, transform 0.1s;
         }
-        #submit-btn:hover:not(:disabled) { background: #33dbff; }
+        #submit-btn:hover:not(:disabled) { background: #0e7490; }
         #submit-btn:active:not(:disabled) { transform: scale(0.99); }
         #submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
