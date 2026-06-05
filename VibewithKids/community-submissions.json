@@ -1,3 +1,16 @@
 {
-  "submissions": []
+  "submissions": [
+    {
+      "id": "sub-issue-1",
+      "name": "Test From CLI",
+      "text": "This is a test submission with enough characters to verify the GitHub Action saves it to community-submissions.json.",
+      "categories": [
+        "Fun"
+      ],
+      "category": "Fun",
+      "author": "Shaz",
+      "submittedAt": "2026-06-05T10:52:40Z",
+      "approved": true
+    }
+  ]
 }
