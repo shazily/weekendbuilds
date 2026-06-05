@@ -144,77 +144,214 @@
         .copy-btn:hover { background: rgba(0,210,255,0.22); border-color: rgba(0,210,255,0.55); }
         .copy-btn.copied { border-color: rgba(74,222,128,0.5); color: #4ade80; background: rgba(74,222,128,0.12); }
 
-        .type-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.85rem; }
-        .type-pill {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 600;
-            padding: 0.5rem 0.9rem; border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06);
-            color: rgba(248,244,255,0.85); cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, color 0.2s;
-        }
-        .type-pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
-        .type-pill.active { background: rgba(124,58,237,0.25); border-color: rgba(124,58,237,0.55); color: #fff; }
+        .type-pills { display: none; }
         #prompt-field-wrap { display: none; }
         #prompt-field-wrap.visible { display: block; }
 
-        .warn-box {
-            background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.35);
-            border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem;
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; line-height: 1.55;
-            color: rgba(254, 243, 199, 0.95);
+        /* Submit panel — clean, adult form UX */
+        .submit-notice {
+            display: flex; gap: 0.65rem; align-items: flex-start;
+            background: rgba(0, 210, 255, 0.06); border: 1px solid rgba(0, 210, 255, 0.2);
+            border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.8125rem; line-height: 1.55;
+            color: rgba(248, 244, 255, 0.75);
         }
-        .warn-box strong { color: #fde68a; }
+        .submit-notice-icon {
+            flex-shrink: 0; width: 18px; height: 18px; margin-top: 0.1rem;
+            color: #00d2ff;
+        }
+        .submit-notice strong { color: #e0f2fe; font-weight: 600; }
+        .submit-notice p { margin: 0; }
 
         .submit-box {
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 16px; padding: 1.25rem; margin-top: 1.5rem;
+            background: rgba(6, 4, 18, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0;
+            margin-top: 0;
+            overflow: hidden;
+            font-family: 'Space Grotesk', sans-serif;
         }
-        .submit-box h2 { font-size: 1rem; margin-bottom: 0.75rem; color: #fda4af; }
-        .submit-box label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: rgba(248,244,255,0.65); display: block; margin-bottom: 0.35rem; }
-        .submit-box .field-hint { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.45); margin: -0.5rem 0 0.75rem; }
-        .submit-box input, .submit-box textarea {
-            width: 100%; padding: 0.65rem 0.85rem; margin-bottom: 0.75rem; border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06);
-            color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
+        .submit-header {
+            padding: 1.35rem 1.35rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .submit-box textarea { min-height: 160px; resize: vertical; }
-        .submit-box .check-row {
-            display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.85rem;
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; color: rgba(248,244,255,0.8);
+        .submit-header h2 {
+            margin: 0 0 0.35rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f8f4ff;
+            letter-spacing: -0.01em;
         }
-        .submit-box .check-row input { width: auto; margin: 0.15rem 0 0; }
-        .submit-box button {
-            padding: 0.65rem 1.25rem; border: none; border-radius: 10px;
-            background: linear-gradient(135deg, #7c3aed, #ff6b9d); color: #fff;
-            font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
-            letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+        .submit-sub {
+            margin: 0;
+            font-size: 0.8125rem;
+            color: rgba(248, 244, 255, 0.5);
+            line-height: 1.5;
         }
-        .submit-box button:hover { filter: brightness(1.1); }
+        .submit-body { padding: 1.25rem 1.35rem 1.35rem; }
+        .form-section { margin-bottom: 1.25rem; }
+        .form-section:last-child { margin-bottom: 0; }
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: rgba(248, 244, 255, 0.55);
+            margin-bottom: 0.45rem;
+            text-transform: none;
+        }
+        .form-hint {
+            font-size: 0.75rem;
+            color: rgba(248, 244, 255, 0.4);
+            margin: -0.25rem 0 0.5rem;
+            line-height: 1.45;
+        }
+
+        .type-segment {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            padding: 3px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .type-segment .type-pill {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.55rem 0.75rem;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: rgba(248, 244, 255, 0.55);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        .type-segment .type-pill:hover { color: rgba(248, 244, 255, 0.85); }
+        .type-segment .type-pill.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+        }
+
+        .submit-box input,
+        .submit-box textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.7rem 0.85rem;
+            margin-bottom: 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: #f8f4ff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.45;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .submit-box input::placeholder,
+        .submit-box textarea::placeholder { color: rgba(248, 244, 255, 0.28); }
+        .submit-box input:focus,
+        .submit-box textarea:focus {
+            outline: none;
+            border-color: rgba(0, 210, 255, 0.45);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .submit-box textarea { min-height: 120px; resize: vertical; }
+        #prompt-field-wrap textarea { min-height: 140px; }
+        .form-field { margin-bottom: 1rem; }
+        .form-field:last-child { margin-bottom: 0; }
+
+        .category-pills {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+        }
+        .cat-pill {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.38rem 0.7rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(248, 244, 255, 0.7);
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            text-transform: none;
+        }
+        .cat-pill:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+        }
+        .cat-pill.active {
+            background: rgba(0, 210, 255, 0.12);
+            border-color: rgba(0, 210, 255, 0.35);
+            color: #e0f2fe;
+        }
+        #category-other-wrap { display: none; margin-top: 0.65rem; }
+        #category-other-wrap.visible { display: block; }
+
+        .submit-footer {
+            margin-top: 1.25rem;
+            padding-top: 1.15rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .check-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            font-size: 0.8125rem;
+            color: rgba(248, 244, 255, 0.65);
+            line-height: 1.45;
+            cursor: pointer;
+        }
+        .check-row input {
+            width: 16px;
+            height: 16px;
+            margin: 0.15rem 0 0;
+            accent-color: #00d2ff;
+            flex-shrink: 0;
+        }
+        #submit-btn {
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            background: #00d2ff;
+            color: #041018;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0;
+            text-transform: none;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+        }
+        #submit-btn:hover:not(:disabled) { background: #33dbff; }
+        #submit-btn:active:not(:disabled) { transform: scale(0.99); }
+        #submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .warn-box { display: none; }
         .toast {
             margin-top: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem;
             display: none;
         }
-        .section-label { font-size: 1rem; color: #fda4af; margin-bottom: 0.75rem; }
+        .section-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: rgba(248, 244, 255, 0.55);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.02em;
+        }
         .community-card .idea-name { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.35rem; }
         .community-card .author { font-weight: 600; color: #c4b5fd; margin-top: 0.5rem; font-size: 0.8rem; }
         .empty-note { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: rgba(248,244,255,0.5); }
-
-        .category-pills {
-            display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.65rem;
-        }
-        .cat-pill {
-            font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 600;
-            padding: 0.4rem 0.75rem; border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06);
-            color: rgba(248,244,255,0.85); cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, color 0.2s;
-        }
-        .cat-pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
-        .cat-pill.active {
-            background: rgba(0,210,255,0.2); border-color: rgba(0,210,255,0.5); color: #fff;
-        }
-        #category-other-wrap { display: none; }
-        #category-other-wrap.visible { display: block; }
     </style>
 </head>
 <body>
@@ -249,46 +386,64 @@
         </div>
 
         <div class="tab-panel" id="panel-submit" role="tabpanel">
-            <div class="warn-box">
-                <strong>Child-safe only.</strong> Keep ideas fun and family-friendly. No personal contact details, violence, or unsafe themes.
+            <div class="submit-notice">
+                <svg class="submit-notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                <p><strong>Child-safe only.</strong> Keep ideas fun and family-friendly. No personal contact details, violence, or unsafe themes.</p>
             </div>
-            <div class="submit-box" style="margin-top:0">
-                <h2>Share your idea</h2>
-                <label>What are you sharing?</label>
-                <div class="type-pills" id="type-pills">
-                    <button type="button" class="type-pill active" data-type="idea">Just an idea</button>
-                    <button type="button" class="type-pill" data-type="prompt">Idea and prompt</button>
+            <div class="submit-box">
+                <header class="submit-header">
+                    <h2>Share your idea</h2>
+                    <p class="submit-sub">Help other families discover what to build next.</p>
+                </header>
+                <div class="submit-body">
+                    <div class="form-section">
+                        <span class="form-label">Type</span>
+                        <div class="type-segment" id="type-pills" role="tablist">
+                            <button type="button" class="type-pill active" data-type="idea" role="tab" aria-selected="true">Just an idea</button>
+                            <button type="button" class="type-pill" data-type="prompt" role="tab" aria-selected="false">Idea and prompt</button>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="idea-name">Idea name</label>
+                        <input type="text" id="idea-name" placeholder="e.g. Cosmic Pet Garden" maxlength="80" required>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="prompt-text">Description</label>
+                        <textarea id="prompt-text" placeholder="What is the idea? What might kids build or learn?" maxlength="8000" required></textarea>
+                    </div>
+                    <div class="form-field" id="prompt-field-wrap">
+                        <label class="form-label" for="idea-prompt">Prompt</label>
+                        <p class="form-hint">The text other families can copy into their AI tool.</p>
+                        <textarea id="idea-prompt" placeholder="Write the full prompt here…" maxlength="8000"></textarea>
+                    </div>
+                    <div class="form-section">
+                        <span class="form-label">Category</span>
+                        <p class="form-hint">Select one or more</p>
+                        <div class="category-pills" id="category-pills">
+                            <button type="button" class="cat-pill" data-cat="Music">Music</button>
+                            <button type="button" class="cat-pill" data-cat="Science">Science</button>
+                            <button type="button" class="cat-pill" data-cat="Fun">Fun</button>
+                            <button type="button" class="cat-pill" data-cat="Game">Game</button>
+                            <button type="button" class="cat-pill" data-cat="Other">Other</button>
+                        </div>
+                        <div id="category-other-wrap">
+                            <label class="form-label" for="category">Custom category</label>
+                            <input type="text" id="category" placeholder="Type your category" maxlength="40">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="author">Your name</label>
+                        <input type="text" id="author" placeholder="Parent and kid names" maxlength="60" required>
+                    </div>
+                    <div class="submit-footer">
+                        <label class="check-row">
+                            <input type="checkbox" id="child-safe">
+                            <span>I confirm this idea is child-safe and family-friendly.</span>
+                        </label>
+                        <button type="button" id="submit-btn">Submit idea</button>
+                        <p class="toast" id="toast"></p>
+                    </div>
                 </div>
-                <label for="idea-name">Idea name</label>
-                <input type="text" id="idea-name" placeholder="e.g. Cosmic Pet Garden" maxlength="80" required>
-                <label for="prompt-text">Description</label>
-                <textarea id="prompt-text" placeholder="Describe the idea and what kids might build or learn..." maxlength="8000" required></textarea>
-                <div id="prompt-field-wrap">
-                    <label for="idea-prompt">Prompt</label>
-                    <p class="field-hint">This is the text other families can copy into their AI tool.</p>
-                    <textarea id="idea-prompt" placeholder="Write the full prompt here — e.g. Build a cosmic pet garden where kids can plant stars..." maxlength="8000"></textarea>
-                </div>
-                <label>Category</label>
-                <p class="field-hint" style="margin-top:0;margin-bottom:0.5rem">Pick one or more</p>
-                <div class="category-pills" id="category-pills">
-                    <button type="button" class="cat-pill" data-cat="Music">Music</button>
-                    <button type="button" class="cat-pill" data-cat="Science">Science</button>
-                    <button type="button" class="cat-pill" data-cat="Fun">Fun</button>
-                    <button type="button" class="cat-pill" data-cat="Game">Game</button>
-                    <button type="button" class="cat-pill" data-cat="Other">Other</button>
-                </div>
-                <div id="category-other-wrap">
-                    <label for="category">Your category</label>
-                    <input type="text" id="category" placeholder="Type your category" maxlength="40">
-                </div>
-                <label for="author">Your name</label>
-                <input type="text" id="author" placeholder="Parent + kid names" maxlength="60" required>
-                <label class="check-row">
-                    <input type="checkbox" id="child-safe">
-                    <span>I confirm this idea is child-safe and family-friendly.</span>
-                </label>
-                <button type="button" id="submit-btn">Share idea</button>
-                <p class="toast" id="toast"></p>
             </div>
         </div>
 
@@ -336,8 +491,12 @@
         document.querySelectorAll('.type-pill').forEach(pill => {
             pill.addEventListener('click', () => {
                 submissionType = pill.dataset.type;
-                document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.type-pill').forEach(p => {
+                    p.classList.remove('active');
+                    p.setAttribute('aria-selected', 'false');
+                });
                 pill.classList.add('active');
+                pill.setAttribute('aria-selected', 'true');
                 document.getElementById('prompt-field-wrap').classList.toggle('visible', submissionType === 'prompt');
             });
         });
@@ -673,8 +832,13 @@
                 document.getElementById('prompt-text').value = '';
                 document.getElementById('idea-prompt').value = '';
                 submissionType = 'idea';
-                document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
-                document.querySelector('.type-pill[data-type="idea"]').classList.add('active');
+                document.querySelectorAll('.type-pill').forEach(p => {
+                    p.classList.remove('active');
+                    p.setAttribute('aria-selected', 'false');
+                });
+                const ideaPill = document.querySelector('.type-pill[data-type="idea"]');
+                ideaPill.classList.add('active');
+                ideaPill.setAttribute('aria-selected', 'true');
                 document.getElementById('prompt-field-wrap').classList.remove('visible');
                 resetCategories();
                 document.getElementById('child-safe').checked = false;
