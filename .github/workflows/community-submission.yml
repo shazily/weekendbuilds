@@ -1,24 +1,60 @@
 name: Save community submission
 
 on:
-  repository_dispatch:
-    types: [community-submission]
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   save:
+    if: startsWith(github.event.issue.title, '[Community Idea]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Parse issue into submission
+        id: payload
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || '';
+            const authorMatch = body.match(/\*\*Author:\*\*\s*(.+)/i);
+            const categoriesMatch = body.match(/\*\*Categories:\*\*\s*(.+)/i);
+            const author = (authorMatch?.[1] || issue.user.login || 'Community').trim().slice(0, 60);
+            const categories = (categoriesMatch?.[1] || 'Other')
+              .split(',')
+              .map(c => c.trim())
+              .filter(Boolean);
+            const text = body
+              .replace(/\*\*Author:\*\*.*\n?/i, '')
+              .replace(/\*\*Categories:\*\*.*\n?/i, '')
+              .replace(/---[\s\S]*$/, '')
+              .trim();
+
+            const submission = {
+              id: `sub-issue-${issue.number}`,
+              name: issue.title.replace(/^\[Community Idea\]\s*/i, '').trim().slice(0, 80),
+              text: text.slice(0, 8000),
+              categories,
+              category: categories.join(', '),
+              author,
+              submittedAt: issue.created_at,
+              approved: true
+            };
+
+            core.setOutput('json', JSON.stringify(submission));
+            core.setOutput('author', submission.author);
 
       - name: Append submission to JSON and CSV
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const submission = context.payload.client_payload;
+            const submission = JSON.parse('${{ steps.payload.outputs.json }}');
             const jsonPath = 'VibewithKids/community-submissions.json';
             const csvPath = 'data/submissions.csv';
 
@@ -26,7 +62,7 @@ jobs:
             if (fs.existsSync(jsonPath)) {
               data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
             }
-            data.submissions = data.submissions || [];
+            data.submissions = (data.submissions || []).filter(s => s.id !== submission.id);
             data.submissions.unshift(submission);
             fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2) + '\n');
 
@@ -49,5 +85,16 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Add community idea from ${{ github.event.client_payload.author }}
+          commit_message: Add community idea from ${{ steps.payload.outputs.author }}
           file_pattern: VibewithKids/community-submissions.json data/submissions.csv
+
+      - name: Close processed issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              state: 'closed'
+            });
