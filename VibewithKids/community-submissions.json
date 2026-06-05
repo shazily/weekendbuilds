@@ -1,3 +1,16 @@
 {
-  "submissions": []
+  "submissions": [
+    {
+      "id": "sub-smoke-1780655993863",
+      "name": "Smoke Test Idea",
+      "text": "Automated smoke test — safe to delete. A fun weekend coding prompt for families.",
+      "categories": [
+        "Fun"
+      ],
+      "category": "Fun",
+      "author": "Smoke Test",
+      "submittedAt": "2026-06-05T10:39:53.863Z",
+      "approved": true
+    }
+  ]
 }
