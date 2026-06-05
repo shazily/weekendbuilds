@@ -55,9 +55,6 @@
             margin-top: 0.75rem; font-family: 'Space Grotesk', sans-serif;
             font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: var(--muted);
         }
-        .hero-stats { display: flex; justify-content: center; gap: 2rem; margin-top: 1.75rem; flex-wrap: wrap; }
-        .stat-num { font-size: 1.75rem; font-weight: 700; }
-        .stat-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.25rem; }
         .section-head { margin-bottom: 1.5rem; }
         .section-head-spaced { margin-top: 2.5rem; }
         .section-head h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 0; }
@@ -151,11 +148,6 @@
         <header class="hero">
             <h1 id="hero-title">Vibe with Kids</h1>
             <p class="tagline" id="hero-tagline">Loading adventures...</p>
-            <div class="hero-stats">
-                <div class="stat"><div class="stat-num" id="stat-count">—</div><div class="stat-label">Projects</div></div>
-                <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Imagination</div></div>
-                <div class="stat"><div class="stat-num">AI</div><div class="stat-label">Powered</div></div>
-            </div>
         </header>
         <div class="section-head">
             <h2>Our Builds</h2>
@@ -217,7 +209,6 @@
 
                 document.getElementById('hero-title').textContent = data.series || VWK.seriesName;
                 document.getElementById('hero-tagline').textContent = data.tagline || '';
-                document.getElementById('stat-count').textContent = data.projects.length;
 
                 if (!data.projects.length) {
                     grid.innerHTML = '<p class="empty">No projects yet — add one to projects.json!</p>';
