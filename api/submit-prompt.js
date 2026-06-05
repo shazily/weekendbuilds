@@ -1,4 +1,4 @@
-import { appendCommunitySubmission, appendSubmissionCsv } from './github-store.js';
+const REPO = 'shazily/weekendbuilds';
 
 function normalizeCategories(body) {
     if (Array.isArray(body.categories) && body.categories.length) {
@@ -46,9 +46,9 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Please confirm your idea is child-safe.' });
     }
 
-    const token = process.env.GITHUB_TOKEN;
+    const token = process.env.GH_PAT || process.env.GITHUB_TOKEN;
     if (!token) {
-        console.error('submit-prompt: GITHUB_TOKEN not set');
+        console.error('submit-prompt: GH_PAT not set on Vercel project');
         return res.status(503).json({
             error: 'We could not save your idea right now. Please try again in a moment.'
         });
@@ -66,12 +66,32 @@ export default async function handler(req, res) {
     };
 
     try {
-        await appendSubmissionCsv(submission, token);
-        await appendCommunitySubmission(submission, token);
+        const gh = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github+json',
+                'Content-Type': 'application/json',
+                'User-Agent': 'weekendbuilds-vwk'
+            },
+            body: JSON.stringify({
+                event_type: 'community-submission',
+                client_payload: submission
+            })
+        });
+
+        if (!gh.ok) {
+            const err = await gh.text();
+            console.error('repository_dispatch failed:', gh.status, err);
+            return res.status(503).json({
+                error: 'We could not save your idea right now. Please try again in a moment.'
+            });
+        }
+
         return res.status(200).json({
             ok: true,
             submission,
-            message: 'Thanks! Your idea is live — see it under Ideas from the Community.'
+            message: 'Thanks! Your idea is saved — it usually appears within a minute.'
         });
     } catch (e) {
         console.error('submit-prompt error:', e);

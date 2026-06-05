@@ -424,23 +424,32 @@
                 toast.textContent = 'Please confirm your idea is child-safe.'; return;
             }
 
-            const title = encodeURIComponent(`[Community Idea] ${name}`);
-            const body = encodeURIComponent(
-                `**Author:** ${author}\n**Categories:** ${categories.join(', ')}\n\n${text}\n\n---\n_Submitted via Vibe with Kids_`
-            );
-            window.open(
-                `https://github.com/shazily/weekendbuilds/issues/new?title=${title}&body=${body}`,
-                '_blank',
-                'noopener'
-            );
+            btn.disabled = true;
+            try {
+                const r = await fetch('/api/submit-prompt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, text, categories, author, childSafe: true })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.error || 'Could not save your idea.');
 
-            document.getElementById('idea-name').value = '';
-            document.getElementById('prompt-text').value = '';
-            resetCategories();
-            document.getElementById('child-safe').checked = false;
-            toast.style.display = 'block';
-            toast.style.color = '#4ade80';
-            toast.textContent = 'Almost done — click Submit on GitHub in the new tab. Your idea appears in about a minute.';
+                document.getElementById('idea-name').value = '';
+                document.getElementById('prompt-text').value = '';
+                resetCategories();
+                document.getElementById('child-safe').checked = false;
+                toast.style.display = 'block';
+                toast.style.color = '#4ade80';
+                toast.textContent = data.message || 'Thanks! Your idea is saved — it usually appears within a minute.';
+                await loadCommunity();
+                document.querySelector('.tab-btn[data-tab="community"]').click();
+            } catch (e) {
+                toast.style.display = 'block';
+                toast.style.color = '#f87171';
+                toast.textContent = e.message || 'Could not save your idea. Please try again.';
+            } finally {
+                btn.disabled = false;
+            }
         });
 
         function activateTab(tab) {

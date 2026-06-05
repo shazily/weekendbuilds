@@ -1,0 +1,44 @@
+name: Sync Vercel env from GitHub
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Push GH_PAT to Vercel project env
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$GH_PAT" ]; then
+            echo "Skipping: add VERCEL_TOKEN and GH_PAT to GitHub repo secrets."
+            exit 0
+          fi
+
+          TEAM_ID="team_w499O7aEmr4hioEE5JF6Luju"
+          PROJECT="weekendbuilds"
+          KEY="GH_PAT"
+
+          EXISTING=$(curl -sS \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$PROJECT/env?teamId=$TEAM_ID" \
+            | jq -r --arg k "$KEY" '.envs[] | select(.key == $k) | .id' | head -1)
+
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            curl -sS -X DELETE \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              "https://api.vercel.com/v9/projects/$PROJECT/env/$EXISTING?teamId=$TEAM_ID"
+          fi
+
+          curl -sS -X POST \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.vercel.com/v10/projects/$PROJECT/env?teamId=$TEAM_ID&upsert=true" \
+            -d "$(jq -n --arg k "$KEY" --arg v "$GH_PAT" \
+              '{key:$k,value:$v,type:"encrypted",target:["production","preview","development"]}')"
+
+          echo "Synced GH_PAT to Vercel project $PROJECT"
