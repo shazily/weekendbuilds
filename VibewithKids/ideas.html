@@ -104,6 +104,23 @@
         .community-card .idea-name { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.35rem; }
         .community-card .author { font-weight: 600; color: #c4b5fd; margin-top: 0.5rem; font-size: 0.8rem; }
         .empty-note { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: rgba(248,244,255,0.5); }
+
+        .category-pills {
+            display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.65rem;
+        }
+        .cat-pill {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 600;
+            padding: 0.4rem 0.75rem; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06);
+            color: rgba(248,244,255,0.85); cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .cat-pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .cat-pill.active {
+            background: rgba(0,210,255,0.2); border-color: rgba(0,210,255,0.5); color: #fff;
+        }
+        #category-other-wrap { display: none; }
+        #category-other-wrap.visible { display: block; }
     </style>
 </head>
 <body>
@@ -114,14 +131,18 @@
         <p class="lead">Browse our prompt library, download the builds, see what other families have shared, or submit your own idea.</p>
 
         <div class="tabs" role="tablist">
-            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="library">Prompt Library &amp; Downloads</button>
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="prompts">Prompt Library</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="downloads">Downloads</button>
             <button class="tab-btn" role="tab" aria-selected="false" data-tab="community">Ideas from the Community</button>
             <button class="tab-btn" role="tab" aria-selected="false" data-tab="submit">Submit an Idea</button>
         </div>
 
-        <div class="tab-panel active" id="panel-library" role="tabpanel">
+        <div class="tab-panel active" id="panel-prompts" role="tabpanel">
             <p class="empty-note" id="prompt-list"></p>
-            <div class="card" style="margin-top:1.5rem">
+        </div>
+
+        <div class="tab-panel" id="panel-downloads" role="tabpanel">
+            <div class="card">
                 <h2>Download the source</h2>
                 <p>Grab any project as a standalone HTML file. Each includes attribution to Shazily Munawar and a link to LinkedIn in the code.</p>
                 <div id="downloads-list"><p class="empty-note">Loading projects...</p></div>
@@ -143,9 +164,19 @@
                 <input type="text" id="idea-name" placeholder="e.g. Cosmic Pet Garden" maxlength="80" required>
                 <label for="prompt-text">Prompt and description</label>
                 <textarea id="prompt-text" placeholder="Describe the vibe coding prompt and what kids will learn or build..." maxlength="500" required></textarea>
-                <label for="category">Category</label>
-                <input type="text" id="category" placeholder="Music, Science, Fun, Game" maxlength="40" required>
-                <p class="field-hint">e.g. Music, Science, Fun, Game</p>
+                <label>Category</label>
+                <div class="category-pills" id="category-pills">
+                    <button type="button" class="cat-pill" data-cat="Music">Music</button>
+                    <button type="button" class="cat-pill" data-cat="Science">Science</button>
+                    <button type="button" class="cat-pill" data-cat="Fun">Fun</button>
+                    <button type="button" class="cat-pill" data-cat="Game">Game</button>
+                    <button type="button" class="cat-pill" data-cat="Other">Other</button>
+                </div>
+                <div id="category-other-wrap">
+                    <label for="category">Your category</label>
+                    <input type="text" id="category" placeholder="Type your category" maxlength="40">
+                </div>
+                <input type="hidden" id="category-value" value="">
                 <label for="author">Your name</label>
                 <input type="text" id="author" placeholder="Parent + kid names" maxlength="60" required>
                 <label class="check-row">
@@ -177,6 +208,35 @@
                 btn.setAttribute('aria-selected', 'true');
                 document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
             });
+        });
+
+        let selectedCategory = '';
+        const categoryOtherWrap = document.getElementById('category-other-wrap');
+        const categoryInput = document.getElementById('category');
+        const categoryValue = document.getElementById('category-value');
+
+        function setCategory(cat) {
+            selectedCategory = cat;
+            categoryValue.value = cat === 'Other' ? '' : cat;
+            document.querySelectorAll('.cat-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.cat === cat);
+            });
+            if (cat === 'Other') {
+                categoryOtherWrap.classList.add('visible');
+                categoryInput.value = '';
+                categoryInput.focus();
+            } else {
+                categoryOtherWrap.classList.remove('visible');
+                categoryInput.value = '';
+            }
+        }
+
+        document.querySelectorAll('.cat-pill').forEach(pill => {
+            pill.addEventListener('click', () => setCategory(pill.dataset.cat));
+        });
+
+        categoryInput.addEventListener('input', () => {
+            categoryValue.value = categoryInput.value.trim();
         });
 
         function getLiked() {
@@ -325,7 +385,9 @@
         document.getElementById('submit-btn').addEventListener('click', async () => {
             const name = document.getElementById('idea-name').value.trim();
             const text = document.getElementById('prompt-text').value.trim();
-            const category = document.getElementById('category').value.trim();
+            const category = selectedCategory === 'Other'
+                ? categoryInput.value.trim()
+                : (categoryValue.value.trim() || selectedCategory);
             const author = document.getElementById('author').value.trim();
             const childSafe = document.getElementById('child-safe').checked;
             const toast = document.getElementById('toast');
@@ -341,9 +403,13 @@
                 toast.style.display = 'block'; toast.style.color = '#f87171';
                 toast.textContent = 'Please write at least 10 characters for the prompt and description.'; return;
             }
+            if (!selectedCategory) {
+                toast.style.display = 'block'; toast.style.color = '#f87171';
+                toast.textContent = 'Please pick a category.'; return;
+            }
             if (!category) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
-                toast.textContent = 'Please add a category.'; return;
+                toast.textContent = selectedCategory === 'Other' ? 'Please type your category.' : 'Please pick a category.'; return;
             }
             if (!author) {
                 toast.style.display = 'block'; toast.style.color = '#f87171';
@@ -366,7 +432,11 @@
 
                 document.getElementById('idea-name').value = '';
                 document.getElementById('prompt-text').value = '';
-                document.getElementById('category').value = '';
+                selectedCategory = '';
+                categoryValue.value = '';
+                categoryInput.value = '';
+                categoryOtherWrap.classList.remove('visible');
+                document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
                 document.getElementById('child-safe').checked = false;
                 toast.style.display = 'block';
                 toast.style.color = '#4ade80';
