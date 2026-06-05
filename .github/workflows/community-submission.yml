@@ -18,7 +18,20 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const submission = context.payload.client_payload;
+            const raw = context.payload.client_payload;
+            const submission = {
+              id: raw.id,
+              type: raw.type || 'idea',
+              name: raw.name,
+              text: raw.text,
+              categories: JSON.parse(raw.categories || '[]'),
+              category: raw.category,
+              author: raw.author,
+              submittedAt: raw.submittedAt,
+              approved: raw.approved === 'true',
+              likes: Number(raw.likes) || 0
+            };
+            if (raw.prompt) submission.prompt = raw.prompt;
             const jsonPath = 'VibewithKids/community-submissions.json';
             const csvPath = 'data/submissions.csv';
 
