@@ -3,116 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibe with Kids</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <title>Vibe with Kids · Weekend Builds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0618;
-            --accent: #00d2ff;
-            --gold: #ffd700;
-            --purple: #a855f7;
+            --bg-deep: #07051a;
+            --bg-mid: #12082e;
+            --text: #f8f4ff;
+            --muted: rgba(248, 244, 255, 0.55);
+            --card-bg: rgba(18, 10, 42, 0.72);
+            --border: rgba(255, 255, 255, 0.08);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
         body {
             min-height: 100vh;
-            background: radial-gradient(ellipse at top, #1a0a3e 0%, var(--bg) 60%);
+            font-family: 'Fredoka', system-ui, sans-serif;
+            color: var(--text);
+            background: var(--bg-deep);
+            overflow-x: hidden;
+        }
+
+        /* ── Ambient background ── */
+        .sky {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(120, 60, 255, 0.35), transparent),
+                radial-gradient(ellipse 60% 40% at 90% 20%, rgba(0, 210, 255, 0.15), transparent),
+                radial-gradient(ellipse 50% 35% at 10% 80%, rgba(255, 26, 94, 0.12), transparent),
+                linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 55%, #040210 100%);
+        }
+
+        #stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .floaties {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            animation: drift 18s ease-in-out infinite;
+        }
+        .blob-1 { width: 320px; height: 320px; background: #7c3aed; top: 8%; left: -5%; }
+        .blob-2 { width: 260px; height: 260px; background: #00d2ff; top: 55%; right: -8%; animation-delay: -6s; }
+        .blob-3 { width: 200px; height: 200px; background: #ff1a5e; bottom: 10%; left: 30%; animation-delay: -12s; }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 25px) scale(0.95); }
+        }
+
+        /* ── Layout ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 2.5rem 1.25rem 4rem;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            text-align: center;
+            padding: 2rem 0 3.5rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 12px #4ade80;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.85); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 9vw, 5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, #c4b5fd 40%, #00d2ff 75%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 40px rgba(124, 58, 237, 0.3));
+        }
+
+        .hero .tagline {
+            margin-top: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 500;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 700;
             color: #fff;
-            font-family: 'Fredoka One', cursive;
-            padding: 2rem 1.5rem 3rem;
+            line-height: 1;
         }
-        header { text-align: center; margin-bottom: 2.5rem; }
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 6vw, 3.5rem);
-            color: var(--accent);
-            text-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
-            letter-spacing: 4px;
+
+        .stat-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.35rem;
         }
-        .subtitle {
-            margin-top: 0.75rem;
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 2px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 400;
+
+        /* ── Section header ── */
+        .section-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
         }
+
+        .section-head h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .section-head p {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            color: var(--muted);
+            max-width: 28rem;
+        }
+
+        /* ── Project grid ── */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
-            max-width: 960px;
-            margin: 0 auto;
         }
-        .card {
-            background: rgba(0, 20, 40, 0.7);
-            border: 2px solid rgba(0, 210, 255, 0.3);
-            border-radius: 16px;
-            padding: 1.75rem;
+
+        .grid .tile:first-child {
+            grid-column: 1 / -1;
+        }
+
+        @media (min-width: 720px) {
+            .grid .tile:first-child {
+                display: grid;
+                grid-template-columns: 1.2fr 1fr;
+                gap: 0;
+            }
+            .grid .tile:first-child .tile-shot { aspect-ratio: auto; min-height: 280px; }
+            .grid .tile:first-child .tile-body { justify-content: center; }
+        }
+
+        .tile {
+            position: relative;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            overflow: hidden;
             text-decoration: none;
             color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.35s ease,
+                        border-color 0.35s ease;
+            backdrop-filter: blur(12px);
+            --accent: #00d2ff;
+            --accent-glow: rgba(0, 210, 255, 0.4);
+        }
+
+        .tile:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.45),
+                0 0 40px var(--accent-glow);
+        }
+
+        .tile-shot {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: #0a0618;
+        }
+
+        .tile-shot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.5s ease;
+        }
+
+        .tile:hover .tile-shot img {
+            transform: scale(1.06);
+        }
+
+        .tile-shot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(7, 5, 26, 0.85) 100%);
+            pointer-events: none;
+        }
+
+        .play-pill {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .tile:hover .play-pill {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tile-body {
+            padding: 1.25rem 1.35rem 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.5rem;
         }
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 0 30px rgba(0, 210, 255, 0.25);
+
+        .tile-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
-        .card h2 { font-size: 1.4rem; color: var(--gold); }
-        .card p {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.6;
-        }
-        .tag {
-            display: inline-block;
-            font-family: 'Orbitron', sans-serif;
+
+        .category {
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 0.65rem;
-            padding: 4px 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            background: color-mix(in srgb, var(--accent) 18%, transparent);
+            color: var(--accent);
+            border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+        }
+
+        .tile-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .tile-sub {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .tile-desc {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: rgba(248, 244, 255, 0.7);
+            margin-top: 0.25rem;
+        }
+
+        /* ── Loading / empty ── */
+        .skeleton {
             border-radius: 20px;
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid var(--purple);
-            color: #d8b4fe;
-            align-self: flex-start;
+            background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            min-height: 320px;
         }
-        footer {
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .empty, .error {
             text-align: center;
-            margin-top: 3rem;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.25);
-            letter-spacing: 2px;
+            padding: 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--muted);
         }
+
+        /* ── How to add ── */
+        .howto {
+            margin-top: 3.5rem;
+            padding: 1.5rem 1.75rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .howto h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: rgba(248, 244, 255, 0.8);
+        }
+
+        .howto ol {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            color: var(--muted);
+            padding-left: 1.25rem;
+            line-height: 1.8;
+        }
+
+        .howto code {
+            font-size: 0.72rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            background: rgba(0, 210, 255, 0.1);
+            color: #7dd3fc;
+        }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            color: rgba(248, 244, 255, 0.25);
+            letter-spacing: 0.08em;
+        }
+
+        footer a {
+            color: rgba(0, 210, 255, 0.5);
+            text-decoration: none;
+        }
+        footer a:hover { color: #00d2ff; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>VIBE WITH KIDS</h1>
-        <p class="subtitle">Weekend builds — vibe coded together</p>
-    </header>
+    <div class="sky"></div>
+    <canvas id="stars"></canvas>
+    <div class="floaties" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
-    <main class="grid">
-        <a class="card" href="starrun_v2.1">
-            <span class="tag">Game</span>
-            <h2>Galactic Ranger</h2>
-            <p>Space shooter. Dodge asteroids, blast enemies, rack up galactic bucks.</p>
-        </a>
-        <a class="card" href="neon_nebula_v2">
-            <span class="tag">Visual</span>
-            <h2>Perfect Blue</h2>
-            <p>Neon nebula canvas. Keyboard-driven particles and reactive sound.</p>
-        </a>
-        <a class="card" href="wigglysounds_v2">
-            <span class="tag">Music</span>
-            <h2>Sound Wizard</h2>
-            <p>Hand-tracking synth. Wave your hands to control pitch and volume.</p>
-        </a>
-    </main>
+    <div class="page">
+        <header class="hero">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                <span id="series-label">Weekend Builds</span>
+            </div>
+            <h1 id="hero-title">Vibe with Kids</h1>
+            <p class="tagline" id="hero-tagline">Loading adventures...</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-num" id="stat-count">—</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">∞</div>
+                    <div class="stat-label">Imagination</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">1</div>
+                    <div class="stat-label">Weekend at a time</div>
+                </div>
+            </div>
+        </header>
 
-    <footer>Weekendbuilds · Shazily Munawar</footer>
+        <div class="section-head">
+            <div>
+                <h2>Our Builds</h2>
+                <p>Tap a tile to launch. Each one is a self-contained adventure we coded together.</p>
+            </div>
+        </div>
+
+        <main class="grid" id="grid" aria-live="polite">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+        </main>
+
+        <aside class="howto">
+            <h3>Adding a new project</h3>
+            <ol>
+                <li>Drop your <code>.html</code> file in this folder</li>
+                <li>Add a screenshot to <code>screenshots/</code></li>
+                <li>Append an entry to <code>projects.json</code> — a new tile appears automatically</li>
+            </ol>
+        </aside>
+
+        <footer>
+            <span id="footer-author">Weekendbuilds</span> ·
+            <a href="https://github.com/shazily/weekendbuilds" target="_blank" rel="noopener">GitHub</a>
+        </footer>
+    </div>
+
+    <script>
+        // ── Starfield ──
+        (function initStars() {
+            const canvas = document.getElementById('stars');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            let w, h;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                stars = Array.from({ length: Math.floor(w * h / 9000) }, () => ({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    r: Math.random() * 1.4 + 0.3,
+                    a: Math.random(),
+                    speed: Math.random() * 0.3 + 0.05
+                }));
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                for (const s of stars) {
+                    s.a += s.speed * 0.01;
+                    const flicker = 0.3 + Math.abs(Math.sin(s.a)) * 0.7;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${flicker * 0.7})`;
+                    ctx.fill();
+                }
+                requestAnimationFrame(draw);
+            }
+
+            resize();
+            draw();
+            window.addEventListener('resize', resize);
+        })();
+
+        // ── Load projects from manifest ──
+        async function loadProjects() {
+            const grid = document.getElementById('grid');
+
+            try {
+                const res = await fetch('projects.json');
+                if (!res.ok) throw new Error('Manifest not found');
+                const data = await res.json();
+
+                document.getElementById('hero-title').textContent = data.series || 'Vibe with Kids';
+                document.getElementById('hero-tagline').textContent = data.tagline || '';
+                document.getElementById('series-label').textContent = 'Weekend Builds';
+                document.getElementById('stat-count').textContent = data.projects.length;
+                if (data.author) {
+                    document.getElementById('footer-author').textContent = data.author;
+                }
+
+                if (!data.projects.length) {
+                    grid.innerHTML = '<p class="empty">No projects yet — add one to projects.json!</p>';
+                    return;
+                }
+
+                grid.innerHTML = data.projects.map((p, i) => `
+                    <a class="tile" href="${p.slug}" style="--accent: ${p.accent}; --accent-glow: ${p.accentGlow || p.accent + '66'}">
+                        <div class="tile-shot">
+                            <img src="${p.screenshot}" alt="${p.title} screenshot" loading="${i < 2 ? 'eager' : 'lazy'}">
+                            <span class="play-pill">▶ Play</span>
+                        </div>
+                        <div class="tile-body">
+                            <div class="tile-meta">
+                                <span class="category">${p.category}</span>
+                            </div>
+                            <h3 class="tile-title">${p.title}</h3>
+                            ${p.subtitle ? `<p class="tile-sub">${p.subtitle}</p>` : ''}
+                            <p class="tile-desc">${p.description}</p>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (err) {
+                grid.innerHTML = '<p class="error">Could not load projects. Check projects.json exists.</p>';
+                console.error(err);
+            }
+        }
+
+        loadProjects();
+    </script>
 </body>
 </html>
