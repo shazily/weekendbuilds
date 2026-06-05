@@ -6,17 +6,22 @@
       "name": "Rainbow Calculator",
       "text": "A fun calculator where every button is a different color and makes a happy sound when pressed.",
       "prompt": "Build a colorful calculator web app for kids ages 6-10. Each number button should be a bright rainbow color. When a button is pressed, play a short cheerful tone. Show the equation and answer in large friendly text. Keep it simple, safe, and fun.",
-      "categories": ["Fun", "Science"],
+      "categories": [
+        "Fun",
+        "Science"
+      ],
       "category": "Fun, Science",
       "author": "Weekend Builds",
       "submittedAt": "2026-06-05T11:20:00.000Z",
       "approved": true,
-      "likes": 2
+      "likes": 3
     },
     {
       "approved": true,
       "author": "Shaz",
-      "categories": ["Art"],
+      "categories": [
+        "Art"
+      ],
       "category": "Art",
       "id": "sub-1780657621575",
       "name": "Live Test 2",
@@ -27,7 +32,9 @@
     {
       "approved": true,
       "author": "E2E Bot",
-      "categories": ["Art"],
+      "categories": [
+        "Art"
+      ],
       "category": "Art",
       "id": "sub-e2e-1",
       "name": "E2E Test Idea",
@@ -39,7 +46,9 @@
       "id": "sub-issue-1",
       "name": "Test From CLI",
       "text": "This is a test submission with enough characters to verify the GitHub Action saves it to community-submissions.json.",
-      "categories": ["Fun"],
+      "categories": [
+        "Fun"
+      ],
       "category": "Fun",
       "author": "Shaz",
       "submittedAt": "2026-06-05T10:52:40Z",
