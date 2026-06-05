@@ -79,20 +79,6 @@ export default async function handler(req, res) {
         submission.prompt = prompt.trim();
     }
 
-    const dispatchPayload = {
-        id: submission.id,
-        type: submission.type,
-        name: submission.name,
-        text: submission.text,
-        prompt: submission.prompt || '',
-        categories: JSON.stringify(submission.categories),
-        category: submission.category,
-        author: submission.author,
-        submittedAt: submission.submittedAt,
-        approved: 'true',
-        likes: '0'
-    };
-
     try {
         const gh = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
             method: 'POST',
@@ -104,7 +90,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 event_type: 'community-submission',
-                client_payload: dispatchPayload
+                client_payload: { data: JSON.stringify(submission) }
             })
         });
 
