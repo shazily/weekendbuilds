@@ -3,3 +3,4 @@ sub-smoke-1780655993863,"Smoke Test Idea","Fun","Smoke Test","Automated smoke te
 sub-smoke-1780656055555,"Smoke Test Idea","Fun","Smoke Test","Automated smoke test — safe to delete. A fun weekend coding prompt for families.",2026-06-05T10:40:55.555Z,true
 sub-issue-1,"Test From CLI","Fun","Shaz","This is a test submission with enough characters to verify the GitHub Action saves it to community-submissions.json.",2026-06-05T10:52:40Z,true
 sub-e2e-1,"E2E Test Idea","Art","E2E Bot","End to end test of repository dispatch submission flow with enough text.",2026-06-05T13:00:00.000Z,true
+sub-1780657621575,"Live Test 2","Art","Shaz","Verifying submit works after redeploy with enough characters here.",2026-06-05T11:07:01.575Z,true

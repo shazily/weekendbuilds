@@ -1,6 +1,18 @@
 {
   "submissions": [
     {
+      "approved": true,
+      "author": "Shaz",
+      "categories": [
+        "Art"
+      ],
+      "category": "Art",
+      "id": "sub-1780657621575",
+      "name": "Live Test 2",
+      "submittedAt": "2026-06-05T11:07:01.575Z",
+      "text": "Verifying submit works after redeploy with enough characters here."
+    },
+    {
       "approved": "true",
       "author": "E2E Bot",
       "categories": [
