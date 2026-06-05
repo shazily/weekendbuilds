@@ -1,35 +1,38 @@
 {
   "series": "Vibe with Kids",
-  "tagline": "Weekend builds — vibe coded together",
-  "author": "Shazily Munawar",
+  "tagline": "Weekend vibe coding — built together with AI",
+  "lab": "Weekend Labs",
   "projects": [
     {
       "slug": "starrun_v2.1",
+      "file": "starrun_v2.1.html",
       "title": "Galactic Ranger",
       "subtitle": "Infinity Run",
       "category": "Game",
       "description": "Space shooter mission. Dodge void crates, slide under lasers, decrypt data cores.",
-      "screenshot": "screenshots/starrun.png",
+      "poster": "assets/posters/starrun.svg",
       "accent": "#00d2ff",
       "accentGlow": "rgba(0, 210, 255, 0.45)"
     },
     {
       "slug": "neon_nebula_v2",
+      "file": "neon_nebula_v2.html",
       "title": "Perfect Blue",
       "subtitle": "Neon Nebula",
       "category": "Visual",
       "description": "Keyboard-driven particle galaxy. Warp, retreat, and paint the cosmos with sound.",
-      "screenshot": "screenshots/neon_nebula.png",
+      "poster": "assets/posters/neon_nebula.svg",
       "accent": "#00f2ff",
       "accentGlow": "rgba(0, 242, 255, 0.4)"
     },
     {
       "slug": "wigglysounds_v2",
+      "file": "wigglysounds_v2.html",
       "title": "Sound Wizard",
       "subtitle": "Academy",
       "category": "Music",
       "description": "Hand-tracking magic synth. Raise your left hand for volume, wiggle right for pitch.",
-      "screenshot": "screenshots/wigglysounds.png",
+      "poster": "assets/posters/wigglysounds.svg",
       "accent": "#ff1a5e",
       "accentGlow": "rgba(255, 26, 94, 0.4)"
     }

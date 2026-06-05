@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Perfect Blue">
+  <defs>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="30%" stop-color="#c084fc"/>
+      <stop offset="70%" stop-color="#3b0764"/>
+      <stop offset="100%" stop-color="#000105"/>
+    </radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="640" height="360" fill="#000105"/>
+  <g opacity="0.8">
+    <ellipse cx="320" cy="180" rx="200" ry="60" fill="none" stroke="#00f2ff" stroke-width="0.5" opacity="0.3" transform="rotate(-25 320 180)"/>
+    <ellipse cx="320" cy="180" rx="160" ry="45" fill="none" stroke="#7c3aed" stroke-width="0.5" opacity="0.4" transform="rotate(-25 320 180)"/>
+    <ellipse cx="320" cy="180" rx="120" ry="32" fill="none" stroke="#00f2ff" stroke-width="0.8" opacity="0.5" transform="rotate(-25 320 180)"/>
+  </g>
+  <ellipse cx="320" cy="180" rx="90" ry="90" fill="url(#core)" filter="url(#glow)"/>
+  <g fill="#fff" opacity="0.5">
+    <rect x="100" y="50" width="3" height="3" transform="rotate(15 101 51)"/>
+    <rect x="500" y="280" width="4" height="4" transform="rotate(-10 502 282)"/>
+    <rect x="450" y="60" width="2" height="2"/><rect x="180" y="300" width="3" height="3"/>
+  </g>
+  <text x="320" y="300" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="28" fill="#00f2ff" letter-spacing="8" filter="url(#glow)">PERFECT BLUE</text>
+  <text x="320" y="325" text-anchor="middle" font-family="monospace" font-size="10" fill="rgba(0,242,255,0.5)" letter-spacing="4">NEON NEBULA</text>
+</svg>

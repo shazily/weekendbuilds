@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekend Vibe Coding Ideas · Vibe with Kids</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/vwk-site.css">
+    <style>
+        body { margin: 0; min-height: 100vh; font-family: 'Fredoka', system-ui, sans-serif; color: #f8f4ff; background: #07051a; }
+        .sky { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse at top, #1a0a3e, #07051a 60%); }
+        .page { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
+        h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 1.25rem 0 0.5rem; }
+        .lead { font-family: 'Space Grotesk', sans-serif; color: rgba(248,244,255,0.6); line-height: 1.6; margin-bottom: 1.5rem; }
+        .submit-box {
+            background: rgba(18,10,42,0.8); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem;
+        }
+        .submit-box h2 { font-size: 1rem; margin-bottom: 0.75rem; color: #ff6b9d; }
+        .submit-box label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: rgba(248,244,255,0.5); display: block; margin-bottom: 0.35rem; }
+        .submit-box input, .submit-box textarea {
+            width: 100%; padding: 0.65rem 0.85rem; margin-bottom: 0.75rem; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.3);
+            color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
+        }
+        .submit-box textarea { min-height: 90px; resize: vertical; }
+        .submit-box button {
+            padding: 0.65rem 1.25rem; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #7c3aed, #ff6b9d); color: #fff;
+            font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
+            letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+        }
+        .submit-box button:hover { filter: brightness(1.1); }
+        .toast {
+            margin-top: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem;
+            color: #4ade80; display: none;
+        }
+        .prompt-list { display: flex; flex-direction: column; gap: 0.85rem; }
+        .prompt-card {
+            background: rgba(18,10,42,0.65); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; padding: 1.1rem 1.2rem; display: flex; gap: 1rem; align-items: flex-start;
+        }
+        .prompt-text { flex: 1; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; line-height: 1.55; color: rgba(248,244,255,0.85); }
+        .prompt-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+        .tag { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 6px; background: rgba(0,210,255,0.1); color: #7dd3fc; font-family: 'Space Grotesk', sans-serif; }
+        .tag.community { background: rgba(255,107,157,0.15); color: #fda4af; }
+        .like-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            padding: 0.5rem 0.65rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.04); cursor: pointer; min-width: 52px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .like-btn:hover { transform: scale(1.05); border-color: rgba(255,107,157,0.4); }
+        .like-btn.liked { border-color: #ff6b9d; background: rgba(255,107,157,0.12); }
+        .like-btn .heart { font-size: 1.2rem; line-height: 1; }
+        .like-btn .count { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: rgba(248,244,255,0.5); }
+    </style>
+</head>
+<body>
+    <div class="sky"></div>
+    <div class="page">
+        <div id="nav-slot"></div>
+        <h1>Weekend Vibe Coding Ideas</h1>
+        <p class="lead">Prompts to try with your kids at home. Like your favourites. Submit your own — we'll add the best ones to the library.</p>
+
+        <div class="submit-box">
+            <h2>Submit your prompt</h2>
+            <label for="author">Your name (optional)</label>
+            <input type="text" id="author" placeholder="Parent + kid names" maxlength="60">
+            <label for="prompt-text">Your vibe coding idea</label>
+            <textarea id="prompt-text" placeholder="Describe a fun project to build together this weekend..." maxlength="500"></textarea>
+            <button type="button" id="submit-btn">Share idea</button>
+            <p class="toast" id="toast"></p>
+        </div>
+
+        <div class="prompt-list" id="prompt-list"><p style="color:rgba(248,244,255,0.4)">Loading ideas...</p></div>
+        <div id="footer-slot"></div>
+    </div>
+    <script src="assets/vwk-site.js"></script>
+    <script>
+        document.getElementById('nav-slot').innerHTML = vwkRenderNav('ideas');
+        document.getElementById('footer-slot').innerHTML = vwkRenderFooter();
+
+        const LIKED_KEY = 'vwk-liked-prompts';
+        const COMMUNITY_KEY = 'vwk-community-prompts';
+
+        function getLiked() {
+            try { return JSON.parse(localStorage.getItem(LIKED_KEY) || '[]'); } catch { return []; }
+        }
+        function setLiked(ids) { localStorage.setItem(LIKED_KEY, JSON.stringify(ids)); }
+
+        function getCommunity() {
+            try { return JSON.parse(localStorage.getItem(COMMUNITY_KEY) || '[]'); } catch { return []; }
+        }
+        function addCommunity(prompt) {
+            const list = getCommunity();
+            list.unshift({ ...prompt, id: 'c-' + Date.now(), community: true });
+            localStorage.setItem(COMMUNITY_KEY, JSON.stringify(list.slice(0, 50)));
+        }
+
+        async function fetchLikeCount(id) {
+            try {
+                const r = await fetch(`/api/like-prompt?id=${encodeURIComponent(id)}`);
+                if (!r.ok) return 0;
+                const d = await r.json();
+                return d.count || 0;
+            } catch { return 0; }
+        }
+
+        async function hitLike(id) {
+            const r = await fetch(`/api/like-prompt?id=${encodeURIComponent(id)}`, { method: 'POST' });
+            const d = await r.json();
+            return d.count || 0;
+        }
+
+        function renderPrompt(p, count, liked) {
+            const tags = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+            const community = p.community ? '<span class="tag community">Community</span>' : '';
+            const age = p.age ? `<span class="tag">Ages ${p.age}</span>` : '';
+            return `<div class="prompt-card" data-id="${p.id}">
+                <div class="prompt-text">${p.text}${p.author ? `<div class="prompt-meta">${community}${age}<span class="tag">— ${p.author}</span>${tags}</div>` : `<div class="prompt-meta">${community}${age}${tags}</div>`}</div>
+                <button class="like-btn${liked ? ' liked' : ''}" data-id="${p.id}" aria-label="Like this prompt">
+                    <span class="heart">${liked ? '❤️' : '🤍'}</span>
+                    <span class="count">${count}</span>
+                </button>
+            </div>`;
+        }
+
+        async function loadPrompts() {
+            const list = document.getElementById('prompt-list');
+            const base = VWK.basePath();
+            const liked = getLiked();
+
+            let curated = [];
+            try {
+                const r = await fetch(`${base}ideas.json`);
+                const data = await r.json();
+                curated = data.prompts || [];
+            } catch (e) { console.error(e); }
+
+            const community = getCommunity();
+            const all = [...community, ...curated];
+
+            const counts = await Promise.all(all.map(p => fetchLikeCount(p.id)));
+            list.innerHTML = all.map((p, i) => renderPrompt(p, counts[i], liked.includes(p.id))).join('');
+
+            list.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.id;
+                    let likedIds = getLiked();
+                    if (likedIds.includes(id)) return;
+                    try {
+                        const count = await hitLike(id);
+                        likedIds.push(id);
+                        setLiked(likedIds);
+                        btn.classList.add('liked');
+                        btn.querySelector('.heart').textContent = '❤️';
+                        btn.querySelector('.count').textContent = count;
+                    } catch (e) { console.error(e); }
+                });
+            });
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', async () => {
+            const text = document.getElementById('prompt-text').value.trim();
+            const author = document.getElementById('author').value.trim() || 'Anonymous';
+            const toast = document.getElementById('toast');
+            if (text.length < 10) { toast.style.display = 'block'; toast.style.color = '#f87171'; toast.textContent = 'Please write at least 10 characters.'; return; }
+
+            try {
+                const r = await fetch('/api/submit-prompt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, author })
+                });
+                const data = await r.json();
+                addCommunity({ text, author, tags: ['submitted'] });
+                document.getElementById('prompt-text').value = '';
+                toast.style.display = 'block';
+                toast.style.color = '#4ade80';
+                toast.textContent = data.stored === 'github' ? 'Thanks! Your idea was submitted for review.' : 'Thanks! Your idea was saved — we\'ll review it soon.';
+                loadPrompts();
+            } catch (e) {
+                addCommunity({ text, author, tags: ['submitted'] });
+                toast.style.display = 'block';
+                toast.style.color = '#4ade80';
+                toast.textContent = 'Saved locally — thanks for sharing!';
+                loadPrompts();
+            }
+        });
+
+        loadPrompts();
+    </script>
+</body>
+</html>

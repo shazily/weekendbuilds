@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Sound Wizard">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a148c"/>
+      <stop offset="100%" stop-color="#2a0a4d"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect x="0" y="0" width="640" height="4" fill="url(#gold)"/>
+  <path d="M0,200 Q160,120 320,200 T640,200" fill="none" stroke="#00ffff" stroke-width="2" opacity="0.4"/>
+  <path d="M0,220 Q160,160 320,220 T640,220" fill="none" stroke="#ffd700" stroke-width="1.5" opacity="0.3"/>
+  <text x="200" y="130" font-size="48" opacity="0.9">=ê</text>
+  <text x="400" y="130" font-size="48" opacity="0.9"></text>
+  <rect x="180" y="250" width="60" height="80" rx="8" fill="rgba(0,0,0,0.4)" stroke="#00ffff" stroke-width="2"/>
+  <rect x="400" y="250" width="60" height="80" rx="8" fill="rgba(0,0,0,0.4)" stroke="#ffd700" stroke-width="2"/>
+  <rect x="188" y="290" width="44" height="30" rx="4" fill="#00ffff" opacity="0.6"/>
+  <rect x="408" y="270" width="44" height="50" rx="4" fill="#ffd700" opacity="0.6"/>
+  <text x="320" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="32" fill="#fff">Sound Wizard</text>
+  <text x="320" y="125" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#d8b4fe" letter-spacing="4">ACADEMY</text>
+  <text x="320" y="340" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" letter-spacing="3">HAND-TRACKING SYNTH</text>
+</svg>

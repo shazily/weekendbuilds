@@ -1,8 +1,9 @@
 {
   "name": "weekendbuilds",
   "private": true,
-  "version": "0.1.0",
-  "description": "Weekly vibe-coded builds — starting with Vibe with Kids",
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Weekend Labs — vibe-coded builds with kids",
   "scripts": {
     "deploy": "vercel --prod",
     "deploy:preview": "vercel"

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Galactic Ranger">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#001428"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0055aa"/>
+      <stop offset="100%" stop-color="#00d2ff"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <circle cx="520" cy="80" r="40" fill="#1a3050" filter="url(#blur)" opacity="0.6"/>
+  <circle cx="120" cy="280" r="60" fill="#0a2040" filter="url(#blur)" opacity="0.5"/>
+  <g fill="#fff" opacity="0.7">
+    <circle cx="80" cy="60" r="1.5"/><circle cx="200" cy="40" r="1"/><circle cx="400" cy="90" r="1.2"/>
+    <circle cx="550" cy="200" r="1"/><circle cx="300" cy="30" r="1.5"/><circle cx="480" cy="300" r="1"/>
+    <circle cx="150" cy="150" r="1"/><circle cx="580" cy="120" r="1.2"/>
+  </g>
+  <polygon points="320,140 300,200 340,200" fill="url(#glow)" opacity="0.9"/>
+  <rect x="305" y="200" width="30" height="25" rx="4" fill="#00d2ff" opacity="0.8"/>
+  <ellipse cx="320" cy="235" rx="50" ry="8" fill="#00d2ff" opacity="0.25" filter="url(#blur)"/>
+  <text x="320" y="100" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="36" fill="url(#glow)" letter-spacing="4">GALACTIC</text>
+  <text x="320" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="22" fill="#aaccff" letter-spacing="6">RANGER</text>
+  <text x="320" y="310" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#446688" letter-spacing="3">SPACE SHOOTER</text>
+</svg>
